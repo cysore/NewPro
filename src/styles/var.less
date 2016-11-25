@@ -1,0 +1,93 @@
+@font-size-base:75;
+//处理屏幕基准值(iphone6 750px)
+.lessRem(@name,@px){
+	@{name}:@px/@font-size-base*1rem;
+}
+/*
+*line-height
+*/
+.lessLineHeight(@px){
+    line-height: @px/@font-size-base*1rem;
+}
+/*
+*padding
+*/
+.lessPadding(@px1,@px2,@px3,@px4){
+    padding: @px1/@font-size-base*1rem @px2/@font-size-base*1rem @px3/@font-size-base*1rem @px4/@font-size-base*1rem;
+}
+.lessPaddingLeft(@px){
+    padding-left: @px/@font-size-base*1rem;
+}
+.lessPaddingRight(@px){
+    padding-right: @px/@font-size-base*1rem;
+}
+.lessPaddingTop(@px){
+    padding-top: @px/@font-size-base*1rem;
+}
+.lessPaddingBottom(@px){
+    padding-bottom: @px/@font-size-base*1rem;
+}
+/*
+*margin
+*/
+.lessMargin(@px1,@px2,@px3,@px4){
+    margin: @px1/@font-size-base*1rem @px2/@font-size-base*1rem @px3/@font-size-base*1rem @px4/@font-size-base*1rem;
+}
+.lessMarginLeft(@px){
+    margin-left: @px/@font-size-base*1rem;
+}
+.lessMarginRight(@px){
+    margin-right: @px/@font-size-base*1rem;
+}
+.lessMarginTop(@px){
+    margin-top: @px/@font-size-base*1rem;
+}
+.lessMarginBottom(@px){
+    margin-bottom: @px/@font-size-base*1rem;
+}
+/*
+*border-ridus
+*/
+.lessBorderRidus(@px1,@px2,@px3,@px4){
+    border-radius: @px1/@font-size-base*1rem @px2/@font-size-base*1rem @px3/@font-size-base*1rem @px4/@font-size-base*1rem;
+}
+/*
+*border
+*/
+.lessBorder(@px,@color){
+    border: @px/@font-size-base*1rem @color solid;
+}
+/*
+*background-size
+*/
+.lessBackgroundSize(@pxw,@pxh){
+    background-size: @pxw/@font-size-base*1rem @pxh/@font-size-base*1rem;
+}
+/*
+*font-szie
+*/
+.lessFZ(@px){
+	font-size: @px/@font-size-base*1rem;
+}
+//处理不同分辨力(dpr不同)字体统一大小的问题
+.lessFontSize(@name, @px){
+    @{name}: round(@px / 2) * 1px;
+    [data-dpr="2"] & {
+        @{name}: @px * 1px;
+    }
+    // for mx3
+    [data-dpr="2.5"] & {
+        @{name}: round(@px * 2.5 / 2) * 1px;
+    }
+    // for 小米note
+    [data-dpr="2.75"] & {
+        @{name}: round(@px * 2.75 / 2) * 1px;
+    }
+    [data-dpr="3"] & {
+        @{name}: round(@px / 2 * 3) * 1px
+    }
+    // for 三星note4
+    [data-dpr="4"] & {
+        @{name}: @px * 2px;
+    }
+}
