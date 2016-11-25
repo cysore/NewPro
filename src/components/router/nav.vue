@@ -55,7 +55,7 @@ export default {
     },
     props:['message'],
     ready(){
-        window.scrollTo(100, 100);
+        // window.scrollTo(100, 100);
     },
     created(){
         this.flag=this.$store.state.StateRoute.routeName;
