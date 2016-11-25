@@ -1,4 +1,4 @@
-# Vue2+Vue-router+Vue-resource+Vuex+Less+ES6 NEWPRO_ADDSS
+# Vue2+Vue-router+Vue-resource+Vuex+Less+ES6
 
 > A Vue.js project
 
