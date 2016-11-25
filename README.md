@@ -1,4 +1,4 @@
-# Vue2+Vue-router+Vue-resource+Vuex+Less+ES6
+# Vue2+Vue-router+Vue-resource+Vuex+Less+ES6 123
 
 > A Vue.js project
 
