@@ -3,7 +3,7 @@
         <div class="paySuccess-content">
             <div class="content-icon">
                 <img src="./images/pay_success.png" alt="">
-                <p>充值成功</p>
+                <p>充值成功{{paySuccess}}</p>
             </div>
             <div class="content-tips">赶紧去投资吧</div>
             <div class="content-btn">
