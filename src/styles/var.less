@@ -69,6 +69,12 @@
 .lessFZ(@px){
 	font-size: @px/@font-size-base*1rem;
 }
+/*
+*text-indent
+*/
+.lessTextIndent(@px){
+	text-indent:  @px/@font-size-base*1rem;
+}
 //处理不同分辨力(dpr不同)字体统一大小的问题
 .lessFontSize(@name, @px){
     @{name}: round(@px / 2) * 1px;
@@ -90,4 +96,39 @@
     [data-dpr="4"] & {
         @{name}: @px * 2px;
     }
+}
+/*
+*box-flex
+*/
+.lessBFX(){
+	display: box;
+	display: -webkit-box;
+	display: flex;
+	display: -webkit-flex;
+}
+.lessBoxFlex(){
+	.lessBFX();
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+}
+.lessBoxFlexC(){
+	.lessBFX();
+	justify-content: center;
+	-webkit-justify-content: center;
+}
+.lessBoxFlexSB(){
+	.lessBFX();
+	justify-content: space-between;
+	-webkit-justify-content: space-between;
+}
+.lessBoxFlexSA(){
+	.lessBFX();
+	justify-content: space-around;
+	-webkit-justify-content: space-around;
+}
+.lessBoxFlexChild(){
+	box-flex: 1;
+	-webkit-box-flex: 1;
+	flex: 1;
+	-webkit-flex: 1;
 }

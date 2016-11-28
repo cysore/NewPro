@@ -1,9 +1,10 @@
 <template>
-    <div>
+    <section>
         <!-- <input class="ipt" type="button" name="name" v-on:click="btn" v-model="routeName"> -->
         <router-view></router-view>
         <Navs v-if="routeName!='routeLogin'" v-bind:message="msg"></Navs>
-    </div>
+        <!-- <vue-progress-bar></vue-progress-bar> -->
+    </section>
 </template>
 
 <script type="text/javascript">
@@ -26,7 +27,8 @@ export default {
         btn(){
             console.log(this.$store.state.StateRoute.routeName);
             this.$router.go(-1);
-        }
+        },
+
     },
     watch:{
         // routeName(curVal,oldVal){

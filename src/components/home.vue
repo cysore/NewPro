@@ -145,6 +145,10 @@ export default {
     beforeCreate(){
         // console.log('beforeCreate');
     },
+    // 模板编译/挂载之后(不保证组件已经存在document中)
+    mounted(){
+        // this.$Progress.finish();//进度条完成
+    },
     // 组件创建完成
     created(){
         if(this.$store.state.StateUser==""){
@@ -152,6 +156,20 @@ export default {
         }else{
             console.log(this.$store.state.StateUser);
         }
+
+        /*this.$Progress.start();//进度条开始
+        this.$router.beforeEach((to,from,next)=>{
+            if(to.meta.progress !== undefined){
+                let meta = to.meta.progress;
+                this.$Progress.parseMeta(meta);
+            }
+            this.$Progress.start();
+            next();
+        })
+        this.$router.afterEach((to,from) => {
+            this.$Progress.finish();
+        })*/
+
     },
     // 导入其他组件
     components:{

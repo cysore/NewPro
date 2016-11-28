@@ -3,7 +3,15 @@ export default [
         path: '/home',
         meta: {
             auth: false,
-            title: '首页'
+            title: '首页',
+            progress: {
+                func: [
+                    {call: 'color', modifier: 'temp', argument: '#ffb000'},
+                    {call: 'fail', modifier: 'temp', argument: '#6e0000'},
+                    {call: 'location', modifier: 'temp', argument: 'top'},
+                    {call: 'transition', modifier: 'temp', argument: {speed: '1.5s', opacity: '0.1s'}}
+                ]
+            }
         },
         name: 'routeHome',
         component: resolve => require(['../components/home.vue'], resolve)
@@ -39,7 +47,8 @@ export default [
         path: '/my',
         meta: {
             auth: true,
-            title: '我的设置'
+            title: '我的设置',
+
         },
         name: 'routeMy',
         component: resolve => require(['../components/my.vue'], resolve)

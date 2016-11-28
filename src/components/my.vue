@@ -83,11 +83,31 @@ import {mapState,mapMutations,mapActions} from 'vuex';
 export default {
     data(){
         return{
-            msg:'myvue'
+            msg:'myvue',
+            articles:[]
         }
     },
     created(){
         console.log(this.$store.state.StateUser.user);
+    },
+    beforeCreate(){
+        // this.$Progress.start();//进度条开始
+        this.$http.jsonp(
+            'https://api.douban.com/v2/movie/top250?count=10',
+            {},
+            {
+                headers: {},
+                emulateJSON: true
+            }
+        ).then(function(response) {
+            // 这里是处理正确的回调
+            this.articles = response.data.subjects;
+            console.log(response);
+            // this.$Progress.finish();//请求数据使用进度条
+        }, function(e) {
+            console.log(e);
+            // this.$Progress.fail();//请求数据使用进度条
+        });
     },
     methods:{
         ...mapActions(['USER_SIGNOUT_Sync']),
@@ -95,7 +115,8 @@ export default {
         logout(){
             this.USER_SIGNOUT_Sync();
             this.$router.replace({path: '/login'})
-        }
+        },
+
     }
 }
 </script>
