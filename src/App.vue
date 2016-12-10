@@ -2,19 +2,20 @@
     <section>
         <!-- <input class="ipt" type="button" name="name" v-on:click="btn" v-model="routeName"> -->
         <router-view></router-view>
-        <Navs v-if="routeName!='routeLogin'" v-bind:message="msg"></Navs>
+        <Navs v-if="!isMenu" v-bind:message="msg"></Navs>
         <!-- <vue-progress-bar></vue-progress-bar> -->
     </section>
 </template>
 
 <script type="text/javascript">
-import Nav from "./components/router/nav.vue";
+import Nav from "./components/menu/nav.vue";
 
 export default {
     data(){
         return {
             msg:'',
-            routeName:this.$store.state.StateRoute.routeName
+            isMenu:false,
+            notMenuRouterName:this.$store.state.StateRoute.routeName,
         }
     },
     components:{
@@ -30,12 +31,22 @@ export default {
         },
 
     },
+    // 计算属性
+    computed:{
+
+    },
     watch:{
         // routeName(curVal,oldVal){
         //     console.log(curVal,oldVal);
         // },
         '$route'(to,from){
-            this.routeName=to.name;
+            this.notMenuRouterName=to.name;
+            // 针对指定路由地址进行底部菜单屏蔽
+            if(to.name == 'routeLogin' || to.name == 'routeInvestementId'){
+                this.isMenu=true;
+            }else{
+                this.isMenu=false;
+            }
         }
     },
 }

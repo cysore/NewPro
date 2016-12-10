@@ -18,10 +18,10 @@
                 <div class="mark-list " v-for="item in listData">
                     <div class="list-top">
                         <div class="top-img">
-                            <img v-if="item.isNew" src="../images/newbie.png" alt="">
+                            <img v-if="item.isNew" src="../../images/newbie.png" alt="">
                         </div>
                         <div class="top-tit">{{item.title}}</div>
-                        <div class="top-right"><img src="../images/guarantee.png" alt="">安全保证</div>
+                        <div class="top-right"><img src="../../images/guarantee.png" alt="">安全保证</div>
                     </div>
                     <div class="list-info">
                         <div class="info-earnings">

@@ -3,15 +3,7 @@ export default [
         path: '/home',
         meta: {
             auth: false,
-            title: '首页',
-            progress: {
-                func: [
-                    {call: 'color', modifier: 'temp', argument: '#ffb000'},
-                    {call: 'fail', modifier: 'temp', argument: '#6e0000'},
-                    {call: 'location', modifier: 'temp', argument: 'top'},
-                    {call: 'transition', modifier: 'temp', argument: {speed: '1.5s', opacity: '0.1s'}}
-                ]
-            }
+            title: '首页'
         },
         name: 'routeHome',
         component: resolve => require(['../components/home.vue'], resolve)
@@ -23,7 +15,7 @@ export default [
             title: '投资'
         },
         name: 'routeInvestement',
-        component: resolve => require(['../components/investement.vue'], resolve)
+        component: resolve => require(['../components/investement/investementList.vue'], resolve)
     },
     {
         path: '/investement/:Datas',
@@ -32,7 +24,7 @@ export default [
             title: '投资详情'
         },
         name: 'routeInvestementId',
-        component: resolve => require(['../components/investementDetails.vue'], resolve)
+        component: resolve => require(['../components/investement/investementDetails.vue'], resolve)
     },
     {
         path: '/media',

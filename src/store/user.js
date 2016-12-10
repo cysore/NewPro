@@ -57,5 +57,13 @@ export default {
         USER_NOT_LOGIN_NAME_Sync({commit},routeName){
             commit('USER_NOT_LOGIN_NAME',routeName);
         }
+    },
+    getters:{
+        /*
+        *获取用户是否登录
+        */
+        GET_USER(state){
+            return state.user ? true : false;
+        }
     }
 }

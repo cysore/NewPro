@@ -183,7 +183,7 @@ export default {
                 // el.focus();
                 let canvasEleSlef = el.children[0].id;
                 let  canvasEleParent= el.id;
-                libs.drawCricle(canvasEleParent,canvasEleSlef);
+                libs.drawCricle(canvasEleParent,canvasEleSlef,true,'#ff7900');
             }
         }
     },

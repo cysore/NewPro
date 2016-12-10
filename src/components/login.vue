@@ -60,7 +60,7 @@ export default {
         ...mapActions(['USER_SIGNIN_Sync']),
         // 登录
         submit() {
-            // console.log(this.USER_SIGNIN_Sync);
+            console.log(this.$store.state.StateUser.notLoginName);
             this.btn = true;
             if(!this.form.phone || !this.form.pass) {
                 this.$toast({

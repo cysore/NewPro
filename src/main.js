@@ -32,6 +32,7 @@ NProgress.configure({
 })
 
 
+
 //开启debug模式
 Vue.config.debug = true;
 Vue.use(VueRouter);//vue使用路由配置
@@ -65,7 +66,7 @@ const router = new VueRouter({
 
 
 
-// 路由拦截
+// 路由请求拦截之前
 let indexScrollTop = 0;
 router.beforeEach((to,from,next)=>{
     NProgress.start();
@@ -106,6 +107,7 @@ Vue.http.interceptors.push((request, next) => {
     });
 });
 
+// 路由请求完成之后
 router.afterEach(to=>{
 
     NProgress.done();

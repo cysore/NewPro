@@ -1,15 +1,28 @@
 const libs={
-    /*
-    * 圆弧进度条
-    *@params:canvas外层div的ID
-    *@params:canvas的ID
-    *进度条的值设置在canvas的data-porgress上，值区间0~100
+    /**
+    *圆弧进度条
+    *@param:canvasParentEle(string:eleID) canvas外层div的ID
+    *@param:canvasSelf(string:eleID) canvas的ID
+    *@param:isTrueOrFalse(boolean) true为圆弧进度条，false为整园进度条
+    *@param:progrColor(string) 绘制进度圆的颜色值
+    *进度条的值设置在canvas的data-progress上，值区间0~100
     */
-    drawCricle:function(canvasParentEle,canvasSelf){
+    drawCricle:function (canvasParentEle,canvasSelf,isTrueOrFalse,progrColor){
+
+        if(!canvasParentEle && !canvasSelf && !isTrueOrFalse){
+            console.error('arguments not meeting expectations');
+            return
+        };
 
         var canvasParent = document.getElementById(canvasParentEle);
         var canvas = document.getElementById(canvasSelf);
-        var porgress = 1.4*(canvas.dataset.progress)/100;
+        var dataPorgress = Number(canvas.dataset.progress);
+        // 字符串'%'替换处理
+        if(isNaN(dataPorgress)){
+            dataPorgress = Number(canvas.dataset.progress.replace('%',''));
+        }
+
+        var porgress = isTrueOrFalse ? 1.4*(dataPorgress)/100 : 2*(dataPorgress)/100;
         var CanvasWidth = (window.getComputedStyle(canvasParent).getPropertyValue('width')).replace(/px/g,'');
         var CanvasHeight = (window.getComputedStyle(canvasParent).getPropertyValue('height')).replace(/px/g,'');
 
@@ -24,23 +37,34 @@ const libs={
         var setData={
             x:canvas.width/2,
             y:canvas.height/2,
-            r:(canvas.width-lineWidth)/2
+            r:(canvas.width-lineWidth-2)/2// 减2控制绘制的圆弧与canvas的边界紧密贴合，防止出现canvas边界出现模糊
         }
 
         var ctx = canvas.getContext('2d');
             ctx.lineCap="round";
             // 绘制底圆
             ctx.beginPath();
-            ctx.arc(
-                setData.x,
-                setData.y,
-                setData.r,
-                0.8*Math.PI,//开始角
-                2.2*Math.PI,//结束角
-                false//False = 顺时针，true = 逆时针。
-            );//绘制圆弧进度条所需的半径总共1.5PI
-            ctx.strokeStyle = '#e4e4e4';
-            ctx.lineWidth = lineWidth;
+            if(isTrueOrFalse==true){
+                ctx.arc(
+                    setData.x,
+                    setData.y,
+                    setData.r,
+                    0.8*Math.PI,//开始角
+                    2.2*Math.PI,//结束角
+                    false//False = 顺时针，true = 逆时针。
+                );//绘制圆弧进度条所需的半径总共1.5PI
+            }else if(isTrueOrFalse==false){
+                ctx.arc(
+                    setData.x,
+                    setData.y,
+                    setData.r,
+                    0*Math.PI,//开始角
+                    2*Math.PI,//结束角
+                    false//False = 顺时针，true = 逆时针。
+                );//绘制圆弧进度条所需的半径总共1.5PI
+            }
+            ctx.strokeStyle = '#e6e6e6';
+            ctx.lineWidth = isTrueOrFalse ? lineWidth : lineWidth/3;
             ctx.stroke();
             ctx.closePath();
 
@@ -54,12 +78,13 @@ const libs={
                 0.8*Math.PI,//开始角
                 (0.8+porgress)*Math.PI,//结束角
                 false
-            )
-            ctx.strokeStyle = '#ff9331';
+            );
+            ctx.strokeStyle = progrColor || '#ff9331';
             ctx.lineWidth = lineWidth;
             ctx.stroke();
             ctx.closePath();
     }
+
 }
 
 export default libs;
