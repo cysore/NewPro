@@ -163,7 +163,7 @@
                         <span>2016-08-20 22:22:22</span>
                     </div>
                     <div class="list-lie">
-                        <span>a***9</span>
+                        <span>{{noticeMsg}}</span>
                         <span>25000.0元</span>
                         <span>2016-08-20 22:22:22</span>
                     </div>
@@ -172,7 +172,7 @@
         </section>
 
         <!-- 底部输入框 -->
-        <section id="newsbieFiexd" class="newsbie-fiexd none">
+        <!-- <section id="newsbieFiexd" class="newsbie-fiexd none">
             <div class="fiexd-tits">
                 <div id="selRed" class="tits-l" v-on:click="selectedRed">
                     <img id="selRedValIcon" src="../../images/reda.png" alt="">
@@ -185,21 +185,19 @@
             <div class="tits-ipt">
                 <div class="ipt-si">
                     <input id="iptMoney" ref="ipts" v-model="iptMoney"  v-bind="{'disabled':state.isLogin ? false : true}" type="tel" pattern="\d*" autocomplete="off" oninput="value=value.replace(/\b(0+)/gi,'');value=value.replace(/[^\d]/gi,'');" maxlength="8"  name="investAmount" class="ebuy-input" onkeyup="value=value.replace(/\b(0+)/gi,'');value=value.replace(/[^\d]/gi,'');" placeholder="请输入投资金额">
-                    <!-- <input id="iptMoney" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" type="tel" value placeholder="请输入投资金额"> -->
                     <span>预期收益<br><em v-bind:class="{'hover' : iptMoney!=''}">{{isNaN(state.expectMoney)==true ? 0 :state.expectMoney}}</em>元</span>
                 </div>
                 <button id="startInvestementBtn" type="button" name="button" v-on:click="startInvestementBtn">立即投资</button>
             </div>
-        </section>
+        </section> -->
 
 
         <bottomFiexd
             v-bind:parentState="state"
             v-bind:parentIptMoney="iptMoney"
-
+            v-bind:parentNotice="noticeMsg"
             v-on:parentSelectRed="selectedRed"
             v-on:parentStartInvestementBtn="startInvestementBtn"
-
         ></bottomFiexd>
 
         <!-- 遮罩层 -->
@@ -323,8 +321,9 @@ export default {
     data(){
         return {
             iptMoney:'',//用户输入的投资金额
+            noticeMsg:false,//通知子组件重置状态
             state:{
-                tipsMsg:'',
+                tipsMsg:'',// 提示信息
                 redMsg:'点击选择红包',
                 selectedIndex:null,//选中的红包下标
                 isLogin:this.$store.getters.GET_USER,//是否登录
@@ -525,6 +524,8 @@ export default {
                 this.state.userBalance=this.state.userBalance-this.iptMoney+this.state.redMoney;
                 this.state.redMoney=0;
                 this.iptMoney='';
+
+                this.noticeMsg=true;//通知子组件更新
 
                 let countDown = setInterval(()=>{
                     if(this.state.count==0){

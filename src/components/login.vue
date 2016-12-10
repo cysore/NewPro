@@ -16,9 +16,9 @@
 
 
             <div class="signin-ipt password" v-bind:class="{active: btn && !form.pass}">
-                <input id="password" type="password" placeholder="输入6-16位密码" v-model="form.pass">
-                <span id="btn_block" class="btn-block">
-                    <img class="btn-block-img" src="../images/signin/icon5.png" alt="">
+                <input id="password" v-bind="{'type' : showTag.showpass ? 'text' : 'password'}"  placeholder="输入6-16位密码" v-model="form.pass">
+                <span id="btn_block" class="btn-block" v-on:click="showTag.showpass = !showTag.showpass">
+                    <img class="btn-block-img" v-bind="{'src' : showTag.showpass ?  showTag.HidePassIcom : showTag.ShowPassIcom}" alt="">
                 </span>
             </div>
             <!-- <div class="signin-ipt invite">
@@ -34,12 +34,19 @@
 
 <script>
 import {mapState,mapMutations,mapActions} from 'vuex';
+import showImg from '../images/signin/icon5.png';
+import hideImg from '../images/signin/icon6.png';
 
 export default {
     data(){
         return{
             btn:false,
             isActive:false,
+            showTag:{
+                showpass:false,
+                ShowPassIcom:showImg,
+                HidePassIcom:hideImg,
+            },
             form:{
                 phone:'',
                 pass:'',
@@ -88,5 +95,6 @@ export default {
     //     countAlias:'user',
     //
     // })
+
 }
 </script>
