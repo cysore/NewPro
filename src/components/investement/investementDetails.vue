@@ -314,7 +314,7 @@
 </template>
 
 <script>
-import {mapState,mapMutations,mapActions} from 'vuex';
+import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 import bottomFiexd from './bottomFiexd.vue';
 import libs from '../../javascripts/main.js';
 export default {

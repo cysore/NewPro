@@ -64,7 +64,7 @@
 </template>
 
 <script>
-import {mapState,mapMutations,mapActions} from 'vuex';
+import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 export default {
     data(){
         return {
@@ -76,6 +76,10 @@ export default {
             cacheListData:this.$store.getters.GET_DATA,
             clickElementOffsetTop:this.$store.getters.GET_OFFSETTOP,
         }
+    },
+    computed:{
+        // 映射store里面的getters(似乎在data里面只使用一次)
+        ...mapGetters(['GET_DATA','GET_OFFSETTOP']),
     },
     methods:{
         //映射store里的actions
@@ -125,7 +129,7 @@ export default {
         loadBottom(id) {
             // this.allLoaded = true;// 若数据已全部获取完毕
             setTimeout(() => {
-                for (let i = 0; i < 10; i++) {
+                for (let i = 0; i < 5; i++) {
                     let obj = {
                         isNew:true,
                         title:'首投专享up',
@@ -143,11 +147,13 @@ export default {
 
     },
     beforeCreate(){
-        console.log(this.$store.getters.GET_DATA);
-        console.log(this.$store.getters.GET_OFFSETTOP);
+        // console.log(this.$store.getters.GET_DATA);
+        // console.log(this.$store.getters.GET_OFFSETTOP);
     },
     // 组件创建完成时调用
     created(){
+        console.log(this.GET_DATA);
+        console.log(this.GET_OFFSETTOP);
         // 判断store里面的investementListCacheData是否存在，如果存在直接转换成数组复制给this.cacheListData
         // 如果不存在直接重新请求数据，并存入store中的investementListCacheData里面
         if(this.cacheListData!=0){

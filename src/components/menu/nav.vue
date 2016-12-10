@@ -31,34 +31,25 @@
 </template>
 
 <script>
-import home_b from '../../images/home_b.png';
-import home_a from '../../images/home_a.png';
-import money_b from '../../images/money_b.png';
-import money_a from '../../images/money_a.png';
-import loan_b from '../../images/loan_b.png';
-import loan_a from '../../images/loan_a.png';
-import my_b from '../../images/my_b.png';
-import my_a from '../../images/my_a.png';
+import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 
 export default {
     data(){
         return {
-            state:this.$store.state.StateRoute,
+            state:this.StateRoute,
             flag:'',
-            navData:[
-                {link:'/home',text:'首页',src:home_b,csrc:home_a},
-                {link:'/investement',text:'投资',src:money_b,csrc:money_a},
-                {link:'/media',text:'金领借款',src:loan_b,csrc:loan_a},
-                {link:'/my',text:'我的',src:my_b,csrc:my_a},
-            ]
         }
     },
     props:['message'],
-    ready(){
-        // window.scrollTo(100, 100);
+    created(){
+        console.log(this.StateRoute);
+    },
+    computed:{
+        // 映射store里面的state到this上(use:this.StateRoute)
+        ...mapState(['StateRoute']),
     },
     created(){
-        this.flag=this.$store.state.StateRoute.routeName;
+        this.flag=this.StateRoute.routeName;
     },
     watch:{
         // 监听组件路由发生变化改变其状态

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import {mapState,mapMutations,mapActions} from 'vuex';
+import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 import showImg from '../images/signin/icon5.png';
 import hideImg from '../images/signin/icon6.png';
 
@@ -55,6 +55,11 @@ export default {
     },
     created(){
         // console.log(this.$store);
+        // console.log(this.StateUser);
+    },
+    computed:{
+        // 映射store里面的state到this上(use:this.StateUser)
+        ...mapState(['StateUser']),
     },
     methods:{
         /*
@@ -67,7 +72,7 @@ export default {
         ...mapActions(['USER_SIGNIN_Sync']),
         // 登录
         submit() {
-            console.log(this.$store.state.StateUser.notLoginName);
+            console.log(this.StateUser.notLoginName);
             this.btn = true;
             if(!this.form.phone || !this.form.pass) {
                 this.$toast({
@@ -84,17 +89,11 @@ export default {
             //     // {silent:true}//指定插件中的mutation为静默
             // );
             this.USER_SIGNIN_Sync(this.form.phone);
-            console.log(this.$store.state.StateUser.notLoginName);
+            console.log(this.StateUser.notLoginName);
             // 登录后跳转到未登录之前访问的路由地址(this.$router.replace({path: '/home'}))
-            this.$router.replace({name:this.$store.state.StateUser.notLoginName ? this.$store.state.StateUser.notLoginName : 'routeHome'});
+            this.$router.replace({name:this.StateUser.notLoginName ? this.StateUser.notLoginName : 'routeHome'});
         },
     },
-    // computed:mapState({
-    //     count:state=>state.user,
-    //     // 传入字符串 'count' 等同于 `state => state.count`
-    //     countAlias:'user',
-    //
-    // })
 
 }
 </script>
