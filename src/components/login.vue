@@ -72,7 +72,7 @@ import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 import showImg from '../images/signin/icon5.png';
 import hideImg from '../images/signin/icon6.png';
 
-// import dialog from './testComponents/dialog.js';
+import dialog from './testComponents/dialog.js';
 import test from './testComponents/test.js';
 
 export default {
@@ -104,7 +104,7 @@ export default {
     },
     created(){
         console.log(test);
-        test.alert(1235)
+        dialog.alert({"title":"title" , message:"message"})
         // console.log(this.$store);
         // console.log(this.StateUser);
     },
@@ -151,7 +151,11 @@ export default {
                     return;
                 }
             },(e)=>{
-                console.log(e);
+                this.$toast({
+                    message:"错误码："+e.status,
+                    position:'middle',
+                    duration:3000
+                });
             })
             // commit dispatch 分发 提交用户登录信息到状态机处理
             // this.$store.dispatch(

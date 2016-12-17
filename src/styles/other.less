@@ -30,3 +30,142 @@
     left: 5%;
     transform: translateY(-50%);
 }
+
+
+
+// dialogConstructor
+.toast {
+    .lessPadding(10,10,10,10);
+    .lessFZ(14);
+    // padding: torem(10px);
+    // font-size: torem(14px);
+    color: #fff;
+    background: rgba(0,0,0,.5);
+    border-radius: 4px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%,-50%,0);
+    animation: fadeInOut 1.5s forwards;
+    // @include transform(translateX(-50%) translateY(-50%));
+    // @include animation(fadeInOut 1.5s forwards);
+}
+@-webkit-keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-moz-keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-ms-keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+@-o-keyframes fadeInOut {
+    0% {
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    70% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.cover {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.7);
+}
+
+.dialog {
+    position: fixed;
+    width: 82%;
+    top: 50%;
+    left: 50%;
+    z-index: 9999;
+    transform: translate3d(-50%,-50%,0);
+    // @include transform(translateX(-50%) translateY(-50%));
+    background-color: #FAFAFC;
+    text-align: center;
+    border-radius: 6px;
+    overflow: hidden;
+}
+.dialog-header {
+    .lessPadding(20,20,20,20);
+    .lessFZ(40);
+    // padding: torem(10px);
+    // font-size: torem(20px);
+}
+.dialog-content {
+    .lessFZ(16);
+    // font-size: torem(16px);
+    color: #666;
+    text-align: center;
+    // padding: torem(5px) torem(10px) torem(10px);
+    .lessPadding(20,20,20,20);
+}
+.dialog-footer {
+    position: relative;
+    // line-height: torem(40px);
+    // margin-top: torem(10px);
+    .lessLineHeight(80);
+    .lessMarginTop(20);
+    border-top: 1px solid #f0f0f0;
+    // @include flexbox();
+    .lessBoxFlexSB();
+}
+.dialog-footer button {
+    width: 100%;
+    .lessRem(height,80);
+    .lessFZ(32);
+    // height: torem(40px);
+    // font-size: torem(16px);
+    background: #fff;
+    .lessBoxFlexChild();
+}
+.dialog-footer button.confirm {
+    color: #f60;
+}
+.dialog-footer button.cancle {
+    color: #9c9c9c;
+    border-left: 1px solid #f0f0f0;
+}
