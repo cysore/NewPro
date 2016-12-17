@@ -38,7 +38,7 @@
                             <var>|</var>
                             已加入<span>56</span>人
                         </p>
-                        <a href="#" class="info-btn">立即投资</a>
+                        <a href="#" class="info-btn" v-on:click="immediately">立即投资</a>
                         <p class="info-tips">
                             资金安全由富友金账户监控
                         </p>
@@ -193,7 +193,16 @@ export default {
         // ...mapActions(['increment']);
         ...mapActions({
             increment:'incrementAsync'
-        })
+        }),
+        immediately(){
+
+            this.$http.get('/api').then((res)=>{
+                console.log(res);
+            },(err)=>{
+                console.log(err);
+            })
+
+        }
         // 带参数的actions
         /*increment () {
             this.$store.dispatch('incrementAsync',{amount:10});

@@ -29,7 +29,7 @@
                             <p>{{item.earnings}}<var>%</var></p>
                         </div>
                         <div class="info-deadline">
-                            <span>期限</span>
+                            <span v-status="item.isNew">期限</span>
                             <p>{{item.date}}<var>天</var></p>
                         </div>
                         <div class="info-start">
@@ -187,6 +187,16 @@ export default {
             this.$refs.wrapper.scrollTop=this.clickElementOffsetTop;
         }
 
+    },
+    directives:{
+        status:{
+            bind:(el,binding)=>{
+                if(binding.value){
+                    // el.innerHTML = binding.value;
+                    // console.log(el.innerHTML);
+                }
+            }
+        }
     }
 }
 </script>
