@@ -1,6 +1,8 @@
 <template lang="html">
     <div class="test">
         {{data}}
+        <input id="date-selector-input" type="text" readonly/>
+        <div id="targetContainer"></div>
     </div>
 </template>
 

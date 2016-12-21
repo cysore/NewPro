@@ -37,9 +37,13 @@
 
         </form>
 
+        <div v-date="true" class="">
+            <input id="date-selector-input" type="text" readonly/>
+            <div id="targetContainer"></div>
+        </div>
+
 
         <!-- 注册 -->
-
         <mt-popup v-model="siginPopup" position="bottom" class="mint-popup-3" v-bind:modal="false">
             <div class="signin">
                 <div class="signin-ipt phone" v-bind:class="{active: sigin.siginBtn && !sigin.phone}">
@@ -75,6 +79,9 @@ import hideImg from '../images/signin/icon6.png';
 import dialog from './testComponents/dialog.js';
 import test from './testComponents/test.js';
 
+// 日期控件
+import DateSelector from 'mob-date-selector';
+
 export default {
     data(){
         return{
@@ -99,14 +106,41 @@ export default {
             }
         }
     },
+    // 组件在挂载之后
+    mounted(){
+        //月份从1开始
+        new DateSelector({
+            input: 'date-selector-input',//点击触发插件的input框的id
+            container: 'targetContainer',//插件插入的容器id
+            type: 0,
+            //0：不需要tab切换，自定义滑动内容，建议小于三个；
+            //1：需要tab切换，【年月日】【时分】完全展示，固定死，可设置开始年份和结束年份
+            param: [1, 1, 0, 1, 0],
+            //设置['year','month','day','hour','minute'],1为需要，0为不需要,需要连续的1
+            beginTime: [2011, 13, -27, 102],//如空数组默认设置成1970年1月1日0时0分开始，如需要设置开始时间点，数组的值对应param参数的对应值。
+            endTime: [2020, 10, 21, 20],//如空数组默认设置成次年12月31日23时59分结束，如需要设置结束时间点，数组的值对应param参数的对应值。
+            recentTime: [],//如不需要设置当前时间，被为空数组，如需要设置的开始的时间点，数组的值对应param参数的对应值。
+            success: function (arr) {
+                console.log(arr);
+            }//回调
+        });
+    },
     component:{
-
     },
     created(){
         console.log(test);
-        dialog.alert({"title":"title" , message:"message"})
+        // dialog.alert({"title":"title" , message:"message"})
         // console.log(this.$store);
         // console.log(this.StateUser);
+    },
+    // 局部自定义指令
+    directives: {
+        date: {
+            // 当绑定元素插入到 DOM 中。
+            bind: function (el,binding) {
+                // console.log(binding.value);
+            }
+        }
     },
     computed:{
         // 映射store里面的state到this上(use:this.StateUser)
