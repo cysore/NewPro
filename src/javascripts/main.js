@@ -1,3 +1,4 @@
+
 const libs={
     /**
     *圆弧进度条
@@ -83,8 +84,27 @@ const libs={
             ctx.lineWidth = lineWidth;
             ctx.stroke();
             ctx.closePath();
-    }
+    },
 
+    /**
+    *@param:(paramsObj)promise对象
+    *返回一个promise对象,可以使用.then来处理response参数
+    */
+    Fetch:function (paramsObj){
+        if(!paramsObj && typeof paramsObj !== 'object' && JSON.stringify(paramsObj) != '{}') return;
+        return new Promise((resolve,reject) => {
+            fetch(paramsObj).then((response) => {
+                if(response.status == 200){
+                    // console.log(response.headers.get('Content-Type'));
+                    // console.log(response.headers.get('Date'));
+                    // resolve(response.json());
+                    resolve(response);
+                }else{
+                    reject(response);
+                }
+            }).catch((err) => {console.log(err);})
+        })
+    }
 }
 
 export default libs;

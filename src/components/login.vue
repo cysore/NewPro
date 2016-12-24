@@ -132,6 +132,8 @@ export default {
         // dialog.alert({"title":"title" , message:"message"})
         // console.log(this.$store);
         // console.log(this.StateUser);
+
+
     },
     // 局部自定义指令
     directives: {
@@ -167,10 +169,15 @@ export default {
                 });
                 return;
             };
+
+            /*this.$http.post('/api/login',{user:this.login.phone,pass:this.login.pass}).then((res) => {
+                console.log(res);
+            })
+            return;*/
             this.$http({
-                url:'/api/selectUser',
-                method:'get',
-                params:{user:this.login.phone,pass:this.login.pass}
+                url:'/api/login',
+                method:'post',
+                body:{user:this.login.phone,pass:this.login.pass}
             }).then((data)=>{
                 console.log(data);
                 if(data.body.code==200){

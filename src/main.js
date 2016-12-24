@@ -9,7 +9,6 @@ import Vue from 'vue';// vue core
 import App from './App.vue';// root component
 import VueRouter from "vue-router";// vue router
 import VueResource from 'vue-resource';// vue http get or post
-// import VueProgressBar from 'vue-progressbar';// vue progress loading bar
 import NProgress from 'nprogress';// vue nprogress loading bar
 
 // import Element from 'element-ui'
@@ -39,20 +38,6 @@ Vue.use(VueRouter);//vue使用路由配置
 Vue.use(VueResource);//vue使用响应请求
 Vue.use(Mint);//使用mintUI
 
-//使用TOP-Loading-bar进度条
-/*Vue.use(VueProgressBar,{//进度条选项
-    color: '#bffaf3',
-    failedColor: '#874b4b',
-    thickness: '5px',
-    transition: {
-        speed: '0.2s',
-        opacity: '0.1s'
-    },
-    autoRevert: true,
-    location: 'top',
-    inverse: false
-});*/
-
 
 // 引入创建的Store
 import store from './store/index.js';
@@ -71,7 +56,8 @@ let indexScrollTop = 0;
 router.beforeEach((to,from,next)=>{
     NProgress.start();
 
-    let {auth = true} = to.meta;
+    // let {auth = true} = to.meta;
+    let auth = to.meta.auth;
     var isLogin = Store.StateUser.user=='' ? false : true; //true用户已登录， false用户未登录
 
     // 授权匹配

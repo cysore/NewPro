@@ -79,6 +79,7 @@
 
 <script>
 import {mapState,mapMutations,mapActions} from 'vuex';
+import libs from '../javascripts/main.js';
 
 export default {
     data(){
@@ -87,27 +88,92 @@ export default {
             articles:[]
         }
     },
+    computed:{
+        // 映射store里面的state到this上(use:this.StateUser)
+        ...mapState(['StateUser']),
+    },
     created(){
-        console.log(this.$store.state.StateUser.user);
+        // store 上保存的用户信息
+        // console.log(this.StateUser.user);
     },
     beforeCreate(){
-        // this.$Progress.start();//进度条开始
-        this.$http.jsonp(
-            'https://api.douban.com/v2/movie/top250?count=10',
-            {},
-            {
-                headers: {},
-                emulateJSON: true
+        /*let a = new Promise((resolve,reject) => {
+            this.$http.jsonp('https://api.douban.com/v2/movie/top250?count=10').then(function(data){
+                data.status == 200 ? resolve(data) : reject(data);
+            });
+        })
+        let b = new Promise((resolve,reject) => {
+            fetch('api/login',{
+                method:'POST',
+                body:{user:123,pass:'123'}
+            }).then(function(data){
+                if(data.status == 200){
+                    data.json().then((d)=>{resolve(d)});
+                }else{
+                    reject(data);
+                }
+            }).catch((e)=>{console.log(e)});
+        })*/
+
+
+        var req1 = new Request('api/login',{
+            method:'post',
+            cache:'reload',
+            body:{user:123,pass:'123'}
+        })
+        var req2 = new Request('api/selectUser',{
+            method:'GET',
+            cache:'reload',
+            params:{user:123,pass:'123'}
+        })
+        var req3 = new Request('https://api.douban.com/v2/movie/top250?count=10',{
+            method:'get',
+            mode:'no-cors'
+        })
+        // 同步等待执行async
+        let asyncPromise = async function(){
+            try{
+                let get1 = await libs.Fetch(req1);
+                console.log(get1.json().then(d => {console.log(d)}));
+                let get2 = await libs.Fetch(req2);
+                console.log(get2.json().then(d => {console.log(d)}));
+            }catch(err){
+                console.log(err);
             }
+        }
+        asyncPromise();
+
+        // 设置头信息
+        /*let headers = new Headers();
+            headers.append("Content-Type", "text/plain");
+            headers.append("Content-Length", '36');
+            headers.append("X-Custom-Header", "ProcessThisImmediately");
+        */
+
+
+        // 单独使用
+        /*libs.Fetch(req2).then((d) => {
+            console.log(d)
+        });*/
+
+
+        // promise并发多个请求
+        /*Promise.all([a,b]).then((data) => {
+            console.log(data);
+        },(err) => {
+            console.log(err);
+        })*/
+
+        /*this.$http.jsonp(
+            'https://api.douban.com/v2/movie/top250?count=10',
         ).then(function(response) {
             // 这里是处理正确的回调
             this.articles = response.data.subjects;
             console.log(response);
-            // this.$Progress.finish();//请求数据使用进度条
         }, function(e) {
             console.log(e);
-            // this.$Progress.fail();//请求数据使用进度条
-        });
+        });*/
+
     },
     methods:{
         ...mapActions(['USER_SIGNOUT_Sync']),
