@@ -75,9 +75,12 @@
 import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 import showImg from '../images/signin/icon5.png';
 import hideImg from '../images/signin/icon6.png';
+// 导入工具库
+import libs from '../javascripts/main.js';
 
 import dialog from './testComponents/dialog.js';
 import test from './testComponents/test.js';
+
 
 // 日期控件
 import DateSelector from 'mob-date-selector';
@@ -128,12 +131,11 @@ export default {
     component:{
     },
     created(){
-        console.log(test);
+        console.log(this.$libs);
         // dialog.alert({"title":"title" , message:"message"})
         // console.log(this.$store);
-        // console.log(this.StateUser);
-
-
+        // let ar = libs.unique([112,112,434,'你好',112,112,34,'你好','str','str1','str']);
+        console.log(Array.from(new Set([112,112,434,'你好',112,112,34,'你好','str','str1','str'])));
     },
     // 局部自定义指令
     directives: {
