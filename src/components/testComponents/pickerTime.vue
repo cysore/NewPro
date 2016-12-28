@@ -7,12 +7,12 @@
                     <span>取消</span>
                     <span>确定</span>
                 </div>
-                <div class="picker-time-content" 
+                <div class="picker-time-content"
                 v-on:touchstart.stop.prevent="touchstart($event)"
                 v-on:touchmove.stop.prevent="touchmove($event)"
-                v-on:touchend.stop.prevent="touchend($event)"
-                >
-                    <ul class="picker-time-list">
+                v-on:touchend.stop.prevent="touchend($event)">
+                    <ul class="picker-time-list"
+                    >
                         <li>2016</li>
                         <li>2016</li>
                         <li>2016</li>
@@ -21,19 +21,21 @@
                         <li>2016</li>
                         <li>2016</li>
                     </ul>
-                    <ul class="picker-time-list">
+                    <ul class="picker-time-list"
+                    >
                         <li>2016</li>
                         <li>2016</li>
-                        <li>2016</li>
+                        <li>2017</li>
                         <li>2016</li>
                         <li>2016</li>
                         <li>2016</li>
                         <li>2016</li>
                     </ul>
-                    <ul class="picker-time-list">
+                    <ul class="picker-time-list"
+                    >
                         <li>2016</li>
                         <li>2016</li>
-                        <li>2016</li>
+                        <li>2018</li>
                         <li>2016</li>
                         <li>2016</li>
                         <li>2016</li>
@@ -62,13 +64,13 @@ export default {
     },
     methods:{
         touchstart(e){
-            console.log(e.target)
+            console.log(e.target.parentNode)
         },
         touchmove(e){
             console.log(1)
         },
         touchend(e){
-            console.log(e.target.children)
+            // console.log(e.target.children)
         },
 
         //返回角度
