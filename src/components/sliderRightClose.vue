@@ -2,9 +2,9 @@
     <div class="sliderRightClose">
         <div class="sliderRightClose-list" v-for="(item,$index) in items" ref="srcl" v-bind="{'data-el':$index}">
             <div class="list-l"
-            v-on:touchstart.stop='touchStart($event,$index)'
-            v-on:touchmove.stop='touchMove($event,$index)'
-            v-on:touchend.stop='touchEnd($event,$index)'>
+            v-on:touchstart.stop.prevent='touchStart($event,$index)'
+            v-on:touchmove.stop.prevent='touchMove($event,$index)'
+            v-on:touchend.stop.prevent='touchEnd($event,$index)'>
                 {{item.remark}}--{{$index}}
             </div>
             <div class="list-r">
@@ -25,14 +25,14 @@ export default {
     data(){
         return{
             msg:'sliderRightClose',
-            startX:0,
-            startY:0,
-            endX:0,
-            endY:0,
-            direction:0,
-            offsetX:0,
-            prevEle:null,
-            markWidth:null,
+            startX:0,//第一次touch的x轴
+            startY:0,//第一次touch的y轴
+            endX:0,//最后一次touch的x轴
+            endY:0,//最后一次touch的y轴
+            direction:0,//滑动的方向
+            offsetX:0,//x轴的偏移量
+            prevEle:null,//上一个touch元素
+            markWidth:null,//需要偏移的距离px
             items:[
                 {
                     index:1,
@@ -43,6 +43,11 @@ export default {
                     index:2,
                     title:'inxex2',
                     remark:'测试备注2'
+                },
+                {
+                    index:3,
+                    title:'inxex3',
+                    remark:'测试备注3'
                 }
             ]
         }
@@ -54,71 +59,80 @@ export default {
 
     },
     mounted(){
-        let listr = document.querySelector('.list-r');
-        this.markWidth = (window.getComputedStyle(listr).width).replace('px','');
-        console.log(this.markWidth);
+        // let listr = document.querySelector('.list-r');
+        // this.markWidth = (window.getComputedStyle(listr).width).replace('px','');
+        // console.log(this.markWidth);
+
     },
     computed:{
-
+        // 删除换行的空节点类型为#text
+        /*del_ff(){
+            let elem = tag.parentNode;
+            var elem_child = elem.childNodes;
+            for(var i=0; i<elem_child.length;i++){
+                if(elem_child[i].nodeName == "#text" && !/\s/.test(elem_child.nodeValue)){
+                    elem.removeChild(elem_child);
+                }
+            }
+        },*/
+        // 获取目标元素的width
+        GetEleWidth(){
+            let tag = this.prevEle;
+            let a = [];
+            let p = tag.parentNode.children;
+            for(let i = 0; i < p.length; i++){
+                if(p[i] != tag){
+                    a.push(p[i]);
+                }
+            }
+            this.markWidth = (window.getComputedStyle(a[a.length-1]).width).replace('px','');
+            return this.markWidth;
+        }
     },
     methods:{
         touchStart(ev,idx){
             // 重置上一个的状态
             if(this.prevEle!=null){
-                this.prevEle.style=
-                `transform:translate3d(0, 0, 0);
-                -webkit-transform:translate3d(0, 0, 0);`;
+                this.prevEle.style.transform='translate3d(0, 0, 0)';
             }
             this.prevEle = ev.target;
             let etouch = ev.changedTouches[0];
             [this.startX,this.startY] = [etouch.pageX,etouch.pageY];
-
+            this.GetEleWidth;//计算宽
         },
         touchMove(ev,idx){
-
+            // console.log(ev.currentTarget);
             let etouch = ev.changedTouches[0];
 
-            let endX = etouch.pageX;
-            let endY = etouch.pageY;
-
-            [this.endX,this.endY] = [etouch.pageX,etouch.pageX];
+            let endX,endY;
+            // 解构赋值
+            [this.endX,endX,this.endY,endY] = [etouch.pageX,etouch.pageX,etouch.pageY,etouch.pageY];
 
             // 计算手指移动方位
             this.direction = this.GetSlideDirection(this.startX,this.startY,endX,endY);
 
             // 计算滑动距离
-            this.offsetX = endX - this.startX < -150 ? -150 :  endX - this.startX;
+            this.offsetX = endX - this.startX < -this.markWidth ? -this.markWidth :  endX - this.startX;
 
             // console.log(direction,endX,offsetX);
 
             if(this.direction==3){// left
-                if(this.offsetX < -60){
-                    console.log(this.offsetX);
-                    ev.srcElement.style=
-                    `transform:translate3d(-150px, 0, 0);
-                    -webkit-transform:translate3d(-150px, 0, 0);`;
+                if(this.offsetX < -(this.markWidth/2)){
+                    ev.target.style.transform=`translate3d(${-this.markWidth}px, 0, 0)`;
                 }else{
-                    ev.srcElement.style=
-                    `transform:translate3d(${this.offsetX}px, 0, 0);
-                    -webkit-transform:translate3d(${this.offsetX}px, 0, 0);`;
+                    ev.target.style.transform=`translate3d(${this.offsetX}px, 0, 0)`;
                 }
             }else if(this.direction==4){// right
-                if(this.offsetX > 0 && this.offsetX < 150){
-                    console.log("////"+this.offsetX);
-                    ev.srcElement.style=
-                    `transform:translate3d(0, 0, 0);
-                    -webkit-transform:translate3d(0, 0, 0);`;
+                if(this.offsetX > 0 && this.offsetX < this.markWidth){
+                    ev.target.style.transform=`translate3d(0, 0, 0)`;
                 }
             }
 
         },
         touchEnd(ev,idx){
-            // console.log(ev);
-            if(this.offsetX > -60){
-                console.log('touchEnd：'+this.offsetX);
-                ev.srcElement.style=
-                `transform:translate3d(0, 0, 0);
-                -webkit-transform:translate3d(0, 0, 0);`;
+            // 判断touchend时候手指位置并重置元素位置
+            if(this.offsetX > -(this.markWidth/2)){
+                ev.target.style.transform=`translate3d(0, 0, 0)`;
             }
         },
         //返回角度
@@ -135,7 +149,7 @@ export default {
             if(Math.abs(dx) < 2 && Math.abs(dy) < 2){
                 return result;
             }
-
+            // 计算角度返回方向
             let angle = this.GetSlideAngle(dx,dy);
 
             if (angle >= -45 && angle < 45) {
