@@ -102,6 +102,13 @@ export default {
             this.endX = e.changedTouches[0].clientX;
             this.endY = e.changedTouches[0].clientY;
 
+            let eEle = e.target.parentNode;
+            let className = eEle.className;
+            
+            if(className.indexOf('picker-time-list')!=-1){
+                // eEle.style.transform='translate3d(0,75px,0)';
+            }
+
             console.log(this.endY)
         },
 
