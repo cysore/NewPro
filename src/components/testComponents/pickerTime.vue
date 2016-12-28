@@ -11,7 +11,7 @@
                 v-on:touchstart.stop.prevent="touchstart($event)"
                 v-on:touchmove.stop.prevent="touchmove($event)"
                 v-on:touchend.stop.prevent="touchend($event)">
-                    <ul class="picker-time-list"
+                    <ul class="picker-time-list list1"
                     >
                         <li>2016</li>
                         <li>2016</li>
@@ -21,7 +21,7 @@
                         <li>2016</li>
                         <li>2016</li>
                     </ul>
-                    <ul class="picker-time-list"
+                    <ul class="picker-time-list list2"
                     >
                         <li>2016</li>
                         <li>2016</li>
@@ -31,7 +31,7 @@
                         <li>2016</li>
                         <li>2016</li>
                     </ul>
-                    <ul class="picker-time-list"
+                    <ul class="picker-time-list list3"
                     >
                         <li>2016</li>
                         <li>2016</li>
@@ -52,25 +52,57 @@
 export default {
     data(){
         return{
-            msg:'msg',
-            data:''
+            time:null,
+            startX:null,
+            startY:null,
+            endX:null,
+            endY:null,
+            liHeight:null,
         }
     },
     created(){
-        console.log(1)
+        
     },
-    moutend(){
-
+    mouted(){
+        let li = document.querySelector('li');
+        this.liHeight = (window.getComputedStyle(li).height).replace('px','');
+        console.log(this.liHeight)
     },
     methods:{
         touchstart(e){
-            console.log(e.target.parentNode)
+            let eEle = e.target;
+
+            this.startX = e.touches[0].clientX;
+            this.startY = e.touches[0].clientY;
+
+            // console.log(e.target.parentNode.className)
+            console.log(this.startY)
         },
         touchmove(e){
-            console.log(1)
+            this.endX = e.touches[0].clientX;
+            this.endY = e.touches[0].clientY;
+
+            let eEle = e.target.parentNode;
+            let direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
+            let offsetY = this.endY - this.startY +this.liHeight;
+            console.log(offsetY);
+            let className = eEle.className;
+
+            if((direction == 1||2) && className.indexOf('picker-time-list')!=-1){
+               
+                eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
+                
+                // console.log(direction)
+            }
+            // console.log(e.target.parentNode);
+
         },
         touchend(e){
-            // console.log(e.target.children)
+
+            this.endX = e.changedTouches[0].clientX;
+            this.endY = e.changedTouches[0].clientY;
+
+            console.log(this.endY)
         },
 
         //返回角度
@@ -81,9 +113,9 @@ export default {
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
 
-            var dy = startY - endY;
-            var dx = endX - startX;
-            var result = 0;
+            let dy = startY - endY;
+            let dx = endX - startX;
+            let result = 0;
 
             //如果滑动距离太短
             if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
@@ -91,7 +123,7 @@ export default {
             }
 
             // 获取手势方向
-            var angle = GetSlideAngle(dx, dy);
+            let angle = this.GetSlideAngle(dx, dy);
             if (angle >= -45 && angle < 45) {
                 result = 4;
             }else if (angle >= 45 && angle < 135) {
@@ -179,6 +211,9 @@ export default {
                 width: 33.33%;
                 height: auto;
                 text-align: center;
+                transition: all .25s ease-out;
+                overflow: hidden;
+                border: 1px red solid;
                 >li{
                     height: 1rem;
                     line-height: 1rem;
