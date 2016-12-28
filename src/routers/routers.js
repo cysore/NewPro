@@ -53,6 +53,14 @@ export default [
         },
         name: 'routeLogin',
         component: resolve => require(['../components/login.vue'],resolve)
+    },{
+        path: '/picker',
+        meta: {
+            auth: false,
+            title: '选择时间',
+        },
+        name: 'routePicker',
+        component: resolve => require(['../components/testComponents/pickerTime.vue'],resolve)
     },
     {
         path: '*',
