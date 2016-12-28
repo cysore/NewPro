@@ -1,6 +1,22 @@
 
 const libs={
     /**
+    *数组去重
+    *适用[string,number]类型
+    *ES6 版 :Array.from(new Set(array));
+    */
+    unique:function(arr){
+        let res = [];
+        let json = {};
+        for(let i = 0;i < arr.length;i++){
+            if(!json[arr[i]]){
+                res.push(arr[i]);
+                json[arr[i]] = true;
+            }
+        }
+        return res;
+    },
+    /**
     *圆弧进度条
     *@param:canvasParentEle(string:eleID) canvas外层div的ID
     *@param:canvasSelf(string:eleID) canvas的ID
@@ -87,18 +103,20 @@ const libs={
     },
 
     /**
-    *@param:(paramsObj)promise对象
+    *@param:(promise) promise对象
+    *@param:(string) 'json' 返回json格式
     *返回一个promise对象,可以使用.then来处理response参数
     */
-    Fetch:function (paramsObj){
-        if(!paramsObj && typeof paramsObj !== 'object' && JSON.stringify(paramsObj) != '{}') return;
+    Fetch:function (promise,type){
+        if(!promise && typeof promise !== 'object' && JSON.stringify(promise) != '{}') return;
         return new Promise((resolve,reject) => {
-            fetch(paramsObj).then((response) => {
+            fetch(promise).then((response) => {
                 if(response.status == 200){
                     // console.log(response.headers.get('Content-Type'));
                     // console.log(response.headers.get('Date'));
                     // resolve(response.json());
-                    resolve(response);
+                    (type && type == 'json') ?
+                    resolve(response.json()) : resolve(response);
                 }else{
                     reject(response);
                 }

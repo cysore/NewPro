@@ -63,6 +63,15 @@ export default [
         component: resolve => require(['../components/testComponents/pickerTime.vue'],resolve)
     },
     {
+        path: '/sliderRightClose',
+        meta: {
+            auth: false,
+            title: '右滑动删除',
+        },
+        name: 'sliderRightClose',
+        component: resolve => require(['../components/sliderRightClose.vue'],resolve)
+    },
+    {
         path: '*',
         redirect: {name:'routeHome'}
     }
