@@ -562,7 +562,8 @@ export default {
             console.log('前往充值！');
         },
         back(){
-            this.$router.replace({name:'routeInvestement'});
+            history.go(-2);
+            // this.$router.replace({name:'routeInvestement'});
         }
     },
     // 局部自定义指令

@@ -1,7 +1,5 @@
 import Vue from 'vue';
 import testComponent from './test.vue';
-// 日期控件
-// import DateSelector from 'mob-date-selector';
 
 // vue构造函数
 const test = Vue.extend(testComponent);
@@ -14,12 +12,39 @@ let component = new test({
 let doc = document.body;
 
 export default {
-    alert:(msg)=>{
-        console.log(msg);
-        component.data=msg;
+    alert:(params) => {
+
+        component.isshow = false;
+        component.type = 'alert';
+
+        for(let k in params){
+            component[k] = params[k];
+        }
         doc.appendChild(component.$el);
+    },
+    toast:(params) => {
+
+        component.isshow = false;
+        component.type = 'toast';
+        for(let k in params){
+            component[k] = params[k];
+        }
+
+        doc.appendChild(component.$el);
+
         setTimeout(()=>{
-            doc.removeChild(component.$el)
+            component.isshow = true;
         },2000)
+    },
+    confirm:(params) => {
+
+        component.isshow = false;
+        component.type = 'confirm';
+        component.ipt = null;
+
+        for(let k in params){
+            component[k] = params[k];
+        }
+        doc.appendChild(component.$el);
     }
 };

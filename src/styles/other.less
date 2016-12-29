@@ -186,13 +186,17 @@
             transition: .25s ease;
             width: 100%;
             background: #fff;
-            // transform:translate3d(-150px, 0, 0);
+            position: absolute;
+            left: 0;
+            top: 0;
+            z-index: 2;
         }
         .list-r{
             position: absolute;
             right: 0;
             top: 0;
-            z-index: -1;
+            z-index: 1;
+            // float:left;
             .lessRem(width,300);
             text-align: center;
             .list-r-mark{

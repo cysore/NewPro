@@ -1,7 +1,7 @@
 <template lang="html">
     <div>
         <section class="banner">
-            <mt-swipe :auto="5000">
+            <mt-swipe :auto="50000">
                 <mt-swipe-item v-for="item in swiper" class="swiper-slide"><img v-bind:src='item.src' v-bind:alt='item.alt'></mt-swipe-item>
             </mt-swipe>
         </section>

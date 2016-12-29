@@ -1,6 +1,6 @@
 <template lang="html">
     <div class="test">
-        
+
         <div class="picker">
             <div class="picker-time">
                 <div class="picker-time-tit">
@@ -11,35 +11,46 @@
                 v-on:touchstart.stop.prevent="touchstart($event)"
                 v-on:touchmove.stop.prevent="touchmove($event)"
                 v-on:touchend.stop.prevent="touchend($event)">
-                    <ul class="picker-time-list list1"
-                    >
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                    </ul>
-                    <ul class="picker-time-list list2"
-                    >
-                        <li>2016</li>
+                    <ul class="picker-time-list list1">
                         <li>2016</li>
                         <li>2017</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                    </ul>
-                    <ul class="picker-time-list list3"
-                    >
-                        <li>2016</li>
-                        <li>2016</li>
                         <li>2018</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
-                        <li>2016</li>
+                        <li>2019</li>
+                        <li>2020</li>
+                        <li>2021</li>
+                        <li>2022</li>
+                    </ul>
+                    <ul class="picker-time-list list2">
+                        <li>10</li>
+                        <li>11</li>
+                        <li>12</li>
+                        <li>13</li>
+                        <li>14</li>
+                        <li>15</li>
+                        <li>16</li>
+                    </ul>
+                    <ul class="picker-time-list list3">
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
+                        <li>22</li>
+                        <li>23</li>
+                        <li>24</li>
+                        <li>25</li>
+                        <li>26</li>
+                        <li>27</li>
+                        <li>28</li>
                     </ul>
                 </div>
             </div>
@@ -52,49 +63,66 @@
 export default {
     data(){
         return{
-            time:null,
             startX:null,
             startY:null,
             endX:null,
             endY:null,
+            direction:0,
+            lisize:0,
+            currY:{
+                0:0,
+                1:0,
+                2:0
+            },
+            time:null,
             liHeight:null,
+            windowWidth:null,
         }
     },
     created(){
-        
+        this.windowWidth = window.screen.width;
     },
-    mouted(){
-        let li = document.querySelector('li');
-        this.liHeight = (window.getComputedStyle(li).height).replace('px','');
-        console.log(this.liHeight)
+    mounted(){
+        this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
     },
     methods:{
         touchstart(e){
-            let eEle = e.target;
-
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
 
+            let eEle = e.target;
+            let ulArr = e.currentTarget.querySelectorAll('ul');
+
+            this.time = new Date().getTime();
+            // this.liHeight = Number((window.getComputedStyle(ulArr[0].querySelector('li')).height).replace('px',''));
+
+            // 根据touch点选取ul
+            this.position = this.GetPosition(this.startX,this.windowWidth);
+
+            this.lisize = ulArr[this.position].querySelectorAll('li').length;
+
+            // console.log(lisize*this.liHeight);
+
+            // ulArr[this.position].style.transition='transform 0.3s ease-out';
+
             // console.log(e.target.parentNode.className)
-            console.log(this.startY)
+            // console.log(this.startX)
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
             this.endY = e.touches[0].clientY;
 
             let eEle = e.target.parentNode;
-            let direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
-            let offsetY = this.endY - this.startY +this.liHeight;
-            console.log(offsetY);
-            let className = eEle.className;
+            this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
+            let offsetY = this.currY[this.position] + this.endY - this.startY ;
+            // console.log(offsetY);
+            let isclass = eEle.className.indexOf('picker-time-list');
 
-            if((direction == 1||2) && className.indexOf('picker-time-list')!=-1){
-               
+            if((this.direction == 1 || this.direction == 2) && isclass!=-1){
+
                 eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
-                
-                // console.log(direction)
+
             }
-            // console.log(e.target.parentNode);
 
         },
         touchend(e){
@@ -102,14 +130,53 @@ export default {
             this.endX = e.changedTouches[0].clientX;
             this.endY = e.changedTouches[0].clientY;
 
-            let eEle = e.target.parentNode;
-            let className = eEle.className;
-            
-            if(className.indexOf('picker-time-list')!=-1){
-                // eEle.style.transform='translate3d(0,75px,0)';
+            let t = new Date().getTime() - this.time;
+            let d = this.endY - this.startY;
+
+            // 取整计算需要移动的值
+            let offset = this.currY[this.position] + d;
+            offset = Math.round(offset / this.liHeight) * this.liHeight;
+
+            // 偏移量大于2个li高度时候
+            if(offset > this.liHeight * 2){
+                offset = this.liHeight * 2;
+            }
+            if(offset < -this.liHeight * (this.lisize - 3)){
+                offset = - this.liHeight * (this.lisize - 3);
             }
 
-            console.log(this.endY)
+            this.currY[this.position] = offset;
+
+            let eEle = e.target.parentNode;
+            let isclass = eEle.className.indexOf('picker-time-list');
+
+            if(isclass!=-1){
+                // 判断是否是快速滑动
+                /*if(t < 500  && Math.abs(d) > this.liHeight * 3){
+                    if(this.direction == 1){
+                        eEle.style.transform='translate3d(0,'+ - this.liHeight * (this.lisize - 3) +'px,0)';
+                        return;
+                    }else if(this.direction == 2){
+                        eEle.style.transform='translate3d(0,'+ this.liHeight * 2 +'px,0)';
+                        return;
+                    }
+                }*/
+                eEle.style.transform='translate3d(0,'+ offset +'px,0)';
+            }
+
+        },
+
+        // 返回点击位置
+        GetPosition(startX,windowWidth){
+            let pos;
+            if(startX < windowWidth/3){
+                pos = 0;
+            }else if(startX > windowWidth/3 && startX < windowWidth/1.5){
+                pos = 1;
+            }else{
+                pos = 2;
+            }
+            return pos;
         },
 
         //返回角度
@@ -176,7 +243,7 @@ export default {
                 height: 1rem;
                 line-height: 1rem;
                 text-align: center;
-                font-size: .35rem;
+                font-size: .45rem;
             }
         }
         .picker-time-content{
@@ -184,12 +251,6 @@ export default {
             width: 100%;
             overflow: hidden;
             position: relative;
-            display: box;
-            display: -webkit-box;
-            display: flex;
-            display: -webkit-flex;
-            justify-content: space-between;
-            -webkit-justify-content: space-between;
             &:before{
                 content: '';
                 display: block;
@@ -199,8 +260,9 @@ export default {
                 height: 2rem;
                 width: 90%;
                 margin: 0 5%;
-                background-image: linear-gradient(to bottom, #FFF, rgba(255, 255, 255, 0));
                 border-bottom: 1px #ccc solid;
+                background-image: linear-gradient(to bottom, #f1f1f1, rgba(255, 255, 255, 0));
+                pointer-events:none;
             }
             &:after{
                 content: '';
@@ -211,16 +273,15 @@ export default {
                 height: 2rem;
                 width: 90%;
                 margin: 0 5%;
-                background-image: linear-gradient(to top, #FFF, rgba(255, 255, 255, 0));
+                background-image: linear-gradient(to top, #f1f1f1, rgba(255, 255, 255, 0));
                 border-top: 1px #ccc solid;
+                pointer-events:none;
             }
             .picker-time-list{
                 width: 33.33%;
-                height: auto;
+                float: left;
                 text-align: center;
-                transition: all .25s ease-out;
-                overflow: hidden;
-                border: 1px red solid;
+                transition: all .3s ease-out;
                 >li{
                     height: 1rem;
                     line-height: 1rem;

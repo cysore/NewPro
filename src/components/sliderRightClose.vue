@@ -8,19 +8,21 @@
                 {{item.remark}}--{{$index}}
             </div>
             <div class="list-r">
-                <div class="list-r-mark">
+                <div class="list-r-mark" v-on:touchstart='setMark($event,$index)'>
                     备注
                 </div>
-                <div class="list-r-del" >
+                <div class="list-r-del" v-on:touchstart='delMark($event,$index)'>
                     删除
                 </div>
             </div>
         </div>
         {{direction}}--{{offsetX}}
+        <!-- <test></test> -->
     </div>
 </template>
 
 <script>
+import test from './testComponents/test.js';
 export default {
     data(){
         return{
@@ -52,29 +54,17 @@ export default {
             ]
         }
     },
-    mounted(){
-        console.log(this.$refs);
+    components:{
+        test:test
     },
     created(){
 
     },
     mounted(){
-        // let listr = document.querySelector('.list-r');
-        // this.markWidth = (window.getComputedStyle(listr).width).replace('px','');
-        // console.log(this.markWidth);
-
+        this.prevEle = document.querySelector('.list-l');
+        this.GetEleWidth;
     },
     computed:{
-        // 删除换行的空节点类型为#text
-        /*del_ff(){
-            let elem = tag.parentNode;
-            var elem_child = elem.childNodes;
-            for(var i=0; i<elem_child.length;i++){
-                if(elem_child[i].nodeName == "#text" && !/\s/.test(elem_child.nodeValue)){
-                    elem.removeChild(elem_child);
-                }
-            }
-        },*/
         // 获取目标元素的width
         GetEleWidth(){
             let tag = this.prevEle;
@@ -85,20 +75,53 @@ export default {
                     a.push(p[i]);
                 }
             }
+            this.siblings = a[a.length-1];
             this.markWidth = (window.getComputedStyle(a[a.length-1]).width).replace('px','');
             return this.markWidth;
-        }
+        },
+
     },
     methods:{
-        touchStart(ev,idx){
+        setMark(ev,idx){
+            let self = this;
+            test.confirm({
+                tit:'测试标题',
+                msg:'测试信息',
+                callback:function(data){
+                    console.log(data);
+                    self.resetStatus();
+                }
+            })
+
+        },
+        delMark(ev,idx){
+            let self = this;
+            test.alert({
+                tit:'删除',
+                msg:'确定删除？',
+                callback:function(data){
+                    console.log(data);
+                    if(data){
+                        self.items.splice(idx,1);
+                    }
+                    self.resetStatus();
+                }
+            })
+        },
+        // 重置上一个元素状态
+        resetStatus(){
             // 重置上一个的状态
             if(this.prevEle!=null){
                 this.prevEle.style.transform='translate3d(0, 0, 0)';
             }
+        },
+        touchStart(ev,idx){
+            this.resetStatus();
+
             this.prevEle = ev.target;
             let etouch = ev.changedTouches[0];
             [this.startX,this.startY] = [etouch.pageX,etouch.pageY];
-            this.GetEleWidth;//计算宽
+            // this.GetEleWidth;//计算宽
         },
         touchMove(ev,idx){
             // console.log(ev.currentTarget);
