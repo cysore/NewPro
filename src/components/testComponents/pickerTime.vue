@@ -63,27 +63,50 @@
 export default {
     data(){
         return{
-            startX:null,
-            startY:null,
-            endX:null,
-            endY:null,
-            direction:0,
-            lisize:0,
+            startX:null,//touch 开始点
+            startY:null,//touch 开始点
+            endX:null,//touch 结束点
+            endY:null,//touch 结束点
+            direction:0,//touch 方向
+            lisize:0,//li 个数
             currY:{
-                0:0,
-                1:0,
-                2:0
-            },
-            time:null,
-            liHeight:null,
-            windowWidth:null,
+                year:0,
+                month:0,
+                day:0
+            },//touch当前的距离
+            index:{
+                year:0,
+                month:0,
+                day:0
+            },//滚动后的记录下标值
+            selected:{
+                year:0,
+                month:0,
+                day:0
+            },//选中的值
+            time:null,//touch start 记录的开始时间
+            liHeight:null,//li 的高度
+            windowWidth:null,//屏幕宽度
+            YDM:{
+                year:[],
+                month:[],
+                day:[]
+            }
         }
     },
     created(){
-        this.windowWidth = window.screen.width;
+
     },
     mounted(){
+        this.windowWidth = window.screen.width;
         this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
+    },
+    computed:{
+        /*dateArr(){
+            let year = [],month = [],day = [];
+            for(let i = 0;i < )
+        },*/
+
     },
     methods:{
         touchstart(e){
@@ -96,7 +119,7 @@ export default {
             this.time = new Date().getTime();
             // this.liHeight = Number((window.getComputedStyle(ulArr[0].querySelector('li')).height).replace('px',''));
 
-            // 根据touch点选取ul
+            // 根据touch点选取ul和li的个数
             this.position = this.GetPosition(this.startX,this.windowWidth);
 
             this.lisize = ulArr[this.position].querySelectorAll('li').length;
@@ -114,14 +137,13 @@ export default {
 
             let eEle = e.target.parentNode;
             this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
-            let offsetY = this.currY[this.position] + this.endY - this.startY ;
-            // console.log(offsetY);
+            let offsetY = this.currY[this.isYMD()] + this.endY - this.startY ;
+
             let isclass = eEle.className.indexOf('picker-time-list');
 
+            // 当只有上下滑动并且是目标ul元素的时候
             if((this.direction == 1 || this.direction == 2) && isclass!=-1){
-
                 eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
-
             }
 
         },
@@ -134,7 +156,7 @@ export default {
             let d = this.endY - this.startY;
 
             // 取整计算需要移动的值
-            let offset = this.currY[this.position] + d;
+            let offset = this.currY[this.isYMD()] + d;
             offset = Math.round(offset / this.liHeight) * this.liHeight;
 
             // 偏移量大于2个li高度时候
@@ -145,7 +167,7 @@ export default {
                 offset = - this.liHeight * (this.lisize - 3);
             }
 
-            this.currY[this.position] = offset;
+            this.currY[this.isYMD()] = offset;
 
             let eEle = e.target.parentNode;
             let isclass = eEle.className.indexOf('picker-time-list');
@@ -164,8 +186,27 @@ export default {
                 eEle.style.transform='translate3d(0,'+ offset +'px,0)';
             }
 
-        },
+            // 将下标推入index对象
+            let idx = offset / this.liHeight - 2;
+            this.index[this.isYMD()] = (-idx);
 
+            console.log(this.index);
+            this.getDate(eEle);
+        },
+        //
+        getDate(el){
+            console.log(el);
+        },
+        // 判断年月日类型
+        isYMD(){
+            if(this.position == 0){
+                return 'year';
+            }else if(this.position == 1){
+                return 'month';
+            }else if(this.position == 2){
+                return 'day';
+            }
+        },
         // 返回点击位置
         GetPosition(startX,windowWidth){
             let pos;
