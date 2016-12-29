@@ -12,45 +12,13 @@
                 v-on:touchmove.stop.prevent="touchmove($event)"
                 v-on:touchend.stop.prevent="touchend($event)">
                     <ul class="picker-time-list list1">
-                        <li>2016</li>
-                        <li>2017</li>
-                        <li>2018</li>
-                        <li>2019</li>
-                        <li>2020</li>
-                        <li>2021</li>
-                        <li>2022</li>
+                        <li v-for="year in YMD.year">{{year}}年</li>
                     </ul>
                     <ul class="picker-time-list list2">
-                        <li>10</li>
-                        <li>11</li>
-                        <li>12</li>
-                        <li>13</li>
-                        <li>14</li>
-                        <li>15</li>
-                        <li>16</li>
+                        <li v-for="month in YMD.month">{{month}}月</li>
                     </ul>
                     <ul class="picker-time-list list3">
-                        <li>22</li>
-                        <li>23</li>
-                        <li>24</li>
-                        <li>25</li>
-                        <li>26</li>
-                        <li>27</li>
-                        <li>28</li>
-                        <li>22</li>
-                        <li>23</li>
-                        <li>24</li>
-                        <li>25</li>
-                        <li>26</li>
-                        <li>27</li>
-                        <li>28</li>
-                        <li>22</li>
-                        <li>23</li>
-                        <li>24</li>
-                        <li>25</li>
-                        <li>26</li>
-                        <li>27</li>
-                        <li>28</li>
+                        <li v-for="day in YMD.day">{{day}}日</li>
                     </ul>
                 </div>
             </div>
@@ -87,7 +55,7 @@ export default {
             time:null,//touch start 记录的开始时间
             liHeight:null,//li 的高度
             windowWidth:null,//屏幕宽度
-            YDM:{
+            YMD:{
                 year:[],
                 month:[],
                 day:[]
@@ -95,12 +63,47 @@ export default {
         }
     },
     created(){
+        let maxDate = '2030-10-10';
+        let minDate = '2000-10-10';
 
+        let [
+                maxDate_year,
+                maxDate_month,
+                maxDate_day,
+
+                minDate_year,
+                minDate_month,
+                minDate_day
+            ] = [
+                Number(maxDate.split('-')[0]),
+                Number(maxDate.split('-')[1]),
+                Number(maxDate.split('-')[2]),
+
+                Number(minDate.split('-')[0]),
+                Number(minDate.split('-')[1]),
+                Number(minDate.split('-')[2])
+            ]
+
+
+        for(let i = 0; i <= maxDate_year - minDate_year; i++){
+            this.YMD.year.push(minDate_year+i);
+        }
+        for(let i = 1; i <= 12; i++){
+            this.YMD.month.push(i);
+        }
+
+        let days = this.getDaysInMonth(this.YMD.year[2],this.YMD.month[2]);
+        this.getDays(days,0);
+
+
+        console.log(days)
     },
+    // 组件挂载
     mounted(){
         this.windowWidth = window.screen.width;
         this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
     },
+    // 计算属性
     computed:{
         /*dateArr(){
             let year = [],month = [],day = [];
@@ -184,18 +187,44 @@ export default {
                     }
                 }*/
                 eEle.style.transform='translate3d(0,'+ offset +'px,0)';
+
             }
 
             // 将下标推入index对象
             let idx = offset / this.liHeight - 2;
-            this.index[this.isYMD()] = (-idx);
+            this.index[this.isYMD()] = Math.abs(idx);
 
             console.log(this.index);
-            this.getDate(eEle);
+
+            if(this.position == 0 || this.position == 1){
+                let [year,month] = [eEle.querySelectorAll('li')[this.index.year].innerHTML,eEle.querySelectorAll('li')[this.index.month].innerHTML]
+                // this.YMD.day.length = 0;
+                let days = this.getDaysInMonth(year.replace(/[^0-9]/ig,""),month.replace(/[^0-9]/ig,""));
+                this.getDays(days,1);
+                console.log(days)
+            }
+
+
+            
         },
         //
-        getDate(el){
-            console.log(el);
+        getDays(d,init){
+            // console.log(el);
+            if(init == 0){
+                for(let i = 1; i <= d; i++){
+                    this.YMD.day.push(i);
+                }
+            }else if(init == 1){
+                for(let i = 1; i <= d; i++){
+                    this.YMD.day.splice(i,i);
+                }
+            }
+        },
+        // 根据年月获得当月天数
+        getDaysInMonth(year,month){ 
+            month = parseInt(month,10); //parseInt(number,type)这个函数后面如果不跟第2个参数来表示进制的话，默认是10进制。 
+            var temp = new Date(year,month,0); 
+            return temp.getDate(); 
         },
         // 判断年月日类型
         isYMD(){
