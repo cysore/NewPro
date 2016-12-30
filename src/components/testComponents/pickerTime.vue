@@ -97,7 +97,7 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[2],this.YMD.month[2]);
         this.getDays(days);
 
-        let setDate = '2005-10-12';
+        let setDate = '2005-1-12';
         let [
             setDate_year,
             setDate_month,
@@ -112,20 +112,18 @@ export default {
 
         // 如果有设置时间年
         if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
-            this.setVal_year = Number(maxDate_year - setDate_year) - 2;
+            this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year)) - 2;
             this.index.year = this.setVal_year;
-            console.log(this.index.year);
+            console.log(maxDate_year - minDate_year);
         }
 
         // 如果有设置时间月
-        if(setDate_month >= minDate_month && setDate_month <= maxDate_month){
-            this.setVal_month = Math.abs(Number(maxDate_month - setDate_month) - 2);
-            this.index.month = this.setVal_month;
+        if(setDate_month){
+            this.setVal_month = setDate_month - 3;
+            this.index.month = Math.abs(this.setVal_month);
             console.log(this.index.month);
         }
 
-        // this.$refs.month.style.transform="translate3d(0,0px,0)";
-        // this.$refs.day.style.transform="translate3d(0,0px,0)";
 
     },
     // 组件挂载
@@ -134,6 +132,8 @@ export default {
         this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
 
         this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
+        this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
+        // this.$refs.day.style.transform="translate3d(0,0px,0)";
 
     },
     // 计算属性
@@ -159,8 +159,9 @@ export default {
             this.endY = e.touches[0].clientY;
 
             let eEle = e.target.parentNode;
+            // 获取滑动方向
             this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
-
+            // 设置开始滑动的值[区间在li的高度上增加]
             let offsetY = this.currY[this.isYMD()] + this.endY - this.startY;
 
             let isclass = eEle.className.indexOf('picker-time-list');
