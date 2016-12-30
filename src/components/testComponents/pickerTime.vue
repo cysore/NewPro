@@ -46,9 +46,9 @@ export default {
                 day:0
             },//touch当前的距离
             index:{
-                year:2,
-                month:2,
-                day:2
+                year:0,
+                month:0,
+                day:0
             },//滚动后的记录下标值(默认居中显示时取下标为2的值作为起始)
             // selected:{
             //     year:0,
@@ -97,7 +97,7 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[2],this.YMD.month[2]);
         this.getDays(days);
 
-        let setDate = '2015-11-2';
+        let setDate = '2015-11-22';
         let [
             setDate_year,
             setDate_month,
@@ -114,24 +114,24 @@ export default {
         if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
             this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year)) - 2;
             this.index.year = this.setVal_year;
-            console.log(this.index.year);
+            // console.log(this.index.year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
             this.setVal_month = setDate_month - 3;
             this.index.month = Math.abs(this.setVal_month);
-            console.log(this.index.month);
+            // console.log(this.index.month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
             this.setVal_day = setDate_day - 3;
             this.index.day = Math.abs(this.setVal_day);
-            console.log(this.index.day);
+            // console.log(this.index.day);
 
         }
-
+        console.log(this.index.year,this.index.month,this.index.day);
     },
     // 组件挂载
     mounted(){
@@ -157,7 +157,7 @@ export default {
 
             this.time = new Date().getTime();
 
-            // 根据touch点选取ul和li的个数
+            // 根据touch点选取年月日所在的ul和li的个数
             this.position = this.GetPosition(this.startX,this.windowWidth);
             this.lisize = this.ulArr[this.position].querySelectorAll('li').length;
         },
@@ -176,8 +176,14 @@ export default {
             // 当只有上下滑动并且是目标ul元素的时候
             if((this.direction == 1 || this.direction == 2) && isclass!=-1){
                 // 当设置了时间的时候防止滑动的时候计算结果是以前的位置
-                if(this.setVal_year != null){
+                if(this.position == 0 && this.setVal_year != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_year　* this.liHeight);
+                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
+                }else if(this.position == 1 && this.setVal_month != null){
+                    offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_month　* this.liHeight);
+                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
+                }else if(this.position == 2 && this.setVal_day != null){
+                    offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_day　* this.liHeight);
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }else{
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
@@ -197,13 +203,28 @@ export default {
             offset = Math.round(offset / this.liHeight) * this.liHeight;
 
 
-            // 当设置了时间的时候防止滑动的时候计算结果是以前的位置
-            if(this.setVal_year != null){
-                // 计算设置时间后的第一次滑动的偏移值
+            // 当设置了年后防止滑动的时候计算结果是以前的位置
+            if(this.position == 0 && this.setVal_year != null){
+                // 计算设置年后的第一次滑动的偏移值
                 let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
                 offset = this.currY[this.isYMD()] + res + (-this.setVal_year　* this.liHeight);
                 this.setVal_year = null;
             }
+
+            if(this.position == 1 && this.setVal_month != null){
+                // 计算设置年后的第一次滑动的偏移值
+                let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
+                offset = this.currY[this.isYMD()] + res + (-this.setVal_month　* this.liHeight);
+                this.setVal_month = null;
+            }
+
+            if(this.position == 2 && this.setVal_day != null){
+                // 计算设置年后的第一次滑动的偏移值
+                let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
+                offset = this.currY[this.isYMD()] + res + (-this.setVal_day　* this.liHeight);
+                this.setVal_day = null;
+            }
+
             // 偏移量大于2个li高度时候
             if(offset > this.liHeight * 2){
                 offset = this.liHeight * 2;
@@ -254,6 +275,8 @@ export default {
 
                 this.getDays(days,eEle,offt);
             }
+
+            console.log(offset)
 
         },
         // 关闭
