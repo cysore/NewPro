@@ -115,8 +115,7 @@ const libs={
                     // console.log(response.headers.get('Content-Type'));
                     // console.log(response.headers.get('Date'));
                     // resolve(response.json());
-                    (type && type == 'json') ?
-                    resolve(response.json()) : resolve(response);
+                    (type && type == 'json') ? resolve(response.json()) : resolve(response);
                 }else{
                     reject(response);
                 }
