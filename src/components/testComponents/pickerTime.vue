@@ -124,6 +124,10 @@ export default {
             console.log(this.index.month);
         }
 
+        // 如果有设置时间日
+        if(setDate_day){
+            console.log(setDate_day);
+        }
 
     },
     // 组件挂载
