@@ -114,7 +114,7 @@ export default {
         if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
             this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year)) - 2;
             this.index.year = this.setVal_year;
-            console.log(maxDate_year - minDate_year);
+            console.log(this.index.year);
         }
 
         // 如果有设置时间月
@@ -127,7 +127,8 @@ export default {
         // 如果有设置时间日
         if(setDate_day){
             this.setVal_day = setDate_day - 3;
-            console.log(setDate_day);
+            this.index.day = Math.abs(this.setVal_day);
+            console.log(this.index.day);
 
         }
 
