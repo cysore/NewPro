@@ -12,12 +12,18 @@
                 v-on:touchmove.stop.prevent="touchmove($event)"
                 v-on:touchend.stop.prevent="touchend($event)">
                     <ul class="picker-time-list list1" ref="year">
+                        <li></li>
+                        <li></li>
                         <li v-for="year in YMD.year">{{year}}年</li>
                     </ul>
                     <ul class="picker-time-list list2" ref="month">
+                        <li></li>
+                        <li></li>
                         <li v-for="month in YMD.month">{{month}}月</li>
                     </ul>
                     <ul class="picker-time-list list3" ref="day">
+                        <li></li>
+                        <li></li>
                         <li v-for="day in YMD.day">{{day}}日</li>
                     </ul>
                 </div>
@@ -97,7 +103,7 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[2],this.YMD.month[2]);
         this.getDays(days);
 
-        let setDate = '2015-11-22';
+        let setDate = '2001-11-22';
         let [
             setDate_year,
             setDate_month,
@@ -112,21 +118,21 @@ export default {
 
         // 如果有设置时间年
         if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
-            this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year)) - 2;
+            this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year)) ;
             this.index.year = this.setVal_year;
-            // console.log(this.index.year);
+            console.log(this.index.year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
-            this.setVal_month = setDate_month - 3;
+            this.setVal_month = setDate_month -1;
             this.index.month = Math.abs(this.setVal_month);
             // console.log(this.index.month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
-            this.setVal_day = setDate_day - 3;
+            this.setVal_day = setDate_day -1;
             this.index.day = Math.abs(this.setVal_day);
             // console.log(this.index.day);
 
@@ -226,8 +232,8 @@ export default {
             }
 
             // 偏移量大于2个li高度时候
-            if(offset > this.liHeight * 2){
-                offset = this.liHeight * 2;
+            if(offset > this.liHeight ){
+                offset = 0 ;
             }
             if(offset < -this.liHeight * (this.lisize - 3)){
                 offset = - this.liHeight * (this.lisize - 3);
@@ -254,7 +260,7 @@ export default {
             }
 
             // 将下标推入index对象
-            let idx = Math.round(offset / this.liHeight - 2);
+            let idx = Math.round(offset / this.liHeight );
             this.index[this.isYMD()] = Math.abs(idx);
 
             if(this.position == 0 || this.position == 1){
@@ -286,11 +292,22 @@ export default {
         // 确定
         enter(){
             console.log(this.index.year,this.index.month,this.index.day);
+            let [
+                liEleYears,
+                liEleMonths,
+                liEleDays
+            ] = [
+                this.$refs.year.querySelectorAll('li'),
+                this.$refs.month.querySelectorAll('li'),
+                this.$refs.day.querySelectorAll('li'),
+            ];
+
+
 
             console.log(
-                this.$refs.year.querySelectorAll('li')[this.index.year].innerHTML,
-                this.$refs.month.querySelectorAll('li')[this.index.month].innerHTML,
-                this.$refs.day.querySelectorAll('li')[this.index.day].innerHTML,
+                liEleYears[this.index.year+2].innerHTML,
+                liEleMonths[this.index.month+2 > liEleMonths.length ? liEleMonths.length : this.index.month+2].innerHTML,
+                liEleDays[this.index.day+2 > liEleDays.length ? liEleDays.length : this.index.day+2].innerHTML,
             );
         },
         //
