@@ -97,7 +97,7 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[2],this.YMD.month[2]);
         this.getDays(days);
 
-        let setDate = '2005-1-12';
+        let setDate = '2015-11-2';
         let [
             setDate_year,
             setDate_month,
@@ -126,7 +126,9 @@ export default {
 
         // 如果有设置时间日
         if(setDate_day){
+            this.setVal_day = setDate_day - 3;
             console.log(setDate_day);
+
         }
 
     },
@@ -137,7 +139,7 @@ export default {
 
         this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
         this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
-        // this.$refs.day.style.transform="translate3d(0,0px,0)";
+        this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
 
     },
     // 计算属性
@@ -395,7 +397,7 @@ export default {
                 width: 90%;
                 margin: 0 5%;
                 border-bottom: 1px #ccc solid;
-                background-image: linear-gradient(to bottom, #f1f1f1, rgba(255, 255, 255, 0));
+                background-image: linear-gradient(to bottom, #FFF, rgba(255, 255, 255, 0));
                 pointer-events:none;
                 z-index: 1;
             }
@@ -408,7 +410,7 @@ export default {
                 height: 2rem;
                 width: 90%;
                 margin: 0 5%;
-                background-image: linear-gradient(to top, #f1f1f1, rgba(255, 255, 255, 0));
+                background-image: linear-gradient(to top, #FFF, rgba(255, 255, 255, 0));
                 border-top: 1px #ccc solid;
                 pointer-events:none;
                 z-index: 1;
