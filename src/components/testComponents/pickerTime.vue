@@ -8,7 +8,7 @@
     <transition name="fadeTB"> 
         <div class="picker-time" v-show="!show">
                 <div class="picker-time-tit">
-                    <span v-on:click="close">取消</span>
+                    <span v-on:click="show = true">取消</span>
                     <span v-on:click="enter">确定</span>
                 </div>
                 <div class="picker-time-content"
@@ -67,7 +67,7 @@ export default {
                 day:[]
             },//需要渲染的年月日,
             selectedDate:null,//选中的年月日
-            show:false,
+            show:true,
         }
     },
     created(){
@@ -148,9 +148,10 @@ export default {
     },
     // 组件挂载
     mounted(){
+        // 获取屏幕宽与li的高来计算touch点的值
         this.windowWidth = window.screen.width;
         this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
-
+        // 当设置有时间时定位到ul>li
         this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
         this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
         this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
@@ -304,10 +305,7 @@ export default {
 
 
         },
-        // 关闭
-        close(){
-            this.show = true;
-        },
+
         // 确定
         enter(){
             console.log(this.index.year,this.index.month,this.index.day);
