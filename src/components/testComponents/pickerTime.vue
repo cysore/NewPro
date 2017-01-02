@@ -3,7 +3,7 @@
     <div v-on:click="show = !show">123<br>123</div>
 {{selectedDate}}
     <transition name="fadeIO">
-        <div class="picker" v-show="!show"></div>
+        <div class="picker" v-on:click="show = true" v-show="!show"></div>
     </transition>   
     <transition name="fadeTB"> 
         <div class="picker-time" v-show="!show">
@@ -217,23 +217,24 @@ export default {
             let offset = Math.round((this.currY[this.isYMD()] + d) / this.liHeight) * this.liHeight;
 
 
-            // 当设置了年后防止滑动的时候计算结果是以前的位置
-            let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
+            // 当设置了年月日后防止滑动的时候计算结果是以前的位置
+            let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight;
+            let cur = this.currY[this.isYMD()] + res;
             // 计算设置年后的第一次滑动的偏移值
             if(this.position == 0 && this.setVal_year != null){
-                offset = this.currY[this.isYMD()] + res + (-this.setVal_year　* this.liHeight);
+                offset = cur + (-this.setVal_year　* this.liHeight);
                 this.setVal_year = null;
             }
 
             // 计算设置月后的第一次滑动的偏移值
             if(this.position == 1 && this.setVal_month != null){
-                offset = this.currY[this.isYMD()] + res + (-this.setVal_month　* this.liHeight);
+                offset = cur + (-this.setVal_month　* this.liHeight);
                 this.setVal_month = null;
             }
 
             // 计算设置日后的第一次滑动的偏移值
             if(this.position == 2 && this.setVal_day != null){
-                offset = this.currY[this.isYMD()] + res + (-this.setVal_day　* this.liHeight);
+                offset = cur + (-this.setVal_day　* this.liHeight);
                 this.setVal_day = null;
             }
 
@@ -245,7 +246,7 @@ export default {
                 offset = - this.liHeight * (this.lisize - 3);
             }
 
-
+            // 重新赋值以便计算下一次滑动的位置
             this.currY[this.isYMD()] = offset;
             let eEle = e.target.parentNode;
             let isclass = eEle.className.indexOf('picker-time-list');
@@ -339,7 +340,7 @@ export default {
         getDays(d,eEle,offt){
             if(eEle){
                 let offsetY = -(this.liHeight * (d-1));
-                console.log(d,offt,offsetY);
+                // console.log(d,offt,offsetY);
                 if(d <= 30 && offt < offsetY){
                     this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }
