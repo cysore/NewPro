@@ -138,7 +138,7 @@ export default {
 
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
-// console.log('设置的最大天'+days)
+
         // 设置最大年月日
         this.setMaxYear = Number(maxDate_year - minDate_year);
         this.setMaxMonth = 12;
@@ -325,7 +325,7 @@ export default {
                 liEleMonths[this.index.month+2].innerHTML + 
                 liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML;
 
-            // this.show = true;
+            this.show = true;
             this.selectedDate = selectedDate;
 
             console.log(
