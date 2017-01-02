@@ -8,7 +8,7 @@
     <transition name="fadeTB"> 
         <div class="picker-time" v-show="!show">
                 <div class="picker-time-tit">
-                    <span v-on:click="close">取消</span>
+                    <span v-on:click="show = true">取消</span>
                     <span v-on:click="enter">确定</span>
                 </div>
                 <div class="picker-time-content"
@@ -67,7 +67,7 @@ export default {
                 day:[]
             },//需要渲染的年月日,
             selectedDate:null,//选中的年月日
-            show:false,
+            show:true,
         }
     },
     created(){
@@ -304,10 +304,7 @@ export default {
 
 
         },
-        // 关闭
-        close(){
-            this.show = true;
-        },
+
         // 确定
         enter(){
             console.log(this.index.year,this.index.month,this.index.day);
