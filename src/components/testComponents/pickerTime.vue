@@ -1,8 +1,12 @@
 <template lang="html">
     <div class="test">
-
-        <div class="picker">
-            <div class="picker-time">
+    <div v-on:click="show = !show">123<br>123</div>
+{{selectedDate}}
+    <transition name="fadeIO">
+        <div class="picker" v-show="!show"></div>
+    </transition>   
+    <transition name="fadeTB"> 
+        <div class="picker-time" v-show="!show">
                 <div class="picker-time-tit">
                     <span v-on:click="close">取消</span>
                     <span v-on:click="enter">确定</span>
@@ -29,8 +33,7 @@
                 </div>
             </div>
         </div>
-
-    </div>
+    </transition>  
 </template>
 
 <script>
@@ -56,23 +59,20 @@ export default {
                 month:0,
                 day:0
             },//滚动后的记录下标值(默认居中显示时取下标为2的值作为起始)
-            // selected:{
-            //     year:0,
-            //     month:0,
-            //     day:0
-            // },//选中的值(默认居中显示时取下标为2的值作为起始)
             time:null,//touch start 记录的开始时间
             windowWidth:null,//屏幕宽度
             YMD:{
                 year:[],
                 month:[],
                 day:[]
-            },//需要渲染的年月日
+            },//需要渲染的年月日,
+            selectedDate:null,//选中的年月日
+            show:false,
         }
     },
     created(){
         let maxDate = '2030-10-10';
-        let minDate = '2000-10-10';
+        let minDate = '1990-10-10';
 
         let [
                 maxDate_year,
@@ -103,7 +103,7 @@ export default {
 
         
 
-        let setDate = '2017-1-28';
+        let setDate = '2001-1-28';
         let [
             setDate_year,
             setDate_month,
@@ -119,26 +119,26 @@ export default {
         if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
             this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year));
             this.index.year = this.setVal_year;
-            // console.log(this.setVal_year);
+            console.log('年'+this.setVal_year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
-            this.setVal_month = setDate_month - 1;
+            this.setVal_month = setDate_month -1;
             this.index.month = Math.abs(this.setVal_month);
-            // console.log(this.index.month);
+            console.log('月'+this.setVal_month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
-            this.setVal_day = setDate_day - 1;
+            this.setVal_day = setDate_day -1;
             this.index.day = Math.abs(this.setVal_day);
-            // console.log(this.index.day);
+            console.log('日'+this.setVal_day);
         }
 
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
-
+// console.log('设置的最大天'+days)
         // 设置最大年月日
         this.setMaxYear = Number(maxDate_year - minDate_year);
         this.setMaxMonth = 12;
@@ -161,6 +161,7 @@ export default {
 
     },
     methods:{
+       
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
@@ -188,7 +189,7 @@ export default {
 
             // 当只有上下滑动并且是目标ul元素的时候
             if((this.direction == 1 || this.direction == 2) && isclass!=-1){
-                // 当设置了时间的时候防止滑动的时候计算结果是以前的位置
+                // 当设置了时间的时候防止滑动的时候计算位置结果是以前的位置
                 if(this.position == 0 && this.setVal_year != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_year　* this.liHeight);
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
@@ -212,34 +213,31 @@ export default {
             let d = this.endY - this.startY;
 
             // 取整计算需要移动的值
-            let offset = this.currY[this.isYMD()] + d;
-            offset = Math.round(offset / this.liHeight) * this.liHeight;
+            let offset = Math.round((this.currY[this.isYMD()] + d) / this.liHeight) * this.liHeight;
 
 
             // 当设置了年后防止滑动的时候计算结果是以前的位置
+            let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
+            // 计算设置年后的第一次滑动的偏移值
             if(this.position == 0 && this.setVal_year != null){
-                // 计算设置年后的第一次滑动的偏移值
-                let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
                 offset = this.currY[this.isYMD()] + res + (-this.setVal_year　* this.liHeight);
                 this.setVal_year = null;
             }
 
+            // 计算设置月后的第一次滑动的偏移值
             if(this.position == 1 && this.setVal_month != null){
-                // 计算设置月后的第一次滑动的偏移值
-                let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
                 offset = this.currY[this.isYMD()] + res + (-this.setVal_month　* this.liHeight);
                 this.setVal_month = null;
             }
 
+            // 计算设置日后的第一次滑动的偏移值
             if(this.position == 2 && this.setVal_day != null){
-                // 计算设置日后的第一次滑动的偏移值
-                let res = Math.round((this.endY - this.startY) / this.liHeight) * this.liHeight
                 offset = this.currY[this.isYMD()] + res + (-this.setVal_day　* this.liHeight);
                 this.setVal_day = null;
             }
 
             // 偏移量大于2个li高度时候
-            if(offset > this.liHeight ){
+            if(offset >= this.liHeight ){
                 offset = 0 ;
             }
             if(offset < -this.liHeight * (this.lisize - 3)){
@@ -270,9 +268,20 @@ export default {
             this.index[this.isYMD()] = Math.abs(idx);
 
             if(this.position == 0 || this.position == 1){
-                let tagIndexYear = (this.index.year + 2) > this.setMaxYear ? this.setMaxYear : this.index.year + 2;
-                let tagIndexMonth = (this.index.month + 2) > this.setMaxMonth+1 ? this.setMaxMonth+1 : this.index.month + 2;
-                let tagIndexDay = (this.index.day + 2) > this.setMaxDay+1 ? this.setMaxDay+1 : this.index.day + 2;
+                let [
+                    liEleYears,
+                    liEleMonths,
+                    liEleDays,
+
+                ] = [
+                    this.$refs.year.querySelectorAll('li').length-1,
+                    this.$refs.month.querySelectorAll('li').length-1,
+                    this.$refs.day.querySelectorAll('li').length-1,
+                ];
+
+                let tagIndexYear = (this.index.year + 2) > liEleYears ? liEleYears : this.index.year + 2;
+                let tagIndexMonth = (this.index.month + 2) > liEleMonths ? liEleMonths : this.index.month + 2;
+                let tagIndexDay = (this.index.day + 2) > liEleDays ? liEleDays : this.index.day + 2;
 
                 let [
                     year,
@@ -297,7 +306,7 @@ export default {
         },
         // 关闭
         close(){
-            console.log(1);
+            this.show = true;
         },
         // 确定
         enter(){
@@ -305,26 +314,34 @@ export default {
             let [
                 liEleYears,
                 liEleMonths,
-                liEleDays
+                liEleDays,
+
             ] = [
                 this.$refs.year.querySelectorAll('li'),
                 this.$refs.month.querySelectorAll('li'),
                 this.$refs.day.querySelectorAll('li'),
             ];
 
+            let selectedDate = 
+                liEleYears[this.index.year+2].innerHTML + 
+                liEleMonths[this.index.month+2].innerHTML + 
+                liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML;
 
+            // this.show = true;
+            this.selectedDate = selectedDate;
 
             console.log(
                 liEleYears[this.index.year+2].innerHTML,
-                liEleMonths[this.index.month+2 > liEleMonths.length ? liEleMonths.length : this.index.month+2].innerHTML,
-                liEleDays[this.index.day+2 > liEleDays.length ? liEleDays.length : this.index.day+2].innerHTML,
+                liEleMonths[this.index.month+2].innerHTML,
+                liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML,
             );
+
         },
         // 根据选择的年月返回当月日数，并且不不超出滑动范围
         getDays(d,eEle,offt){
             if(eEle){
-                let offsetY = -(this.liHeight * (d-3));
-
+                let offsetY = -(this.liHeight * (d-1));
+                console.log(d,offt,offsetY);
                 if(d <= 30 && offt < offsetY){
                     this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }
@@ -407,79 +424,101 @@ export default {
 }
 .picker{
     position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     z-index: 9999;
     background: rgba(0,0,0,.5);
-    .picker-time{
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 6rem;
-        background: #fff;
-        .picker-time-tit{
-            border-bottom: 1px #ccc solid;
-            display: box;
-            display: -webkit-box;
-            display: flex;
-            display: -webkit-flex;
-            justify-content: space-between;
-            -webkit-justify-content: space-between;
-            >span{
-                width: 20%;
-                height: 1rem;
-                line-height: 1rem;
-                text-align: center;
-                font-size: .45rem;
-            }
-        }
-        .picker-time-content{
-            height: 5rem;
-            width: 100%;
-            overflow: hidden;
-            position: relative;
-            &:before{
-                content: '';
-                display: block;
-                position: absolute;
-                top: 0;
-                left: 0;
-                height: 2rem;
-                width: 90%;
-                margin: 0 5%;
-                border-bottom: 1px #ccc solid;
-                background-image: linear-gradient(to bottom, #FFF, rgba(255, 255, 255, 0));
-                pointer-events:none;
-                z-index: 1;
-            }
-            &:after{
-                content: '';
-                display: block;
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                height: 2rem;
-                width: 90%;
-                margin: 0 5%;
-                background-image: linear-gradient(to top, #FFF, rgba(255, 255, 255, 0));
-                border-top: 1px #ccc solid;
-                pointer-events:none;
-                z-index: 1;
-            }
-            .picker-time-list{
-                width: 33.33%;
-                float: left;
-                text-align: center;
-                transition: all .3s ease-out;
-                >li{
-                    height: 1rem;
-                    line-height: 1rem;
-                    font-size: .5rem;
-                }
+    overflow-y: hidden;
+}
+.picker-time{
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 6rem;
+    background: #fff;
+    z-index: 9999;
+    .picker-time-tit{
+        height: calc(1rem - .1px);
+        line-height: 1rem;
+        border-bottom: 1px #ccc solid;
 
-            }
+        display: box;
+        display: -webkit-box;
+        display: flex;
+        display: -webkit-flex;
+        justify-content: space-between;
+        -webkit-justify-content: space-between;
+        text-align: center;
+        font-size: .45rem;
+        >span{
+            width: 20%;
         }
     }
+    .picker-time-content{
+        height: 5rem;
+        width: 100%;
+        overflow: hidden;
+        position: relative;
+        &:before{
+            content: '';
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 2rem;
+            width: 90%;
+            margin: 0 5%;
+            border-bottom: 1px #ccc solid;
+            background-image: linear-gradient(to bottom, #FFF, rgba(255, 255, 255, 0));
+            pointer-events:none;
+            z-index: 1;
+        }
+        &:after{
+            content: '';
+            display: block;
+            position: absolute;
+            left: 0;
+            bottom: 1px;
+            height: 2rem;
+            width: 90%;
+            margin: 0 5%;
+            background-image: linear-gradient(to top, #FFF, rgba(255, 255, 255, 0));
+            border-top: 1px #ccc solid;
+            pointer-events:none;
+            z-index: 1;
+        }
+        .picker-time-list{
+            width: 33.33%;
+            float: left;
+            text-align: center;
+            transition: all .3s ease-out;
+            >li{
+                height: 1rem;
+                line-height: 1rem;
+                font-size: .5rem;
+            }
+
+        }
+    }
+}
+.fadeIO-enter-active, .fadeIO-leave-active {
+    transition: .5s;
+}
+.fadeIO-enter, .fadeIO-leave-active {
+    opacity: 0;
+}
+.fadeTB-enter-active, .fadeTB-leave-active {
+    transition: .25s;
+}
+.fadeTB-enter, .fadeTB-leave-active {
+    opacity: 0;
+    transform: translateY(6rem);
 }
 
 </style>
