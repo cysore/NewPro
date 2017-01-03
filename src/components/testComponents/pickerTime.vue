@@ -72,7 +72,7 @@ export default {
     },
     created(){
         let maxDate = '2018-10-10';
-        let minDate = '2016-10-10';
+        let minDate = '2016-11-11';
 
         [
             this.maxDate_year,
@@ -301,69 +301,75 @@ export default {
                 let translate3dY_px = this.ulArr[2].style.transform;
                 let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px',"") : 0;
 
-
-                //当年月日均<=设置的最小年月日时
-                /*if(year == this.minDate_year && month == this.minDate_month){
-
-                    this.YMD.month.length = 0;
-                    for(let i = this.minDate_month; i <= 12; i++){
-                        this.YMD.month.push(i)
-                    }
-
-                    this.YMD.day.length = 0;
-                    for(let i = this.minDate_day; i <= days; i++){
-                        this.YMD.day.push(i)
-                    }
-
-                    let offsetY = -(this.liHeight * (days-this.minDate_day));
-                    this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
-                }*/
-                if(year == this.minDate_year || year == this.maxDate_year){
-
-                    this.YMD.month.length = 0;
-                    if(year == this.minDate_year){
-                        for(let i = this.minDate_month; i <= 12; i++){
-                            this.YMD.month.push(i)
-                        }
-                    }else if(year == this.maxDate_year){
-                        for(let i = this.maxDate_month; i <= 12; i++){
-                            this.YMD.month.push(i)
-                        }
-                    }
-                    // month = this.YMD.month[0];
-                    console.log(this.ulArr[1].querySelectorAll('li'));
-                }else{
-                    this.YMD.month.length = 0;
-                    for(let i = 1; i <= 12; i++){
-                        this.YMD.month.push(i);
-                    }
-                }
-
-                if(month == this.minDate_month || month == this.maxDate_month){
-                    this.YMD.day.length = 0;
-                    if(month == this.minDate_month){
-                        for(let i = this.minDate_day; i <= days; i++){
-                            this.YMD.day.push(i)
-                        }
-                    }else if(month == this.maxDate_month){
-                        for(let i = this.maxDate_day; i <= days; i++){
-                            this.YMD.day.push(i)
-                        }
-                    }
-                    this.getDays(days,eEle,offt);
-                }
-
                 // 根据天数设置日期，并且重新计算滑动的初始点
-                // this.getDays(days,eEle,offt);
-
+                this.getDays(days,eEle,offt);
 
             }
 
 
+            //当年月日均<=设置的最小年月日时
+            let [
+                liEleYears,
+                liEleMonths,
+                liEleDays,
+
+            ] = [
+                this.$refs.year.querySelectorAll('li').length - 1,
+                this.$refs.month.querySelectorAll('li').length - 1,
+                this.$refs.day.querySelectorAll('li').length - 1,
+            ];
+
+            let tagIndexYear = (this.index.year + 2) > liEleYears ? liEleYears : this.index.year + 2;
+            let tagIndexMonth = (this.index.month + 2) > liEleMonths ? liEleMonths : this.index.month + 2;
+            let tagIndexDay = (this.index.day + 2) > liEleDays ? liEleDays : this.index.day + 2;
+
+            let [
+                year,
+                month,
+                day,
+            ] = [
+                Number(this.ulArr[0].querySelectorAll('li')[tagIndexYear].dataset.year),
+                Number(this.ulArr[1].querySelectorAll('li')[tagIndexMonth].dataset.month),
+                Number(this.ulArr[2].querySelectorAll('li')[tagIndexDay].dataset.day),
+            ];
 
 
-        },
-        test(){
+            // console.log(year);
+            if(year == this.minDate_year || year == this.maxDate_year){
+
+                if(year == this.minDate_year){
+                    this.YMD.month.length = 0;
+                    for(let i = this.minDate_month; i <= 12; i++){
+                        this.YMD.month.push(i)
+                    }
+                }else if(year == this.maxDate_year){
+                    this.YMD.month.length = 0;
+                    for(let i = this.maxDate_month; i <= 12; i++){
+                        this.YMD.month.push(i)
+                    }
+                }
+                // month = this.YMD.month[0];
+                // console.log(this.ulArr[1].querySelectorAll('li')[2].dataset.month);
+            }else{
+                this.YMD.month.length = 0;
+                for(let i = 1; i <= 12; i++){
+                    this.YMD.month.push(i);
+                }
+            }
+
+            /*if(month == this.minDate_month || month == this.maxDate_month){
+                this.YMD.day.length = 0;
+                if(month == this.minDate_month){
+                    for(let i = this.minDate_day; i <= days; i++){
+                        this.YMD.day.push(i)
+                    }
+                }else if(month == this.maxDate_month){
+                    for(let i = this.maxDate_day; i <= days; i++){
+                        this.YMD.day.push(i)
+                    }
+                }
+                this.getDays(days,eEle,offt);
+            }*/
 
         },
         // 确定
@@ -470,6 +476,14 @@ export default {
                 result = 3;
             }
             return result;
+        }
+    },
+    watch:{
+        // 监听组件路由发生变化改变其状态
+        'YMD.month.length'(newVal,oldVal){
+            if(newVal < 12){
+                console.log(this.$refs.month.querySelectorAll('li'));
+            }
         }
     }
 }
