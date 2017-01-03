@@ -1,11 +1,11 @@
 <template lang="html">
     <div class="test">
     <div v-on:click="show = !show">123<br>123</div>
-{{selectedDate}}
+{{selectedDate}}{{show}}
     <transition name="fadeIO">
         <div class="picker" v-on:click="show = true" v-show="!show"></div>
-    </transition>   
-    <transition name="fadeTB"> 
+    </transition>
+    <transition name="fadeTB">
         <div class="picker-time" v-show="!show">
                 <div class="picker-time-tit">
                     <span v-on:click="show = true">取消</span>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </div>
-    </transition>  
+    </transition>
 </template>
 
 <script>
@@ -101,7 +101,7 @@ export default {
             this.YMD.month.push(i);
         }
 
-        
+
 
         let setDate = '2001-1-28';
         let [
@@ -162,7 +162,7 @@ export default {
 
     },
     methods:{
-       
+
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
@@ -321,9 +321,9 @@ export default {
                 this.$refs.day.querySelectorAll('li'),
             ];
 
-            let selectedDate = 
-                liEleYears[this.index.year+2].innerHTML + 
-                liEleMonths[this.index.month+2].innerHTML + 
+            let selectedDate =
+                liEleYears[this.index.year+2].innerHTML +
+                liEleMonths[this.index.month+2].innerHTML +
                 liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML;
 
             this.show = true;
