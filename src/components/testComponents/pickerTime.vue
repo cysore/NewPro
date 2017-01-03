@@ -18,17 +18,17 @@
                     <ul class="picker-time-list list1" ref="year">
                         <li></li>
                         <li></li>
-                        <li v-for="year in YMD.year">{{year}}年</li>
+                        <li v-for="year in YMD.year" v-bind="{'data-year' : year}">{{year}}年</li>
                     </ul>
                     <ul class="picker-time-list list2" ref="month">
                         <li></li>
                         <li></li>
-                        <li v-for="month in YMD.month">{{month}}月</li>
+                        <li v-for="month in YMD.month" v-bind="{'data-month' : month}">{{month}}月</li>
                     </ul>
                     <ul class="picker-time-list list3" ref="day">
                         <li></li>
                         <li></li>
-                        <li v-for="day in YMD.day">{{day}}日</li>
+                        <li v-for="day in YMD.day" v-bind="{'data-day' : day}">{{day}}日</li>
                     </ul>
                 </div>
             </div>
@@ -67,43 +67,43 @@ export default {
                 day:[]
             },//需要渲染的年月日,
             selectedDate:null,//选中的年月日
-            show:true,
+            show:false,
         }
     },
     created(){
-        let maxDate = '2030-10-10';
-        let minDate = '1990-10-10';
+        let maxDate = '2018-10-10';
+        let minDate = '2016-10-10';
 
-        let [
-                maxDate_year,
-                maxDate_month,
-                maxDate_day,
+        [
+            this.maxDate_year,
+            this.maxDate_month,
+            this.maxDate_day,
 
-                minDate_year,
-                minDate_month,
-                minDate_day
-            ] = [
-                Number(maxDate.split('-')[0]),
-                Number(maxDate.split('-')[1]),
-                Number(maxDate.split('-')[2]),
+            this.minDate_year,
+            this.minDate_month,
+            this.minDate_day
+        ] = [
+            Number(maxDate.split('-')[0]),
+            Number(maxDate.split('-')[1]),
+            Number(maxDate.split('-')[2]),
 
-                Number(minDate.split('-')[0]),
-                Number(minDate.split('-')[1]),
-                Number(minDate.split('-')[2])
-            ]
+            Number(minDate.split('-')[0]),
+            Number(minDate.split('-')[1]),
+            Number(minDate.split('-')[2])
+        ]
 
-
-        for(let i = 0; i <= maxDate_year - minDate_year; i++){
-            this.YMD.year.push(minDate_year+i);
+        // year
+        for(let i = 0; i <= this.maxDate_year - this.minDate_year; i++){
+            this.YMD.year.push(this.minDate_year+i);
         }
-
+        // month
         for(let i = 1; i <= 12; i++){
             this.YMD.month.push(i);
         }
+        // day
 
 
-
-        let setDate = '2001-1-28';
+        let setDate = '2017-1-28';
         let [
             setDate_year,
             setDate_month,
@@ -116,35 +116,35 @@ export default {
 
 
         // 如果有设置时间年
-        if(setDate_year >= minDate_year && setDate_year <= maxDate_year){
-            this.setVal_year = Number((maxDate_year - minDate_year) - (maxDate_year - setDate_year));
+        if(setDate_year >= this.minDate_year && setDate_year <= this.maxDate_year){
+            this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - setDate_year));
             this.index.year = this.setVal_year;
-            console.log('年'+this.setVal_year);
+            // console.log('年'+this.setVal_year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
-            this.setVal_month = setDate_month -1;
+            this.setVal_month = setDate_month - 1;
             this.index.month = Math.abs(this.setVal_month);
-            console.log('月'+this.setVal_month);
+            // console.log('月'+this.setVal_month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
-            this.setVal_day = setDate_day -1;
+            this.setVal_day = setDate_day - 1;
             this.index.day = Math.abs(this.setVal_day);
-            console.log('日'+this.setVal_day);
+            // console.log('日'+this.setVal_day);
         }
 
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
 
         // 设置最大年月日
-        this.setMaxYear = Number(maxDate_year - minDate_year);
+        this.setMaxYear = Number(this.maxDate_year - this.minDate_year);
         this.setMaxMonth = 12;
         this.setMaxDay = days;
 
-        console.log(this.index.year,this.index.month,this.index.day);
+        // console.log(this.index.year,this.index.month,this.index.day);
     },
     // 组件挂载
     mounted(){
@@ -276,9 +276,9 @@ export default {
                     liEleDays,
 
                 ] = [
-                    this.$refs.year.querySelectorAll('li').length-1,
-                    this.$refs.month.querySelectorAll('li').length-1,
-                    this.$refs.day.querySelectorAll('li').length-1,
+                    this.$refs.year.querySelectorAll('li').length - 1,
+                    this.$refs.month.querySelectorAll('li').length - 1,
+                    this.$refs.day.querySelectorAll('li').length - 1,
                 ];
 
                 let tagIndexYear = (this.index.year + 2) > liEleYears ? liEleYears : this.index.year + 2;
@@ -290,23 +290,82 @@ export default {
                     month,
                     day,
                 ] = [
-                    this.ulArr[0].querySelectorAll('li')[tagIndexYear].innerHTML.replace(/[^0-9]/ig,""),
-                    this.ulArr[1].querySelectorAll('li')[tagIndexMonth].innerHTML.replace(/[^0-9]/ig,""),
-                    this.ulArr[2].querySelectorAll('li')[tagIndexDay].innerHTML.replace(/[^0-9]/ig,""),
+                    Number(this.ulArr[0].querySelectorAll('li')[tagIndexYear].dataset.year),
+                    Number(this.ulArr[1].querySelectorAll('li')[tagIndexMonth].dataset.month),
+                    Number(this.ulArr[2].querySelectorAll('li')[tagIndexDay].dataset.day),
                 ];
 
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
-                console.log(days)
+                // console.log(days)
                 let translate3dY_px = this.ulArr[2].style.transform;
                 let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px',"") : 0;
 
-                this.getDays(days,eEle,offt);
+
+                //当年月日均<=设置的最小年月日时
+                /*if(year == this.minDate_year && month == this.minDate_month){
+
+                    this.YMD.month.length = 0;
+                    for(let i = this.minDate_month; i <= 12; i++){
+                        this.YMD.month.push(i)
+                    }
+
+                    this.YMD.day.length = 0;
+                    for(let i = this.minDate_day; i <= days; i++){
+                        this.YMD.day.push(i)
+                    }
+
+                    let offsetY = -(this.liHeight * (days-this.minDate_day));
+                    this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
+                }*/
+                if(year == this.minDate_year || year == this.maxDate_year){
+
+                    this.YMD.month.length = 0;
+                    if(year == this.minDate_year){
+                        for(let i = this.minDate_month; i <= 12; i++){
+                            this.YMD.month.push(i)
+                        }
+                    }else if(year == this.maxDate_year){
+                        for(let i = this.maxDate_month; i <= 12; i++){
+                            this.YMD.month.push(i)
+                        }
+                    }
+                    // month = this.YMD.month[0];
+                    console.log(this.ulArr[1].querySelectorAll('li'));
+                }else{
+                    this.YMD.month.length = 0;
+                    for(let i = 1; i <= 12; i++){
+                        this.YMD.month.push(i);
+                    }
+                }
+
+                if(month == this.minDate_month || month == this.maxDate_month){
+                    this.YMD.day.length = 0;
+                    if(month == this.minDate_month){
+                        for(let i = this.minDate_day; i <= days; i++){
+                            this.YMD.day.push(i)
+                        }
+                    }else if(month == this.maxDate_month){
+                        for(let i = this.maxDate_day; i <= days; i++){
+                            this.YMD.day.push(i)
+                        }
+                    }
+                    this.getDays(days,eEle,offt);
+                }
+
+                // 根据天数设置日期，并且重新计算滑动的初始点
+                // this.getDays(days,eEle,offt);
+
+
             }
 
 
-        },
 
+
+        },
+        test(){
+
+        },
         // 确定
         enter(){
             console.log(this.index.year,this.index.month,this.index.day);
@@ -336,7 +395,7 @@ export default {
             );
 
         },
-        // 根据选择的年月返回当月日数，并且不不超出滑动范围
+        // 根据天数设置日期数，并且不不超出滑动范围
         getDays(d,eEle,offt){
             if(eEle){
                 let offsetY = -(this.liHeight * (d-1));
@@ -352,7 +411,7 @@ export default {
         },
         // 根据年月获得当月天数
         getDaysInMonth(year,month){
-            console.log(year,month)
+            // console.log(year,month)
             month = parseInt(month,10); //parseInt(number,type)这个函数后面如果不跟第2个参数来表示进制的话，默认是10进制。
             var temp = new Date(year,month,0);
             return temp.getDate();
