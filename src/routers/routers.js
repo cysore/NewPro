@@ -72,6 +72,15 @@ export default [
         component: resolve => require(['../components/sliderRightClose.vue'],resolve)
     },
     {
+        path: '/silder',
+        meta: {
+            auth: false,
+            title: '幻灯片',
+        },
+        name: 'silder',
+        component: resolve => require(['../components/testComponents/silder.vue'],resolve)
+    },
+    {
         path: '*',
         redirect: {name:'routeHome'}
     }
