@@ -109,7 +109,7 @@ export default {
         // day
 
 
-        let setDate = '2017-2-28';
+        let setDate = '2017-1-28';
         let [
             setDate_year,
             setDate_month,
@@ -272,8 +272,11 @@ export default {
 
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
-                console.log(year,month,days)
-
+                // console.log(year,month,days)
+                let translate3dY_px = this.ulArr[2].style.transform;
+                let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px','') : 0;
+                // 根据天数设置日期，并且重新计算滑动的初始点
+                this.getDays(days,eEle,offt);
 
                 //当前选中的年==设置的最小/大年时
                 if(year == this.minDate_year || year == this.maxDate_year){
@@ -281,22 +284,32 @@ export default {
                     this.YMD.month.length = 0;
                     if(year == this.minDate_year){
                         for(let i = this.minDate_month; i <= 12; i++){
-                            this.YMD.month.push(i)
+                            this.YMD.month.push(i);
                         }
                     }else if(year == this.maxDate_year){
                         for(let i = 1; i <= this.maxDate_month; i++){
-                            this.YMD.month.push(i)
+                            this.YMD.month.push(i);
                         }
                     }
-
+                    // 存入月份，不管当前月存不存在，不存在重新计算
+                    let indexMonth;
                     // 当前月不存在时，重新计算月份的位置
                     if(!this.YMD.month[this.index.month]){
                         let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
                         this.currY.month = 0;
                         this.index.month = 0;
                         this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
+
+                        indexMonth = this.YMD.month[this.index.month];
+                        console.log('no'+this.YMD.month[this.index.month]);
+                    }else{
+                        indexMonth = this.YMD.month[this.index.month];
+                        console.log('yes'+this.YMD.month[this.index.month]);
+                        // this.setVal_month = null;
+                        // this.ulArr[1].style.transform='translate3d(0,'+ 0 +'px,0)';
                     }
-                    days = this.getDaysInMonth(year,this.YMD.month[this.index.month]);
+                    days = this.getDaysInMonth(year,indexMonth);
+                    console.log(days);
 
                 }else{
                     this.YMD.month.length = 0;
@@ -305,10 +318,7 @@ export default {
                     }
                 }
 
-                let translate3dY_px = this.ulArr[2].style.transform;
-                let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px','') : 0;
-                // 根据天数设置日期，并且重新计算滑动的初始点
-                this.getDays(days,eEle,offt);
+
 
                 // 当选中的年月==设置的年月时
                 if((year == this.minDate_year && month == this.minDate_month) || (year == this.maxDate_year && month == this.maxDate_month)){
@@ -384,7 +394,7 @@ export default {
                     this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
                     this.index.day = d - 1;
                 }else{
-
+                    console.log('kls');
                 }
             }
             this.YMD.day.length = 0;
