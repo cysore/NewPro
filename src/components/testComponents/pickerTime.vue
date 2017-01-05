@@ -269,31 +269,18 @@ export default {
             let idx = Math.round(offset / this.liHeight );
             this.index[this.isYMD()] = Math.abs(idx);
 
-            if(this.position == 0 || this.position == 1){
-                let [
-                    liEleYears,
-                    liEleMonths,
-                    liEleDays,
-
-                ] = [
-                    this.$refs.year.querySelectorAll('li').length - 1,
-                    this.$refs.month.querySelectorAll('li').length - 1,
-                    this.$refs.day.querySelectorAll('li').length - 1,
-                ];
-
-                let tagIndexYear = (this.index.year + 2) > liEleYears ? liEleYears : this.index.year + 2;
-                let tagIndexMonth = (this.index.month + 2) > liEleMonths ? liEleMonths : this.index.month + 2;
-                let tagIndexDay = (this.index.day + 2) > liEleDays ? liEleDays : this.index.day + 2;
+            if(this.position == 0 || this.position == 1 || this.position == 2){
 
                 let [
                     year,
                     month,
                     day,
                 ] = [
-                    Number(this.ulArr[0].querySelectorAll('li')[tagIndexYear].dataset.year),
-                    Number(this.ulArr[1].querySelectorAll('li')[tagIndexMonth].dataset.month),
-                    Number(this.ulArr[2].querySelectorAll('li')[tagIndexDay].dataset.day),
+                    this.YMD.year[this.index.year],
+                    this.YMD.month[this.index.month],
+                    this.YMD.day[this.index.day]
                 ];
+
 
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
@@ -304,7 +291,8 @@ export default {
                 // 根据天数设置日期，并且重新计算滑动的初始点
                 this.getDays(days,eEle,offt);
 
-
+                let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
+                console.log(selectedDate);
                 /*if(year == this.minDate_year){
                     console.log(this.YMD.month);
                     this.YMD.month.length = 0;
@@ -329,29 +317,16 @@ export default {
         // 确定
         enter(){
             console.log(this.index.year,this.index.month,this.index.day);
-            let [
-                liEleYears,
-                liEleMonths,
-                liEleDays,
 
-            ] = [
-                this.$refs.year.querySelectorAll('li'),
-                this.$refs.month.querySelectorAll('li'),
-                this.$refs.day.querySelectorAll('li'),
-            ];
-
-            let selectedDate =
-                liEleYears[this.index.year+2].innerHTML +
-                liEleMonths[this.index.month+2].innerHTML +
-                liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML;
+            let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
 
             this.show = true;
             this.selectedDate = selectedDate;
 
             console.log(
-                liEleYears[this.index.year+2].innerHTML,
-                liEleMonths[this.index.month+2].innerHTML,
-                liEleDays[this.index.day+2>liEleDays.length-1 ? liEleDays.length-1 : this.index.day+2].innerHTML,
+                this.YMD.year[this.index.year],
+                this.YMD.month[this.index.month],
+                this.YMD.day[this.index.day]
             );
 
         },

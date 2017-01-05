@@ -196,6 +196,7 @@
             v-bind:parentState="state"
             v-bind:parentIptMoney="iptMoney"
             v-bind:parentNotice="noticeMsg"
+            v-bind:parentTestObj="testObj.test"
             v-on:parentSelectRed="selectedRed"
             v-on:parentStartInvestementBtn="startInvestementBtn"
         ></bottomFiexd>
@@ -320,6 +321,14 @@ import libs from '../../javascripts/main.js';
 export default {
     data(){
         return {
+            testObj:{
+                test:{
+                    obj1:1,
+                    obj2:2,
+                    obj3:3,
+                    arr:[]
+                },
+            },
             iptMoney:'',//用户输入的投资金额
             noticeMsg:false,//通知子组件重置状态
             state:{
@@ -384,11 +393,17 @@ export default {
         bottomFiexd:bottomFiexd
     },
     beforeCreate(){
-
+        this.$http.get('../static/AreaData.json').then((data) => {
+            console.log(data);
+            this.testObj.test.arr = data.data;
+        },(err) => {
+            console.log(err);
+        })
     },
     created(){
         // console.log(this.$store.getters.GET_USER);
         // console.log(this.$on);
+
     },
     computed:{
 

@@ -23,7 +23,27 @@
 <script>
 export default {
     name:'bf',
-    props:['parentState','parentIptMoney','parentNotice'],
+    props:{
+        parentState:{
+            type:Object,
+        },
+        parentIptMoney:{
+            type:String,
+        },
+        parentNotice:{
+            type:Boolean,
+            default:function(){
+                console.log(1);
+                return false;
+            }
+        },
+        parentTestObj:{
+            validator:function(v){
+                // console.log(v);
+                return v;
+            }
+        }
+    },
     data(){
         return{
             iptMoney:this.parentIptMoney,
@@ -32,6 +52,7 @@ export default {
     created(){
         // console.log(this.$parent);
         // console.log(this.parentState.noticeMsg);
+        // console.log(this.parentTestObj);
     },
     methods:{
         HandlerSelectRed(){
