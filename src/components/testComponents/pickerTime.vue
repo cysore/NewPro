@@ -19,16 +19,22 @@
                         <li></li>
                         <li></li>
                         <li v-for="year in YMD.year" v-bind="{'data-year' : year}">{{year}}年</li>
+                        <li></li>
+                        <li></li>
                     </ul>
                     <ul class="picker-time-list list2" ref="month">
                         <li></li>
                         <li></li>
                         <li v-for="month in YMD.month" v-bind="{'data-month' : month}">{{month}}月</li>
+                        <li></li>
+                        <li></li>
                     </ul>
                     <ul class="picker-time-list list3" ref="day">
                         <li></li>
                         <li></li>
                         <li v-for="day in YMD.day" v-bind="{'data-day' : day}">{{day}}日</li>
+                        <li></li>
+                        <li></li>
                     </ul>
                 </div>
             </div>
@@ -103,7 +109,7 @@ export default {
         // day
 
 
-        let setDate = '2017-1-28';
+        let setDate = '2017-2-28';
         let [
             setDate_year,
             setDate_month,
@@ -115,34 +121,30 @@ export default {
         ];
 
 
+
         // 如果有设置时间年
         if(setDate_year >= this.minDate_year && setDate_year <= this.maxDate_year){
             this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - setDate_year));
             this.index.year = this.setVal_year;
-            // console.log('年'+this.setVal_year);
+            console.log('年下标_'+this.index.year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
             this.setVal_month = setDate_month - 1;
             this.index.month = Math.abs(this.setVal_month);
-            // console.log('月'+this.setVal_month);
+            console.log('月下标_'+this.index.month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
             this.setVal_day = setDate_day - 1;
             this.index.day = Math.abs(this.setVal_day);
-            // console.log('日'+this.setVal_day);
+            console.log('日下标_'+this.index.day);
         }
 
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
-
-        // 设置最大年月日
-        this.setMaxYear = Number(this.maxDate_year - this.minDate_year);
-        this.setMaxMonth = 12;
-        this.setMaxDay = days;
 
         // console.log(this.index.year,this.index.month,this.index.day);
     },
@@ -242,8 +244,8 @@ export default {
             if(offset >= this.liHeight ){
                 offset = 0 ;
             }
-            if(offset < -this.liHeight * (this.lisize - 3)){
-                offset = - this.liHeight * (this.lisize - 3);
+            if(offset < -this.liHeight * (this.lisize - 5)){
+                offset = - this.liHeight * (this.lisize - 5);
             }
 
             // 重新赋值以便计算下一次滑动的位置
@@ -251,25 +253,14 @@ export default {
             let eEle = e.target.parentNode;
             let isclass = eEle.className.indexOf('picker-time-list');
 
-            if(isclass!=-1){
-                // 判断是否是快速滑动
-                /*if(t < 500  && Math.abs(d) > this.liHeight * 3){
-                    if(this.direction == 1){
-                        eEle.style.transform='translate3d(0,'+ - this.liHeight * (this.lisize - 3) +'px,0)';
-                        return;
-                    }else if(this.direction == 2){
-                        eEle.style.transform='translate3d(0,'+ this.liHeight * 2 +'px,0)';
-                        return;
-                    }
-                }*/
-                eEle.style.transform='translate3d(0,'+ offset +'px,0)';
-            }
+
 
             // 将下标推入index对象
             let idx = Math.round(offset / this.liHeight );
             this.index[this.isYMD()] = Math.abs(idx);
 
-            if(this.position == 0 || this.position == 1 || this.position == 2){
+
+            if(this.position == 0 || this.position == 1 ){
 
                 let [
                     year,
@@ -284,32 +275,69 @@ export default {
 
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
-                // console.log(days)
+                // console.log(year,month,days)
                 let translate3dY_px = this.ulArr[2].style.transform;
                 let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px',"") : 0;
 
                 // 根据天数设置日期，并且重新计算滑动的初始点
                 this.getDays(days,eEle,offt);
 
-                let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
-                console.log(selectedDate);
-                /*if(year == this.minDate_year){
-                    console.log(this.YMD.month);
+                //当前选中的年==设置的最小/大年时
+                if(year == this.minDate_year || year == this.maxDate_year){
+
                     this.YMD.month.length = 0;
-                    for(let i = this.minDate_month; i <= 12; i++){
-                        this.YMD.month.push(i)
+                    if(year == this.minDate_year){
+                        for(let i = this.minDate_month; i <= 12; i++){
+                            this.YMD.month.push(i)
+                        }
+                    }else if(year == this.maxDate_year){
+                        for(let i = this.maxDate_month; i <= 12; i++){
+                            this.YMD.month.push(i)
+                        }
                     }
 
-                    let offsetY = -(this.liHeight * (4-3));
-                    this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
-                    console.log(this.$refs.month.children);
-                }*/
+                    // console.log(this.currY.month,this.index.month);
+                    console.log(this.currY.year,this.index.year);
+                    if(!this.YMD.month[this.index.month]){
+                        let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
+                        this.currY.month = 0;
+                        this.index.month = 0;
+                        this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
+                        // console.log(this.YMD.month[this.index.month]);
+                    }
+
+                }else{
+                    this.YMD.month.length = 0;
+                    for(let i = 1; i <= 12; i++){
+                        this.YMD.month.push(i)
+                    }
+                    // let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
+                    // this.currY.month = 0;
+                    // this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
+                }
+
+                let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
+                console.log('选中的日期：'+selectedDate);
+                console.log('月份的下标：'+this.index.month);
+                console.log('月份轴偏移：'+this.currY.month);
 
             }
 
 
-            //当年月日均<=设置的最小年月日时
 
+            if(isclass!=-1){
+                // 判断是否是快速滑动
+                /*if(t < 500  && Math.abs(d) > this.liHeight * 3){
+                    if(this.direction == 1){
+                        eEle.style.transform='translate3d(0,'+ - this.liHeight * (this.lisize - 3) +'px,0)';
+                        return;
+                    }else if(this.direction == 2){
+                        eEle.style.transform='translate3d(0,'+ this.liHeight * 2 +'px,0)';
+                        return;
+                    }
+                }*/
+                eEle.style.transform='translate3d(0,'+ offset +'px,0)';
+            }
 
 
 
@@ -337,6 +365,9 @@ export default {
                 // console.log(d,offt,offsetY);
                 if(d <= 30 && offt < offsetY){
                     this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
+                    this.index.day = d - 1;
+                }else{
+
                 }
             }
             this.YMD.day.length = 0;
@@ -409,11 +440,11 @@ export default {
     },
     watch:{
         // 监听组件路由发生变化改变其状态
-        'YMD.month.length'(newVal,oldVal){
+        /*'YMD.month.length'(newVal,oldVal){
             if(newVal < 12){
                 console.log(this.YMD.month);
             }
-        }
+        }*/
     }
 }
 </script>
