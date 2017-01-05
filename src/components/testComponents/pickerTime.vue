@@ -43,6 +43,7 @@
 </template>
 
 <script>
+
 export default {
     name:'pickerTime',
     data(){
@@ -126,21 +127,21 @@ export default {
         if(setDate_year >= this.minDate_year && setDate_year <= this.maxDate_year){
             this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - setDate_year));
             this.index.year = this.setVal_year;
-            console.log('年下标_'+this.index.year);
+            // console.log('年下标_'+this.index.year);
         }
 
         // 如果有设置时间月
         if(setDate_month){
             this.setVal_month = setDate_month - 1;
             this.index.month = Math.abs(this.setVal_month);
-            console.log('月下标_'+this.index.month);
+            // console.log('月下标_'+this.index.month);
         }
 
         // 如果有设置时间日
         if(setDate_day){
             this.setVal_day = setDate_day - 1;
             this.index.day = Math.abs(this.setVal_day);
-            console.log('日下标_'+this.index.day);
+            // console.log('日下标_'+this.index.day);
         }
 
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
@@ -272,7 +273,7 @@ export default {
 
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
-                // console.log(year,month,days)
+                console.log(year,month,days)
                 let translate3dY_px = this.ulArr[2].style.transform;
                 let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px','') : 0;
                 // 根据天数设置日期，并且重新计算滑动的初始点
@@ -308,8 +309,15 @@ export default {
                         // this.setVal_month = null;
                         // this.ulArr[1].style.transform='translate3d(0,'+ 0 +'px,0)';
                     }
+
                     days = this.getDaysInMonth(year,indexMonth);
-                    console.log(days);
+                    if(indexMonth == this.minDate_month && year == this.minDate_year){
+                        this.YMD.day.length = 0;
+                        for(let i = this.minDate_day; i <= days; i++){
+                            this.YMD.day.push(i)
+                        }
+                        this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
+                    }
 
                 }else{
                     this.YMD.month.length = 0;
@@ -333,6 +341,8 @@ export default {
                             this.YMD.day.push(i)
                         }
                     }
+                    
+                    console.log('===='+this.YMD.month[this.index.month])
 
                     if(!this.YMD.day[this.index.day]){
                         let offsetY = -(this.liHeight * (this.YMD.day.length - 1));
@@ -391,10 +401,10 @@ export default {
                 let offsetY = -(this.liHeight * (d-1));
                 // console.log(d,offt,offsetY);
                 if(d <= 30 && offt < offsetY){
-                    this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
+                    this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
                     this.index.day = d - 1;
                 }else{
-                    console.log('kls');
+                    // console.log('kls');
                 }
             }
             this.YMD.day.length = 0;
