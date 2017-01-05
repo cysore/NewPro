@@ -253,8 +253,6 @@ export default {
             let eEle = e.target.parentNode;
             let isclass = eEle.className.indexOf('picker-time-list');
 
-
-
             // 将下标推入index对象
             let idx = Math.round(offset / this.liHeight );
             this.index[this.isYMD()] = Math.abs(idx);
@@ -272,15 +270,10 @@ export default {
                     this.YMD.day[this.index.day]
                 ];
 
-
                 // 根据年月返回当月天数
                 let days = this.getDaysInMonth(year,month);
-                // console.log(year,month,days)
-                let translate3dY_px = this.ulArr[2].style.transform;
-                let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px',"") : 0;
+                console.log(year,month,days)
 
-                // 根据天数设置日期，并且重新计算滑动的初始点
-                this.getDays(days,eEle,offt);
 
                 //当前选中的年==设置的最小/大年时
                 if(year == this.minDate_year || year == this.maxDate_year){
@@ -291,35 +284,59 @@ export default {
                             this.YMD.month.push(i)
                         }
                     }else if(year == this.maxDate_year){
-                        for(let i = this.maxDate_month; i <= 12; i++){
+                        for(let i = 1; i <= this.maxDate_month; i++){
                             this.YMD.month.push(i)
                         }
                     }
 
-                    // console.log(this.currY.month,this.index.month);
-                    console.log(this.currY.year,this.index.year);
+                    // 当前月不存在时，重新计算月份的位置
                     if(!this.YMD.month[this.index.month]){
                         let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
                         this.currY.month = 0;
                         this.index.month = 0;
                         this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
-                        // console.log(this.YMD.month[this.index.month]);
                     }
+                    days = this.getDaysInMonth(year,this.YMD.month[this.index.month]);
 
                 }else{
                     this.YMD.month.length = 0;
                     for(let i = 1; i <= 12; i++){
                         this.YMD.month.push(i)
                     }
-                    // let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
-                    // this.currY.month = 0;
-                    // this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }
 
-                let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
-                console.log('选中的日期：'+selectedDate);
-                console.log('月份的下标：'+this.index.month);
-                console.log('月份轴偏移：'+this.currY.month);
+                let translate3dY_px = this.ulArr[2].style.transform;
+                let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px','') : 0;
+                // 根据天数设置日期，并且重新计算滑动的初始点
+                this.getDays(days,eEle,offt);
+
+                // 当选中的年月==设置的年月时
+                if((year == this.minDate_year && month == this.minDate_month) || (year == this.maxDate_year && month == this.maxDate_month)){
+
+                    this.YMD.day.length = 0;
+                    if(year == this.minDate_year && month == this.minDate_month){
+                        for(let i = this.minDate_day; i <= days; i++){
+                            this.YMD.day.push(i)
+                        }
+                    }else if(year == this.maxDate_year && month == this.maxDate_month){
+                        for(let i = 1; i <= this.maxDate_day; i++){
+                            this.YMD.day.push(i)
+                        }
+                    }
+
+                    if(!this.YMD.day[this.index.day]){
+                        let offsetY = -(this.liHeight * (this.YMD.day.length - 1));
+                        this.currY.day = 0;
+                        this.index.day = 0;
+                        this.setVal_day = null;
+                        this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
+                    }
+                }
+
+
+
+
+                // let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
 
             }
 
