@@ -277,7 +277,7 @@ export default {
                 let translate3dY_px = this.ulArr[2].style.transform;
                 let offt = translate3dY_px ? translate3dY_px.split(',')[1].replace('px','') : 0;
                 // 根据天数设置日期，并且重新计算滑动的初始点
-                this.getDays(days,eEle,offt);
+                //this.getDays(days,eEle,offt);
 
                 //当前选中的年==设置的最小/大年时
                 if(year == this.minDate_year || year == this.maxDate_year){
@@ -306,17 +306,22 @@ export default {
                     }else{
                         indexMonth = this.YMD.month[this.index.month];
                         console.log('yes'+this.YMD.month[this.index.month]);
-                        // this.setVal_month = null;
-                        // this.ulArr[1].style.transform='translate3d(0,'+ 0 +'px,0)';
                     }
 
                     days = this.getDaysInMonth(year,indexMonth);
                     if(indexMonth == this.minDate_month && year == this.minDate_year){
+                        console.log(indexMonth);
                         this.YMD.day.length = 0;
                         for(let i = this.minDate_day; i <= days; i++){
                             this.YMD.day.push(i)
                         }
                         this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
+                    }else{
+                        console.log('wu');
+                        this.YMD.day.length = 0;
+                        for(let i = 1; i <= days; i++){
+                            this.YMD.day.push(i)
+                        }
                     }
 
                 }else{
@@ -341,8 +346,6 @@ export default {
                             this.YMD.day.push(i)
                         }
                     }
-                    
-                    console.log('===='+this.YMD.month[this.index.month])
 
                     if(!this.YMD.day[this.index.day]){
                         let offsetY = -(this.liHeight * (this.YMD.day.length - 1));
@@ -351,6 +354,9 @@ export default {
                         this.setVal_day = null;
                         this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
                     }
+                }else{
+                    // 根据天数设置日期，并且重新计算滑动的初始点
+                    this.getDays(days,eEle,offt);
                 }
 
 
@@ -401,7 +407,7 @@ export default {
                 let offsetY = -(this.liHeight * (d-1));
                 // console.log(d,offt,offsetY);
                 if(d <= 30 && offt < offsetY){
-                    this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
+                    this.ulArr[2].style.transform='translate3d(0,'+ offsetY +'px,0)';
                     this.index.day = d - 1;
                 }else{
                     // console.log('kls');
