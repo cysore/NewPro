@@ -77,6 +77,26 @@ export default {
             show:false,
         }
     },
+    props:{
+        maxDate:{
+            type:String,
+            default:function(){
+                // return new Date();
+            }
+        },
+        minDate:{
+            type:String,
+            default:function(){
+                // return new Date();
+            }
+        },
+        setDate:{
+            type:String,
+            default:function(){
+                // return new Date();
+            }
+        }
+    },
     created(){
         let maxDate = '2018-10-10';
         let minDate = '2016-11-11';
@@ -110,7 +130,7 @@ export default {
         // day
 
 
-        let setDate = '2017-1-28';
+        let setDate = '2018-10-9';
         let [
             setDate_year,
             setDate_month,
