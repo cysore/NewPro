@@ -321,6 +321,7 @@ export default {
                         this.index.month = 0;
                         this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
 
+                        this.setVal_month = null;
                         indexMonth = this.YMD.month[this.index.month];
                         console.log('no'+this.YMD.month[this.index.month]);
                     }else{
