@@ -122,6 +122,8 @@
             v-bind:maxDate="'2020-10-10'"
             v-bind:minDate="'2010-10-10'"
             v-bind:setDate="'2017-10-10'"
+            v-bind:resDate='data'
+            v-on:on-result-change="onResultChange"
             v-on:show="showPicker"
             ref="pickerTime"
         ></pickerTime>
@@ -141,6 +143,7 @@ var i = require('../images/top_banner.png')
 export default {
     data(){
         return{
+            date:null,
             count:this.$store.state.StateRoute.count,
             message:"Hello",
             swiper:[
@@ -221,6 +224,10 @@ export default {
         }*/
         showPicker(){
             this.$refs.pickerTime.open();
+        },
+        onResultChange(val){
+            this.data = val;
+            console.log(this.data)
         }
     },
     // 组件的计算属性
@@ -239,6 +246,11 @@ export default {
         countPlusLocalState(state){
             return state.StateRoute.count+this.localCount
         }
-    })
+    }),
+    watch:{
+        'date'(val){
+            console.log(val)
+        }
+    }
 }
 </script>

@@ -113,6 +113,7 @@ export default {
             },//需要渲染的年月日,
             selectedDate:null,//选中的年月日
             show:true,
+            myresult:this.resDate
         }
     },
     props:{
@@ -133,6 +134,9 @@ export default {
             default:()=>{
                 return getDate('cur',0);
             }
+        },
+        resDate:{
+            type:null
         }
     },
     created(){
@@ -464,7 +468,7 @@ export default {
                 this.YMD.month[this.index.month],
                 this.YMD.day[this.index.day]
             );
-
+            this.myresult = selectedDate;
         },
         // 根据天数设置日期数，并且不不超出滑动范围
         getDays(d,eEle,offt){
@@ -544,32 +548,21 @@ export default {
                 result = 3;
             }
             return result;
-        }
+        },
+
     },
     watch:{
-        // 监听组件路由发生变化改变其状态
-        /*'YMD.month.length'(newVal,oldVal){
-            if(newVal < 12){
-                console.log(this.YMD.month);
-            }
-        }*/
+        resDate(newVal,oldVal){
+            this.myresult = newVal;
+        },
+        myresult(newVal,oldVal){
+            this.$emit('on-result-change',newVal);
+        }
     }
 }
 </script>
 
 <style lang="less">
-/*.pickerTime{
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 9999;
-    background: red;
-}*/
 .picker{
     position: fixed;
     top: 0;
