@@ -1,49 +1,87 @@
 <template lang="html">
-    <div class="test">
-    <div v-on:click="show = !show">123<br>123</div>
-{{selectedDate}}{{show}}
     <transition name="fadeIO">
-        <div class="picker" v-on:click="show = true" v-show="!show"></div>
-    </transition>
-    <transition name="fadeTB">
-        <div class="picker-time" v-show="!show">
-                <div class="picker-time-tit">
-                    <span v-on:click="show = true">取消</span>
-                    <span v-on:click="enter">确定</span>
+
+        <div class="picker" v-on:click="show = true" v-show="!show">
+            <!-- <div v-on:click="show = !show">123<br>123</div> -->
+
+            <!-- <transition name="fadeIO"> -->
+                <!-- <div class="picker" v-on:click="show = true" v-show="!show"></div> -->
+            <!-- </transition> -->
+            <transition name="fadeTB">
+                <div class="picker-time" v-show="!show">
+                    <div class="picker-time-tit">
+                        <span v-on:click="show = true">取消</span>
+                        <span v-on:click="enter">确定</span>
+                    </div>
+                    <div class="picker-time-content"
+                    v-on:touchstart.stop.prevent="touchstart($event)"
+                    v-on:touchmove.stop.prevent="touchmove($event)"
+                    v-on:touchend.stop.prevent="touchend($event)">
+                        <ul class="picker-time-list list1" ref="year">
+                            <li></li>
+                            <li></li>
+                            <li v-for="year in YMD.year" v-bind="{'data-year' : year}">{{year}}年</li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <ul class="picker-time-list list2" ref="month">
+                            <li></li>
+                            <li></li>
+                            <li v-for="month in YMD.month" v-bind="{'data-month' : month}">{{month}}月</li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                        <ul class="picker-time-list list3" ref="day">
+                            <li></li>
+                            <li></li>
+                            <li v-for="day in YMD.day" v-bind="{'data-day' : day}">{{day}}日</li>
+                            <li></li>
+                            <li></li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="picker-time-content"
-                v-on:touchstart.stop.prevent="touchstart($event)"
-                v-on:touchmove.stop.prevent="touchmove($event)"
-                v-on:touchend.stop.prevent="touchend($event)">
-                    <ul class="picker-time-list list1" ref="year">
-                        <li></li>
-                        <li></li>
-                        <li v-for="year in YMD.year" v-bind="{'data-year' : year}">{{year}}年</li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    <ul class="picker-time-list list2" ref="month">
-                        <li></li>
-                        <li></li>
-                        <li v-for="month in YMD.month" v-bind="{'data-month' : month}">{{month}}月</li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                    <ul class="picker-time-list list3" ref="day">
-                        <li></li>
-                        <li></li>
-                        <li v-for="day in YMD.day" v-bind="{'data-day' : day}">{{day}}日</li>
-                        <li></li>
-                        <li></li>
-                    </ul>
-                </div>
-            </div>
+            </transition>
         </div>
+
     </transition>
 </template>
 
 <script>
+/**
+*获取当前时间YY-MM-DD or YY-MM-DD h:m:s
+*@params:strDate(String) 'max:最大时间 min:最小时间 cur:当前时间'
+*@params:sizeDate(Number) '最大、小年数值' 
+*
+*
+*/
+function getDate(strDate,sizeDate){
+    let str = strDate || 'cur';
+    let size = sizeDate || 0;
 
+    let date = new Date();
+    let [splice1,splice2] = ["-",":"];
+
+    let year    = date.getFullYear();
+    let month   = date.getMonth() + 1;
+    let day     = date.getDate();
+    let hours   = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+
+    let cur = year + splice1 + month + splice1 + day;
+    let max = (year + size) + splice1 + month + splice1 + day;
+    let min = (year - size) + splice1 + month + splice1 + day;
+
+    if(str == 'cur'){
+        return cur;
+    }else if(str == 'max'){
+        return max;
+    }else if(str == 'min'){
+        return min;
+    }else{
+        return year + splice1 + month + splice1 + day + " " + hours + splice2 + minutes + splice2 + seconds;
+    }
+}
 export default {
     name:'pickerTime',
     data(){
@@ -74,33 +112,43 @@ export default {
                 day:[]
             },//需要渲染的年月日,
             selectedDate:null,//选中的年月日
-            show:false,
+            show:true,
         }
     },
     props:{
         maxDate:{
-            type:String,
-            default:function(){
-                // return new Date();
+            type:null,
+            default:()=>{
+                return getDate('max',30);
             }
         },
         minDate:{
-            type:String,
-            default:function(){
-                // return new Date();
+            type:null,
+            default:()=>{
+                return getDate('min',30);
             }
         },
         setDate:{
-            type:String,
-            default:function(){
-                // return new Date();
+            type:null,
+            default:()=>{
+                return getDate('cur',0);
             }
         }
     },
     created(){
-        let maxDate = '2018-10-10';
-        let minDate = '2016-11-11';
+        let maxDate = this.maxDate;
+        let minDate = this.minDate;
+        let setDate = this.setDate;
 
+        let [
+            setDate_year,
+            setDate_month,
+            setDate_day
+        ] = [
+            Number(setDate.split('-')[0]),
+            Number(setDate.split('-')[1]),
+            Number(setDate.split('-')[2])
+        ];
         [
             this.maxDate_year,
             this.maxDate_month,
@@ -130,16 +178,7 @@ export default {
         // day
 
 
-        let setDate = '2018-10-9';
-        let [
-            setDate_year,
-            setDate_month,
-            setDate_day
-        ] = [
-            Number(setDate.split('-')[0]),
-            Number(setDate.split('-')[1]),
-            Number(setDate.split('-')[2])
-        ];
+        
 
 
 
@@ -182,10 +221,13 @@ export default {
     },
     // 计算属性
     computed:{
-
+        
     },
     methods:{
-
+        open(){
+            this.show = false;
+            this.getNowFormatDate;
+        },
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
@@ -317,14 +359,19 @@ export default {
                     // 当前月不存在时，重新计算月份的位置
                     if(!this.YMD.month[this.index.month]){
                         let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
+
                         this.currY.month = 0;
                         this.index.month = 0;
-                        this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
-
                         this.setVal_month = null;
+                        this.ulArr[1].style.transform='translate3d(0,'+ 0 +'px,0)';
+
                         indexMonth = this.YMD.month[this.index.month];
                         console.log('no'+this.YMD.month[this.index.month]);
                     }else{
+                        // this.setVal_month = null;
+                        // let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
+                        // this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
+
                         indexMonth = this.YMD.month[this.index.month];
                         console.log('yes'+this.YMD.month[this.index.month]);
                     }
@@ -368,13 +415,10 @@ export default {
                         }
                     }
 
-                    if(!this.YMD.day[this.index.day]){
-                        let offsetY = -(this.liHeight * (this.YMD.day.length - 1));
-                        this.currY.day = 0;
-                        this.index.day = 0;
-                        this.setVal_day = null;
-                        this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
-                    }
+                    this.currY.day = 0;
+                    this.index.day = 0;
+                    this.setVal_day = null;
+                    this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
                 }else{
                     // 根据天数设置日期，并且重新计算滑动的初始点
                     this.getDays(days,eEle,offt);
@@ -408,7 +452,7 @@ export default {
         },
         // 确定
         enter(){
-            console.log(this.index.year,this.index.month,this.index.day);
+            // console.log(this.index.year,this.index.month,this.index.day);
 
             let selectedDate = this.YMD.year[this.index.year] + "-" + this.YMD.month[this.index.month] + "-" + this.YMD.day[this.index.day];
 
@@ -514,10 +558,18 @@ export default {
 </script>
 
 <style lang="less">
-.test{
+/*.pickerTime{
     overflow: hidden;
-    border: 1px red solid;
-}
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: red;
+}*/
 .picker{
     position: fixed;
     top: 0;

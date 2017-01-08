@@ -62,7 +62,7 @@
                             <var>|</var>
                             已加入<span>56</span>人
                         </p>
-                        <a href="#" class="info-btn">立即投资</a>
+                        <a class="info-btn" v-on:click="showPicker">立即投资</a>
                         <p class="info-tips">
                             资金安全由富友金账户监控
                         </p>
@@ -118,6 +118,14 @@
 
         </section>
 
+        <pickerTime 
+            v-bind:maxDate="'2020-10-10'"
+            v-bind:minDate="'2010-10-10'"
+            v-bind:setDate="'2017-10-10'"
+            v-on:show="showPicker"
+            ref="pickerTime"
+        ></pickerTime>
+
     </div>
 </template>
 
@@ -126,6 +134,7 @@
 import {mapState,mapActions} from 'vuex';
 import libs from '../javascripts/main.js';
 import img from '../images/top_banner.png';
+import picker from './testComponents/pickerTime.vue';
 
 var i = require('../images/top_banner.png')
 
@@ -137,7 +146,7 @@ export default {
             swiper:[
                 {src:img,alt:"top_banner1"},
                 {src:"http://static0.tuicool.com/images/upload/pingxx_right.jpg",alt:"top_banner2"},
-                {src:"http://static1.tuicool.com/images/upload/sspaas320.jpg",alt:"top_banner3"},
+                {src:img,alt:"top_banner3"},
             ]
         }
     },
@@ -173,7 +182,7 @@ export default {
     },
     // 导入其他组件
     components:{
-
+        pickerTime:picker
     },
     // 局部自定义指令
     directives: {
@@ -202,7 +211,7 @@ export default {
                 console.log(err);
             })
 
-        }
+        },
         // 带参数的actions
         /*increment () {
             this.$store.dispatch('incrementAsync',{amount:10});
@@ -210,6 +219,9 @@ export default {
         decrement () {
         	this.$store.commit('decrement');
         }*/
+        showPicker(){
+            this.$refs.pickerTime.open();
+        }
     },
     // 组件的计算属性
     /*computed: {
