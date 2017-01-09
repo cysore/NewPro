@@ -118,10 +118,10 @@
 
         </section>
 
-        <pickerTime 
-            v-bind:maxDate="'2020-10-10'"
-            v-bind:minDate="'2010-10-10'"
-            v-bind:setDate="'2017-10-10'"
+        <pickerTime
+            v-bind:maxDate="'2010-10-10'"
+            v-bind:minDate="'2010-12-10'"
+            v-bind:setDate="'2010-11-10'"
             v-bind:resDate='data'
             v-on:on-result-change="onResultChange"
             v-on:show="showPicker"
