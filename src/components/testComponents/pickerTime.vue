@@ -54,7 +54,7 @@
 *
 *
 */
-function getDate(strDate,sizeDate){
+function getFormDate(strDate,sizeDate){
     let str = strDate || 'cur';
     let size = sizeDate || 0;
 
@@ -120,19 +120,19 @@ export default {
         maxDate:{
             type:null,
             default:()=>{
-                return getDate('max',30);
+                return getFormDate('max',30);
             }
         },
         minDate:{
             type:null,
             default:()=>{
-                return getDate('min',30);
+                return getFormDate('min',30);
             }
         },
         setDate:{
             type:null,
             default:()=>{
-                return getDate('cur',0);
+                return getFormDate('cur',0);
             }
         },
         resDate:{
@@ -140,31 +140,10 @@ export default {
         }
     },
     created(){
-
-    },
-    // 组件挂载
-    mounted(){
-        // 获取屏幕宽与li的高来计算touch点的值
-        this.windowWidth = window.screen.width;
-        this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
-        // 当设置有时间时定位到ul>li
-        this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
-        this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
-        this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
-
         let maxDate = this.maxDate;
         let minDate = this.minDate;
         let setDate = this.setDate;
 
-        let [
-            setDate_year,
-            setDate_month,
-            setDate_day
-        ] = [
-            Number(setDate.split('-')[0]),
-            Number(setDate.split('-')[1]),
-            Number(setDate.split('-')[2])
-        ];
         [
             this.maxDate_year,
             this.maxDate_month,
@@ -172,7 +151,11 @@ export default {
 
             this.minDate_year,
             this.minDate_month,
-            this.minDate_day
+            this.minDate_day,
+
+            this.setDate_year,
+            this.setDate_month,
+            this.setDate_day
         ] = [
             Number(maxDate.split('-')[0]),
             Number(maxDate.split('-')[1]),
@@ -180,7 +163,11 @@ export default {
 
             Number(minDate.split('-')[0]),
             Number(minDate.split('-')[1]),
-            Number(minDate.split('-')[2])
+            Number(minDate.split('-')[2]),
+
+            Number(setDate.split('-')[0]),
+            Number(setDate.split('-')[1]),
+            Number(setDate.split('-')[2])
         ]
 
         // year
@@ -195,36 +182,24 @@ export default {
 
 
         // 如果有设置时间年
-        if(setDate_year >= this.minDate_year && setDate_year <= this.maxDate_year){
-            this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - setDate_year));
+        if(this.setDate_year >= this.minDate_year && this.setDate_year <= this.maxDate_year){
+            this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - this.setDate_year));
             this.index.year = this.setVal_year;
             // console.log('年下标_'+this.index.year);
-            if(setDate_year == this.minDate_year || setDate_year == this.maxDate_year){
-
-
-                // this.YMD.month.length = 0;
-                // this.currY.month = 0;
-                // this.index.month = 0;
-                // this.setVal_month = null;
-                //
-                // console.log(this.minDate_month,this.maxDate_month);
-                // for(let i = setDate_month; i <= this.minDate_month; i++){
-                //     this.YMD.month.push(i);
-                // }
-                // this.$refs.month.style.transform='translate3d(0,'+ 0 +'px,0)';
-            }
+            
         }
 
         // 如果有设置时间月
-        if(setDate_month){
-            this.setVal_month = setDate_month - 1;
+        if(this.setDate_month){
+            this.setVal_month = this.setDate_month - 1;
             this.index.month = Math.abs(this.setVal_month);
-            // console.log('月下标_'+this.index.month);
+            this.resetMonth = 0;
+            console.log('月下标_'+this.index.month,this.setVal_month);
         }
 
         // 如果有设置时间日
-        if(setDate_day){
-            this.setVal_day = setDate_day - 1;
+        if(this.setDate_day){
+            this.setVal_day = this.setDate_day - 1;
             this.index.day = Math.abs(this.setVal_day);
             // console.log('日下标_'+this.index.day);
         }
@@ -233,16 +208,45 @@ export default {
         this.getDays(days);
 
         // console.log(this.index.year,this.index.month,this.index.day);
+    },
+    // 组件挂载
+    mounted(){
+        /*if(this.setDate_year == this.minDate_year || this.setDate_year == this.maxDate_year){
+            // console.log(this.minDate_month,this.maxDate_month)
+
+            this.YMD.month.length = 0;
+            this.currY.month = 0;
+            this.index.month = 0;
+
+            console.log(this.YMD.month)
+            for(let i = this.minDate_month; i <= this.maxDate_month; i++){
+                this.YMD.month.push(i);
+            }
+
+             this.$refs.month.style.transform='translate3d(0,'+ 0 +'px,0)';
+        }else{
+            // this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
+        }*/
+
+        // 获取屏幕宽与li的高来计算touch点的值
+        this.windowWidth = window.screen.width;
+        this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
+        // 当设置有时间时定位到ul>li
+        this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
+        this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
+        this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
 
     },
     // 计算属性
     computed:{
-
+        tast(){
+            console.log(this.$refs)
+            return true;
+        }
     },
     methods:{
         open(){
             this.show = false;
-            this.getNowFormatDate;
         },
         touchstart(e){
             this.startX = e.touches[0].clientX;
@@ -256,6 +260,7 @@ export default {
             // 根据touch点选取年月日所在的ul和li的个数
             this.position = this.GetPosition(this.startX,this.windowWidth);
             this.lisize = this.ulArr[this.position].querySelectorAll('li').length;
+
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
@@ -270,14 +275,19 @@ export default {
             let isclass = eEle.className.indexOf('picker-time-list');
 
             // 当只有上下滑动并且是目标ul元素的时候
-            if((this.direction == 1 || this.direction == 2) && isclass!=-1){
+            if((this.direction == 1 || this.direction == 2) && isclass != -1){
                 // 当设置了时间的时候防止滑动的时候计算位置结果是以前的位置
                 if(this.position == 0 && this.setVal_year != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_year　* this.liHeight);
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }else if(this.position == 1 && this.setVal_month != null){
+                    // if(this.resetMonth == 0){
+                    //     offsetY = this.currY[this.isYMD()] + this.endY - this.startY;
+                    // }else{
+                    // }
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_month　* this.liHeight);
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
+                    console.log(offsetY)
                 }else if(this.position == 2 && this.setVal_day != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_day　* this.liHeight);
                     eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
@@ -327,8 +337,8 @@ export default {
                 offset = - this.liHeight * (this.lisize - 5);
             }
 
-            // 重新赋值以便计算下一次滑动的位置
             this.currY[this.isYMD()] = offset;
+            // 重新赋值以便计算下一次滑动的位置
             let eEle = e.target.parentNode;
             let isclass = eEle.className.indexOf('picker-time-list');
 
