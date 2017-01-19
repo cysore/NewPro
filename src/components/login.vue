@@ -72,15 +72,36 @@
         <app-Layout>
             <app-header slot="header"></app-header>
             <app-main>11</app-main>
+
+            <template slot="main" scope="props">
+                <span>这是一个父类</span>
+                <span>{{props.text}}{{props.note}}</span>
+            </template>
+
             <app-footer slot="footer"></app-footer>
         </app-Layout>
+
         <!-- slot 作用域插槽 -->
         <test-solt>
-            <template scope="props">
+            <div slot="a" class="">
+                1
+            </div>
+            <div slot="b" class="">
+                2
+            </div>
+            <!-- <template scope="props">
                 <span>hello from parent</span>
                 <span>{{ props.text }}</span>
-            </template>
+            </template> -->
         </test-solt>
+
+        <!-- 动态组件 -->
+        <keep-alive>
+            <component v-bind:is="currentView">
+                <!-- 组件在 vm.currentview 变化时改变！ -->
+                <!-- 非活动组件将被缓存！ -->
+            </component>
+        </keep-alive>
 
     </div>
 </template>
@@ -108,7 +129,7 @@ import DateSelector from 'mob-date-selector';
 export default {
     data(){
         return{
-            slot:'这是一个slot',
+            currentView: 'appMain',
             isActive:false,
             siginPopup:false,
             showTag:{
@@ -156,6 +177,9 @@ export default {
         appMain     :main,
         appFooter   :footer,
         testSolt    :testsolt,
+        child       :{
+            template:'<div>A custom component!</div>'
+        }
     },
     created(){
         // dialog.alert({"title":"title" , message:"message"})

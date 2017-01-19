@@ -5,7 +5,7 @@
         <!-- 只有父组件没有分发内容时候才显示默认且没有具名的slot -->
         <slot>没有内容才显示这个分发的slot</slot>
 
-        <slot name="main" text="hello from child"></slot>
+        <slot name="main" text="这是子类的text属性" note="这是子类的note属性"></slot>
 
         <slot name="footer"></slot>
     </div>

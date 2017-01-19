@@ -1,6 +1,10 @@
 <template lang="html">
     <div class="">
-        <slot text="hello from child"></slot>
+
+        <slot name="a">aaaa</slot>
+        sadfsadklfsadfsdaf
+        <span></span>
+        <slot name="b">bbbb</slot>
     </div>
 </template>
 
