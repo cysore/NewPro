@@ -119,12 +119,11 @@
         </section>
 
         <pickerTime
-            v-bind:maxDate="'2014-12-10'"
+            v-bind:maxDate="'2012-10-10'"
             v-bind:minDate="'2010-10-10'"
-            v-bind:setDate="'2012-11-10'"
+            v-bind:setDate="'2011-11-10'"
             v-bind:resDate='data'
             v-on:on-result-change="onResultChange"
-            v-on:show="showPicker"
             ref="pickerTime"
         ></pickerTime>
 
@@ -144,7 +143,8 @@ export default {
     data(){
         return{
             date:null,
-            count:this.$store.state.StateRoute.count,
+            // count:this.$store.state.StateRoute.count,
+            counts:this.$store.state.StateRoute.count,
             message:"Hello",
             swiper:[
                 {src:img,alt:"top_banner1"},

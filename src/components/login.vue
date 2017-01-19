@@ -68,6 +68,20 @@
             </div>
         </mt-popup>
 
+        <!-- slot -->
+        <app-Layout>
+            <app-header slot="header"></app-header>
+            <app-main>11</app-main>
+            <app-footer slot="footer"></app-footer>
+        </app-Layout>
+        <!-- slot 作用域插槽 -->
+        <test-solt>
+            <template scope="props">
+                <span>hello from parent</span>
+                <span>{{ props.text }}</span>
+            </template>
+        </test-solt>
+
     </div>
 </template>
 
@@ -78,9 +92,15 @@ import hideImg from '../images/signin/icon6.png';
 // 导入工具库
 import libs from '../javascripts/main.js';
 
-import dialog from './testComponents/dialog.js';
-import test from './testComponents/test.js';
+// import dialog from './testComponents/dialog.js';
+// import test from './testComponents/test.js';
 
+//导入slot
+import applayout from './slot/applayout.vue';
+import header from './slot/header.vue';
+import main from './slot/main.vue';
+import footer from './slot/footer.vue';
+import testsolt from './slot/testSolt.vue';
 
 // 日期控件
 import DateSelector from 'mob-date-selector';
@@ -88,6 +108,7 @@ import DateSelector from 'mob-date-selector';
 export default {
     data(){
         return{
+            slot:'这是一个slot',
             isActive:false,
             siginPopup:false,
             showTag:{
@@ -128,10 +149,15 @@ export default {
             }//回调
         });
     },
-    component:{
+    // 组件
+    components:{
+        appLayout   :applayout,
+        appHeader   :header,
+        appMain     :main,
+        appFooter   :footer,
+        testSolt    :testsolt,
     },
     created(){
-        console.log(this.$libs);
         // dialog.alert({"title":"title" , message:"message"})
         // console.log(this.$store);
         // let ar = libs.unique([112,112,434,'你好',112,112,34,'你好','str','str1','str']);
