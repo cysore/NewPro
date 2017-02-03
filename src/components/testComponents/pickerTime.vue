@@ -140,9 +140,6 @@ export default {
         }
     },
     created(){
-        let maxDate = this.maxDate;
-        let minDate = this.minDate;
-        let setDate = this.setDate;
 
         [
             this.maxDate_year,
@@ -157,44 +154,51 @@ export default {
             this.setDate_month,
             this.setDate_day
         ] = [
-            Number(maxDate.split('-')[0]),
-            Number(maxDate.split('-')[1]),
-            Number(maxDate.split('-')[2]),
+            Number(this.maxDate.split('-')[0]),
+            Number(this.maxDate.split('-')[1]),
+            Number(this.maxDate.split('-')[2]),
 
-            Number(minDate.split('-')[0]),
-            Number(minDate.split('-')[1]),
-            Number(minDate.split('-')[2]),
+            Number(this.minDate.split('-')[0]),
+            Number(this.minDate.split('-')[1]),
+            Number(this.minDate.split('-')[2]),
 
-            Number(setDate.split('-')[0]),
-            Number(setDate.split('-')[1]),
-            Number(setDate.split('-')[2])
+            Number(this.setDate.split('-')[0]),
+            Number(this.setDate.split('-')[1]),
+            Number(this.setDate.split('-')[2])
         ]
-
-        // year
-        for(let i = 0; i <= this.maxDate_year - this.minDate_year; i++){
-            this.YMD.year.push(this.minDate_year+i);
-        }
-        // month
-        for(let i = 1; i <= 12; i++){
-            this.YMD.month.push(i);
-        }
-        // day
-
+        console.log(this.maxDate_month,this.minDate_month);
 
         // 如果有设置时间年
         if(this.setDate_year >= this.minDate_year && this.setDate_year <= this.maxDate_year){
             this.setVal_year = Number((this.maxDate_year - this.minDate_year) - (this.maxDate_year - this.setDate_year));
             this.index.year = this.setVal_year;
             // console.log('年下标_'+this.index.year);
-            
+            for(let i = 0; i <= this.maxDate_year - this.minDate_year; i++){
+                this.YMD.year.push(this.minDate_year+i);
+            }
         }
 
         // 如果有设置时间月
         if(this.setDate_month){
             this.setVal_month = this.setDate_month - 1;
-            this.index.month = Math.abs(this.setVal_month);
-            this.resetMonth = 0;
-            console.log('月下标_'+this.index.month,this.setVal_month);
+
+            // console.log('月下标_'+this.index.month,this.setVal_month);
+            if(this.setDate_year == this.minDate_year || this.setDate_year == this.maxDate_year){
+                if(this.setDate_month == this.minDate_month || this.setDate_month == this.maxDate_month){
+                }
+                // console.log(this.maxDate_month - this.minDate_month + 1);
+                for(let i = this.minDate_month; i <= 12; i++){
+                    this.YMD.month.push(i);
+                }
+                this.index.month = 0;
+                this.currY.month = 0;
+                console.log('/'+this.setVal_month);
+            }else{
+                for(let i = 1; i <= 12; i++){
+                    this.YMD.month.push(i);
+                }
+                this.index.month = Math.abs(this.setVal_month);
+            }
         }
 
         // 如果有设置时间日
@@ -207,27 +211,10 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
 
-        // console.log(this.index.year,this.index.month,this.index.day);
+        console.log(days);
     },
     // 组件挂载
     mounted(){
-        /*if(this.setDate_year == this.minDate_year || this.setDate_year == this.maxDate_year){
-            // console.log(this.minDate_month,this.maxDate_month)
-
-            this.YMD.month.length = 0;
-            this.currY.month = 0;
-            this.index.month = 0;
-
-            console.log(this.YMD.month)
-            for(let i = this.minDate_month; i <= this.maxDate_month; i++){
-                this.YMD.month.push(i);
-            }
-
-             this.$refs.month.style.transform='translate3d(0,'+ 0 +'px,0)';
-        }else{
-            // this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
-        }*/
-
         // 获取屏幕宽与li的高来计算touch点的值
         this.windowWidth = window.screen.width;
         this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
@@ -235,6 +222,8 @@ export default {
         this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
         this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
         this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
+
+        this.initYMDlocation();
 
     },
     // 计算属性
@@ -245,6 +234,14 @@ export default {
         }
     },
     methods:{
+        initYMDlocation(){
+            if(this.setDate_year == this.minDate_year || this.setDate_year == this.maxDate_year){
+                this.$refs.month.style.transform='translate3d(0,0,0)';
+                this.index.month = 0;
+                this.currY.month = 0;
+            }
+
+        },
         open(){
             this.show = false;
         },
@@ -276,24 +273,24 @@ export default {
 
             // 当只有上下滑动并且是目标ul元素的时候
             if((this.direction == 1 || this.direction == 2) && isclass != -1){
+
                 // 当设置了时间的时候防止滑动的时候计算位置结果是以前的位置
                 if(this.position == 0 && this.setVal_year != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_year　* this.liHeight);
-                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }else if(this.position == 1 && this.setVal_month != null){
-                    // if(this.resetMonth == 0){
-                    //     offsetY = this.currY[this.isYMD()] + this.endY - this.startY;
-                    // }else{
-                    // }
+
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_month　* this.liHeight);
-                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
-                    console.log(offsetY)
+                    if(this.setVal_month == this.minDate_month){
+                        console.log(1);
+                        offsetY = this.currY[this.isYMD()] + this.endY - this.startY;
+
+                    }
                 }else if(this.position == 2 && this.setVal_day != null){
                     offsetY = this.currY[this.isYMD()] + this.endY - this.startY + (-this.setVal_day　* this.liHeight);
-                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
-                }else{
-                    eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
                 }
+
+                eEle.style.transform='translate3d(0,'+ offsetY +'px,0)';
+
             }
         },
         touchend(e){
@@ -392,26 +389,29 @@ export default {
                         this.ulArr[1].style.transform='translate3d(0,'+ 0 +'px,0)';
 
                         indexMonth = this.YMD.month[this.index.month];
-                        console.log('no'+this.YMD.month[this.index.month]);
+                        // console.log('no'+this.YMD.month[this.index.month]);
                     }else{
                         // this.setVal_month = null;
                         // let offsetY = -(this.liHeight * (this.YMD.month.length - 2));
                         // this.ulArr[1].style.transform='translate3d(0,'+ offsetY +'px,0)';
 
                         indexMonth = this.YMD.month[this.index.month];
-                        console.log('yes'+this.YMD.month[this.index.month]);
+                        // console.log('yes'+this.YMD.month[this.index.month]);
                     }
 
                     days = this.getDaysInMonth(year,indexMonth);
                     if(indexMonth == this.minDate_month && year == this.minDate_year){
-                        console.log(indexMonth);
+                        // console.log(indexMonth);
                         this.YMD.day.length = 0;
+                        this.currY.day = 0;
+                        this.index.day = 0;
+                        this.setVal_day = null;
                         for(let i = this.minDate_day; i <= days; i++){
                             this.YMD.day.push(i)
                         }
                         this.ulArr[2].style.transform='translate3d(0,'+ 0 +'px,0)';
                     }else{
-                        console.log('wu');
+                        // console.log('wu');
                         this.YMD.day.length = 0;
                         for(let i = 1; i <= days; i++){
                             this.YMD.day.push(i)
