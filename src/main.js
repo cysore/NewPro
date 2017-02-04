@@ -60,7 +60,7 @@ router.beforeEach((to,from,next)=>{
 
     // let {auth = true} = to.meta;
     let auth = to.meta.auth;
-    var isLogin = Store.StateUser.user=='' ? false : true; //true用户已登录， false用户未登录
+    let isLogin = Store.StateUser.user=='' ? false : true; //true用户已登录， false用户未登录
 
     // 授权匹配
     if (auth && !isLogin && to.path !== '/login') {
