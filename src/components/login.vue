@@ -28,7 +28,7 @@
                     邀请码
                 </span>
             </div> -->
-            <button class="signin-btn" v-bind:disabled=" login.phone=='' && login.pass=='' " v-bind:class="{disabled: login.phone=='' && login.pass=='' }">login</button>
+            <button class="signin-btn" v-bind:disabled=" (login.phone=='' || login.pass=='') ">login</button>
 
             <div class="not-user">
                 <a class="not-user-l" v-on:click="siginPopup = true;">没有账号？先注册</a>
@@ -183,9 +183,10 @@ export default {
     },
     created(){
         // dialog.alert({"title":"title" , message:"message"})
-        // console.log(this.$store);
+        console.log(this.$store);
         // let ar = libs.unique([112,112,434,'你好',112,112,34,'你好','str','str1','str']);
-        console.log(Array.from(new Set([112,112,434,'你好',112,112,34,'你好','str','str1','str'])));
+        // console.log(Array.from(new Set([112,112,434,'你好',112,112,34,'你好','str','str1','str'])));
+
     },
     // 局部自定义指令
     directives: {

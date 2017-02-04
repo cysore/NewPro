@@ -319,6 +319,7 @@ import {mapState,mapMutations,mapActions,mapGetters} from 'vuex';
 import bottomFiexd from './bottomFiexd.vue';
 import libs from '../../javascripts/main.js';
 export default {
+    name:'investement',
     data(){
         return {
             testObj:{
@@ -386,27 +387,38 @@ export default {
                     msg:'福利红包，投资5000元可用'
                 },
             ],
-            Datas:JSON.parse(decodeURI(this.$route.params.Datas))
+            Datas:null
         }
     },
     components:{
         bottomFiexd:bottomFiexd
     },
     beforeCreate(){
-        this.$http.get('../static/AreaData.json').then((data) => {
+        /*this.$http.get('../static/AreaData.json').then((data) => {
             console.log(data);
             this.testObj.test.arr = data.data;
         },(err) => {
             console.log(err);
-        })
+        })*/
     },
     created(){
+
         // console.log(this.$store.getters.GET_USER);
         // console.log(this.$on);
+        let routesParam = this.$route.params.Datas;
+        let data;
+        if(routesParam){
+            data = JSON.parse(decodeURI(routesParam));
+        }else{
+            this.Datas = this.GET_TEMPORARY;
+        }
 
+        if(!this.GET_USER){
+            this.Datas = data;
+        }
     },
     computed:{
-
+        ...mapGetters(['GET_USER','GET_TEMPORARY'])
     },
     methods:{
         /*
@@ -564,10 +576,12 @@ export default {
         /*
         *去登陆
         */
-        ...mapActions(['USER_NOT_LOGIN_NAME_Sync']),//映射store里面的actions
+        ...mapActions(['USER_NOT_LOGIN_NAME_Sync','investementIndexDataSync']),//映射store里面的actions
+        // ...mapGetters(['GET_USER','GET_TEMPORARY']),//映射store里面的getters
         goLogin(){
             console.log(this.$route.name);
             this.USER_NOT_LOGIN_NAME_Sync(this.$route.name);
+            this.investementIndexDataSync(this.Datas);
             this.$router.replace({name:'routeLogin'});
         },
         /*
