@@ -119,9 +119,9 @@
         </section>
 
         <pickerTime
-            v-bind:maxDate="'2020-12-12'"
-            v-bind:minDate="'2010-10-10'"
-            v-bind:setDate="'2017-11-11'"
+            v-bind:maxDate="'2010-12-12'"
+            v-bind:minDate="'2010-1-10'"
+            v-bind:setDate="'2010-11-11'"
             v-bind:resDate='data'
             v-on:on-result-change="onResultChange"
             ref="pickerTime"
