@@ -11,15 +11,15 @@
                     <div class="padding-tit" v-on:click="back">稳利宝.20161115-AWMimg</div>
                     <div class="padding-center">
                         <div class="center-l">
-                            <p>8.5<var>%</var></p>
+                            <p>{{Datas.earnings}}<var>%</var></p>
                             <span>年化收益</span>
                         </div>
                         <div class="center-c">
-                            <p>90<var>天</var></p>
+                            <p>{{Datas.date}}<var>天</var></p>
                             <span>投资期限</span>
                         </div>
                         <div class="center-r">
-                            <p><var>50万</var></p>
+                            <p><var>{{Datas.num}}万</var></p>
                             <span>项目金额</span>
                         </div>
                     </div>
@@ -402,20 +402,16 @@ export default {
         })*/
     },
     created(){
-
         // console.log(this.$store.getters.GET_USER);
         // console.log(this.$on);
         let routesParam = this.$route.params.Datas;
-        let data;
         if(routesParam){
-            data = JSON.parse(decodeURI(routesParam));
+            this.Datas = JSON.parse(decodeURI(routesParam));
         }else{
             this.Datas = this.GET_TEMPORARY;
         }
-
-        if(!this.GET_USER){
-            this.Datas = data;
-        }
+        
+        console.log(this.Datas);
     },
     computed:{
         ...mapGetters(['GET_USER','GET_TEMPORARY'])
@@ -591,7 +587,7 @@ export default {
             console.log('前往充值！');
         },
         back(){
-            history.go(-2);
+            history.go(-1);
             // this.$router.replace({name:'routeInvestement'});
         }
     },

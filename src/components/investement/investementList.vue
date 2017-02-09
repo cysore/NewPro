@@ -87,6 +87,8 @@ export default {
         // 跳转指定详情页
         startInvestementDetails(data,e){
             // console.log(e.path[0].offsetTop);
+            console.log(data);
+            console.log(this.router);
             // 获取点击时的按钮定位
             this.saveClickElementOffsetTopSyns(this.$refs.wrapper.scrollTop);
             // 进行url编码
