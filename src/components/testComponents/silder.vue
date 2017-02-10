@@ -80,7 +80,7 @@ export default {
             if(this.eEle.tagName == "SECTION"){return}
             console.log()
             this.$refs.silderboxImg.style.transition="none";
-console.log(e.touches[0].pageX)
+// console.log(e.touches[0].pageX)
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
@@ -97,8 +97,9 @@ console.log(e.touches[0].pageX)
                     console.log(-this.imgIndex*this.windowWidth-this.startOffset)
                 }
             }
-            
-            // this.eEle.style.transform=`translate3d(${-this.startOffset}px,0,0)`;
+            let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
+            // console.log(s)
+            this.eEle.style.transform=`translate3d(${s}px,0,0)`;
         },
         touchend(e){
             this.endX = e.changedTouches[0].clientX;
@@ -113,20 +114,25 @@ console.log(e.touches[0].pageX)
                 return;
             }
 
-            if(this.direction == 3){//向右
 
-                if(this.imgIndex == this.imgs.length-1){return}
+
+            if(this.direction == 3){//向右
+                if(this.imgIndex == this.imgs.length-1){
+                    this.eEle.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                    return;
+                }
+                
                 this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                 this.imgIndex+=1;
 
-                console.log('向右'+this.imgIndex);
+                // console.log('向右'+this.imgIndex);
                 return;
 
             }else if(this.direction == 4){//向左
-                console.log('向左'+(this.imgIndex-1));
+                // console.log('向左'+(this.imgIndex-1));
                 let res;
                 this.imgIndex -= 1;
-
+                
                 if(this.imgIndex <= 0){
                     this.imgIndex = 0;
                     res = 0;
@@ -138,7 +144,7 @@ console.log(e.touches[0].pageX)
                 return;
             }
             
-            // console.log(this.endX,this.endY);
+            
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
