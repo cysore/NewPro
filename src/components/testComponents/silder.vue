@@ -9,7 +9,7 @@
             </a>
         </div>
         <div class="silderbox-item">
-            <span v-for="i in imgs.length"></span>
+            <span v-for="i in imgs.length">{{index}}</span>
         </div>
     </section>
 </template>
@@ -57,7 +57,7 @@ export default {
                 {'url':i},
                 {'url':i},
             ],
-            index:null,//图片下标
+            index:1,//图片下标
             boxWidth:0,//silderbox-img 的总宽度
             boxOffset:0,//上一个图片的offsetX值
         }
@@ -74,11 +74,11 @@ export default {
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
 
-            this.index = e.target.dataset.item;//第几张图片的下标
+            this.index = Number(e.target.dataset.item);//第几张图片的下标
             this.eEle = e.target.parentNode;
             if(this.eEle.tagName == "SECTION"){return}
 
-            // console.log(this.startX,this.startY);
+            console.log(this.index);
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
@@ -88,25 +88,12 @@ export default {
             this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.offsetX =  -(this.startX - this.endX);
             // console.log(this.eEle.style.width.replace('px',''));
-
-
-            if(this.direction == 3){//向右
-                // console.log('向右');
-                console.log('向右'+this.index);
-                if(this.index == this.imgs.length){return}
-                this.eEle.style.transform=`translate3d(${-(this.index*this.windowWidth)}px,0,0)`;
-                return;
-            }else if(this.direction == 4){//向左
-                console.log('向左'+(this.index-1));
-                if(this.index-1 == 0){
-                    this.index = 1;
-                }
-                let res = this.boxWidth-(this.index-1)*this.windowWidth
-                console.log(res);
-                this.eEle.style.transform=`translate3d(${0}px,0,0)`;
-                return;
-            }
             this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;
+            // if(this.offsetX >= (this.windowWidth/2)){
+            //     this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;
+            // }
+
+
 
 
 
@@ -116,7 +103,29 @@ export default {
             // this.endX = e.changedTouches[0].clientX;
             // this.endY = e.changedTouches[0].clientY;
             // console.log(this.offsetX);
+            /*if(this.direction == 3){//向右
+                // console.log('向右');
+                console.log('向右'+this.index);
 
+                if(this.index == this.imgs.length){return}
+                this.eEle.style.transform=`translate3d(${-(this.index*this.windowWidth)}px,0,0)`;
+                return;
+            }else if(this.direction == 4){//向左
+                console.log('向左'+(this.index-1));
+                let res;
+                let idx = this.index - 1;
+                if(idx == 0){
+                    this.index = 1;
+                    res = this.boxWidth-(idx)*this.windowWidth;
+                }else{
+
+                    res = this.boxWidth-(idx)*this.windowWidth;
+                    console.log(res);
+                }
+                this.eEle.style.transform=`translate3d(${-res}px,0,0)`;
+                return;
+            }
+            this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;*/
             // console.log(this.endX,this.endY);
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
@@ -162,7 +171,7 @@ export default {
         display: -webkit-flex;
         justify-content: space-between;
         -webkit-justify-content: space-between;
-        transition: .5s;
+        // transition: .5s;
         >a{
             display: block;
             height: 4rem;
