@@ -1,15 +1,15 @@
 <template lang="html">
     <section class="silderbox">
-        <div class="silderbox-img" v-bind="{'style' : 'width:'+ boxWidth +'px'}"
+        <div class="silderbox-img" ref="silderboxImg" v-bind="{'style' : 'width:'+ boxWidth +'px'}"
         v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
         v-on:touchend.stop.prevent="touchend($event)">
-            <a href="http://www.baidu.com" v-for="(item,index) in imgs" v-bind="{'data-item' : index+1}">
+            <a href="http://www.baidu.com" v-for="(item,index) in imgs" v-bind="{'data-item' : index}">
                 <img v-bind:src="item.url" alt="">
             </a>
         </div>
         <div class="silderbox-item">
-            <span v-for="i in imgs.length">{{index}}</span>
+            <span v-for="(i,index) in imgs.length" v-bind:class="{'curr': index==imgIndex}"></span>
         </div>
     </section>
 </template>
@@ -56,10 +56,12 @@ export default {
                 {'url':i},
                 {'url':i},
                 {'url':i},
+                {'url':i},
             ],
-            index:1,//图片下标
+            imgIndex:0,//图片下标
             boxWidth:0,//silderbox-img 的总宽度
             boxOffset:0,//上一个图片的offsetX值
+            endOffset:0,
         }
     },
     mounted(){
@@ -73,59 +75,69 @@ export default {
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
-
-            this.index = Number(e.target.dataset.item);//第几张图片的下标
+            
             this.eEle = e.target.parentNode;
             if(this.eEle.tagName == "SECTION"){return}
-
-            console.log(this.index);
+            console.log()
+            this.$refs.silderboxImg.style.transition="none";
+console.log(e.touches[0].pageX)
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
             this.endY = e.touches[0].clientY;
-            // console.log(this.endX,this.endY);
 
             this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
-            this.offsetX =  -(this.startX - this.endX);
+            this.startOffset =  -(this.startX - this.endX);
             // console.log(this.eEle.style.width.replace('px',''));
-            this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;
-            // if(this.offsetX >= (this.windowWidth/2)){
-            //     this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;
-            // }
-
-
-
-
-
-
+            if(Math.abs(this.startOffset) >= (this.windowWidth/3)){
+                if(this.direction == 3 ){
+                    // this.index+=1;
+                }else if(this.direction == 4){
+                    // this.index-=1;
+                    console.log(-this.imgIndex*this.windowWidth-this.startOffset)
+                }
+            }
+            
+            // this.eEle.style.transform=`translate3d(${-this.startOffset}px,0,0)`;
         },
         touchend(e){
-            // this.endX = e.changedTouches[0].clientX;
-            // this.endY = e.changedTouches[0].clientY;
-            // console.log(this.offsetX);
-            /*if(this.direction == 3){//向右
-                // console.log('向右');
-                console.log('向右'+this.index);
+            this.endX = e.changedTouches[0].clientX;
+            this.endY = e.changedTouches[0].clientY;
+            this.imgIndex = Number(e.target.dataset.item);//第几张图片的下标
+            this.$refs.silderboxImg.style.transition=".5s";
+            this.endOffset = Math.abs(this.startX-this.endX);
 
-                if(this.index == this.imgs.length){return}
-                this.eEle.style.transform=`translate3d(${-(this.index*this.windowWidth)}px,0,0)`;
-                return;
-            }else if(this.direction == 4){//向左
-                console.log('向左'+(this.index-1));
-                let res;
-                let idx = this.index - 1;
-                if(idx == 0){
-                    this.index = 1;
-                    res = this.boxWidth-(idx)*this.windowWidth;
-                }else{
-
-                    res = this.boxWidth-(idx)*this.windowWidth;
-                    console.log(res);
-                }
-                this.eEle.style.transform=`translate3d(${-res}px,0,0)`;
+            // 如果是只是点击则不切换图片
+            if(this.endOffset <= 50){
+                this.eEle.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
             }
-            this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;*/
+
+            if(this.direction == 3){//向右
+
+                if(this.imgIndex == this.imgs.length-1){return}
+                this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                this.imgIndex+=1;
+
+                console.log('向右'+this.imgIndex);
+                return;
+
+            }else if(this.direction == 4){//向左
+                console.log('向左'+(this.imgIndex-1));
+                let res;
+                this.imgIndex -= 1;
+
+                if(this.imgIndex <= 0){
+                    this.imgIndex = 0;
+                    res = 0;
+                }else{
+                    res = (this.imgIndex+1)*this.windowWidth-this.windowWidth;
+                }
+                this.eEle.style.transform=`translate3d(${-res}px,0,0)`;
+                
+                return;
+            }
+            
             // console.log(this.endX,this.endY);
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
@@ -171,7 +183,6 @@ export default {
         display: -webkit-flex;
         justify-content: space-between;
         -webkit-justify-content: space-between;
-        // transition: .5s;
         >a{
             display: block;
             height: 4rem;
@@ -188,21 +199,22 @@ export default {
         bottom: 0;
         left: 0;
         padding:.1rem 0;
-        height: .3rem;
-        line-height: .3rem;
+        height: .25rem;
+        line-height: .25rem;
         width: 100%;
         text-align: center;
         >span{
             display: inline-block;
-            height: .3rem;
-            width: .3rem;
+            height: .25rem;
+            width: .25rem;
             margin: 0 .05rem;
             border-radius: 50%;
+            background: #ccc;
+        }
+        .curr{
             background: #fd9153;
         }
     }
 }
-.curr{
-    background: red;
-}
+
 </style>
