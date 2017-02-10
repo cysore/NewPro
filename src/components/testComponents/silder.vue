@@ -1,6 +1,6 @@
 <template lang="html">
     <section class="silderbox">
-        <div class="silderbox-img" v-bind="{'style' : 'width:'+imgs.length * 375+'px'}"
+        <div class="silderbox-img" v-bind="{'style' : 'width:'+ boxWidth +'px'}"
         v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
         v-on:touchend.stop.prevent="touchend($event)">
@@ -58,27 +58,25 @@ export default {
                 {'url':i},
             ],
             index:null,//图片下标
-
+            boxWidth:0,//silderbox-img 的总宽度
+            boxOffset:0,//上一个图片的offsetX值
         }
     },
     mounted(){
-        this.windowWidth = window.screen.width;
+
     },
     created(){
-
+        this.windowWidth = window.screen.width;
+        this.boxWidth = this.imgs.length * this.windowWidth;
     },
     methods:{
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
 
-            console.log(e.target.dataset.item);
-
-            this.index = e.target.dataset.item;
+            this.index = e.target.dataset.item;//第几张图片的下标
             this.eEle = e.target.parentNode;
             if(this.eEle.tagName == "SECTION"){return}
-
-            this.eEleWidth = e.target.parentNode.style.width.replace('px','');
 
             // console.log(this.startX,this.startY);
         },
@@ -89,41 +87,37 @@ export default {
 
             this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.offsetX =  -(this.startX - this.endX);
+            // console.log(this.eEle.style.width.replace('px',''));
 
-            if(this.direction == 3 || this.direction == 4){
-                this.eEle.style.transform='translate3d('+ this.offsetX +'px,0,0)';
-            }
-            // 第一张不能向左再滑了
-            if(this.direction == 4 && this.offsetX >= (this.windowWidth/2)){
-                console.log(this.offsetX);
-                this.eEle.style.transform='translate3d('+ 0 +'px,0,0)';
+
+            if(this.direction == 3){//向右
+                // console.log('向右');
+                console.log('向右'+this.index);
+                if(this.index == this.imgs.length){return}
+                this.eEle.style.transform=`translate3d(${-(this.index*this.windowWidth)}px,0,0)`;
+                return;
+            }else if(this.direction == 4){//向左
+                console.log('向左'+(this.index-1));
+                if(this.index-1 == 0){
+                    this.index = 1;
+                }
+                let res = this.boxWidth-(this.index-1)*this.windowWidth
+                console.log(res);
+                this.eEle.style.transform=`translate3d(${0}px,0,0)`;
                 return;
             }
+            this.eEle.style.transform=`translate3d(${this.offsetX}px,0,0)`;
 
-            // console.log(offsetX);
+
+
+
         },
         touchend(e){
-            this.endX = e.changedTouches[0].clientX;
-            this.endY = e.changedTouches[0].clientY;
-            if(Math.abs(this.offsetX) >= (this.windowWidth/2)){
+            // this.endX = e.changedTouches[0].clientX;
+            // this.endY = e.changedTouches[0].clientY;
+            // console.log(this.offsetX);
 
-                // console.log(this.offsetX);
-
-                if(this.direction == 3){
-                    this.eEle.style.transform='translate3d('+ -this.index*this.windowWidth +'px,0,0)';
-                    console.log(this.index*this.windowWidth);
-                }else if(this.direction == 4 && this.offsetX <= (this.windowWidth/2)){
-                    this.eEle.style.transform='translate3d('+ 375 +'px,0,0)';
-                    console.log(2);
-                }
-
-            }else{
-                this.eEle.style.transform='translate3d('+ 0 +'px,0,0)';
-            }
             // console.log(this.endX,this.endY);
-        },
-        hrefhandler(){
-            console.log(1);
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
