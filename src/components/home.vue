@@ -1,18 +1,20 @@
 <template lang="html">
     <div>
         <section class="banner">
-            <mt-swipe v-bind:auto="100000">
+            <mt-swipe v-bind:auto="10000">
                 <mt-swipe-item v-for="item in swiper" class="swiper-slide"><img v-bind:src='item.src' v-bind:alt='item.alt'></mt-swipe-item>
             </mt-swipe>
         </section>
-        <section class="">
-            <silderBox v-bind:auto="3000" v-bind:imgArr="swiper" v-bind:show="'right'">
-                
-                <!-- <silderItem v-for="(item,index) in swiper" v-bind="{'data-item' : index}">
-                    <img v-bind:src="item.src" alt="">
-                </silderItem> -->
-            </silderBox>
-        </section>
+
+        
+        <silderBox v-bind:auto="3000" v-bind:imgArr="swiper" v-bind:show="'block'">
+
+            <!-- <a v-bind:href="item.url" v-for="(item,index) in swiper">
+                <img v-bind:src="item.src" v-bind:alt="item.alt">
+            </a> -->
+            
+        </silderBox>
+
         <section class="content">
             <div class="content-total">
                 <div class="totals-l">
@@ -144,6 +146,7 @@ import {mapState,mapActions} from 'vuex';
 import libs from '../javascripts/main.js';
 import img from '../images/top_banner.png';
 import picker from './testComponents/pickerTime.vue';
+
 import silder from './testComponents/silder.vue';
 import silderitem from './testComponents/silderItem.vue';
 

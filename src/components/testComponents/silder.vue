@@ -4,13 +4,16 @@
         v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
         v-on:touchend.stop.prevent="touchend($event)">
-            <a v-bind:href="item.url" v-for="(item,index) in imgs" v-bind="{'data-item' : index}">
-                <img v-bind:src="item.src" v-bind:alt="item.alt">
-            </a>
+            
+            <slot>
+                <a v-bind:href="item.url" v-for="(item,idx) in imgs" v-bind="{'data-item' : idx}">
+                    <img v-bind:src="item.src" v-bind:alt="item.alt">
+                </a>
+            </slot>
 
         </div>
         <ul class="silderbox-item" ref="silderboxItem">
-            <li v-for="(i,index) in imgs.length" v-bind:class="{'curr': index==imgIndex}"></span>
+            <li v-for="(i,idx) in imgs.length" v-bind:class="{'curr': idx==imgIndex}"></span>
         </ul>
     </section>
 </template>
@@ -54,12 +57,7 @@ export default {
     data(){
         return {
             msg:'silder',
-            imgs:this.imgArr/*[
-                {'url':i,'src':i,'alt':i},
-                {'url':i,'src':i,'alt':i},
-                {'url':i,'src':i,'alt':i},
-                {'url':i,'src':i,'alt':i},
-            ]*/,
+            imgs:this.imgArr,
             imgIndex:0,//图片下标
             boxWidth:0,//silderbox-img 的总宽度
             startOffset:0,//上一个图片的offsetX值
@@ -118,6 +116,7 @@ export default {
             this.endX = e.changedTouches[0].clientX;
             this.endY = e.changedTouches[0].clientY;
             this.imgIndex = Number(e.target.dataset.item);//第几张图片的下标
+
             this.$refs.silderboxImg.style.transition=".5s";
             this.endOffset = Math.abs(this.startX-this.endX);
             this.autoPlay();
@@ -149,6 +148,10 @@ export default {
                 }
                 this.silderBox.style.transform=`translate3d(${-res}px,0,0)`;
             }
+            // 获取图片下标
+            // let str = this.$refs.silderboxImg.style.transform;
+            // let curidx = Math.abs(str.substring(str.indexOf('(')+1,str.length-1).split(',')[0].replace('px',''));
+            // this.imgIndex = curidx / this.windowWidth;
         },
         autoPlay(){
             if(this.auto){

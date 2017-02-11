@@ -13,7 +13,7 @@
                         <span v-on:click="show = true">取消</span>
                         <span v-on:click="enter">确定</span>
                     </div>
-                    <div class="picker-time-content"
+                    <div class="picker-time-content" ref="picker"
                     v-on:touchstart.stop.prevent="touchstart($event)"
                     v-on:touchmove.stop.prevent="touchmove($event)"
                     v-on:touchend.stop.prevent="touchend($event)">
@@ -118,19 +118,19 @@ export default {
     },
     props:{
         maxDate:{
-            type:null,
+            type:String,
             default:()=>{
                 return getFormDate('max',30);
             }
         },
         minDate:{
-            type:null,
+            type:String,
             default:()=>{
                 return getFormDate('min',30);
             }
         },
         setDate:{
-            type:null,
+            type:String,
             default:()=>{
                 return getFormDate('cur',0);
             }
@@ -166,7 +166,7 @@ export default {
             Number(this.setDate.split('-')[1]),
             Number(this.setDate.split('-')[2])
         ]
-        console.log(this.maxDate_month,this.minDate_month);
+        // console.log(this.maxDate_month,this.minDate_month);
 
         // 如果有设置时间年
         if(this.setDate_year >= this.minDate_year && this.setDate_year <= this.maxDate_year){
@@ -211,20 +211,20 @@ export default {
         let days = this.getDaysInMonth(this.YMD.year[this.index.year],this.YMD.month[this.index.month]);
         this.getDays(days);
 
-        console.log(days);
+        // console.log(days);
     },
     // 组件挂载
     mounted(){
         // 获取屏幕宽与li的高来计算touch点的值
         this.windowWidth = window.screen.width;
-        this.liHeight = Number((window.getComputedStyle(document.querySelector('li')).height).replace('px',''));
+        this.liHeight = Number((window.getComputedStyle(this.$refs.picker.querySelector('li')).height).replace('px',''));
         // 当设置有时间时定位到ul>li
         this.$refs.year.style.transform='translate3d(0,'+ -this.setVal_year * this.liHeight +'px,0)';
         this.$refs.month.style.transform='translate3d(0,'+ -this.setVal_month * this.liHeight +'px,0)';
         this.$refs.day.style.transform='translate3d(0,'+ -this.setVal_day * this.liHeight +'px,0)';
 
         this.initYMDlocation();
-
+        console.log(this.liHeight)
     },
     // 计算属性
     computed:{
@@ -540,6 +540,12 @@ export default {
             }
             return pos;
         },
+
+        //返回角度
+        GetSlideAngle(dx,dy){
+            return Math.atan2(dy,dx) * 180 / Math.PI;
+        },
+
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
 
