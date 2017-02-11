@@ -540,12 +540,6 @@ export default {
             }
             return pos;
         },
-
-        //返回角度
-        GetSlideAngle(dx,dy){
-            return Math.atan2(dy,dx) * 180 / Math.PI;
-        },
-
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
 
@@ -558,8 +552,8 @@ export default {
                 return result;
             }
 
-            // 获取手势方向
-            let angle = this.GetSlideAngle(dx, dy);
+            // 根据角度获取手势方向
+            let angle = Math.atan2(dy,dx) * 180 / Math.PI;
             if (angle >= -45 && angle < 45) {
                 result = 4;
             }else if (angle >= 45 && angle < 135) {

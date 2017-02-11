@@ -65,7 +65,8 @@ export default {
         }
     },
     mounted(){
-
+        this.eEle = this.$refs.silderboxImg;
+        this.autoPlay();
     },
     created(){
         this.windowWidth = window.screen.width;
@@ -74,13 +75,9 @@ export default {
     methods:{
         touchstart(e){
             this.startX = e.touches[0].clientX;
-            this.startY = e.touches[0].clientY;
-            
-            this.eEle = e.target.parentNode;
-            if(this.eEle.tagName == "SECTION"){return}
-            console.log()
-            this.$refs.silderboxImg.style.transition="none";
-// console.log(e.touches[0].pageX)
+            this.startY = e.touches[0].clientY;            
+            this.eEle.style.transition="none";
+            clearInterval(this.auto)
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
@@ -94,11 +91,10 @@ export default {
                     // this.index+=1;
                 }else if(this.direction == 4){
                     // this.index-=1;
-                    console.log(-this.imgIndex*this.windowWidth-this.startOffset)
                 }
             }
             let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
-            // console.log(s)
+            console.log(s)
             this.eEle.style.transform=`translate3d(${s}px,0,0)`;
         },
         touchend(e){
@@ -107,14 +103,12 @@ export default {
             this.imgIndex = Number(e.target.dataset.item);//第几张图片的下标
             this.$refs.silderboxImg.style.transition=".5s";
             this.endOffset = Math.abs(this.startX-this.endX);
-
+            this.autoPlay();
             // 如果是只是点击则不切换图片
             if(this.endOffset <= 50){
                 this.eEle.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
             }
-
-
 
             if(this.direction == 3){//向右
                 if(this.imgIndex == this.imgs.length-1){
@@ -124,10 +118,7 @@ export default {
                 
                 this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                 this.imgIndex+=1;
-
                 // console.log('向右'+this.imgIndex);
-                return;
-
             }else if(this.direction == 4){//向左
                 // console.log('向左'+(this.imgIndex-1));
                 let res;
@@ -140,11 +131,22 @@ export default {
                     res = (this.imgIndex+1)*this.windowWidth-this.windowWidth;
                 }
                 this.eEle.style.transform=`translate3d(${-res}px,0,0)`;
-                
-                return;
             }
-            
-            
+        },
+        autoPlay(){
+
+            this.auto = setInterval(()=>{
+                this.eEle.style.transition=".5s";
+                if(this.imgIndex == this.imgs.length-1){
+
+                    this.eEle.style.transform=`translate3d(${0}px,0,0)`;
+                    this.imgIndex=0;
+                    
+                }else{
+                    this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                    this.imgIndex+=1;
+                }
+            }, 1000)
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
