@@ -1,9 +1,17 @@
 <template lang="html">
     <div>
         <section class="banner">
-            <mt-swipe :auto="50000">
+            <mt-swipe v-bind:auto="100000">
                 <mt-swipe-item v-for="item in swiper" class="swiper-slide"><img v-bind:src='item.src' v-bind:alt='item.alt'></mt-swipe-item>
             </mt-swipe>
+        </section>
+        <section class="">
+            <silderBox v-bind:auto="3000" v-bind:imgArr="swiper" v-bind:show="'right'">
+                
+                <!-- <silderItem v-for="(item,index) in swiper" v-bind="{'data-item' : index}">
+                    <img v-bind:src="item.src" alt="">
+                </silderItem> -->
+            </silderBox>
         </section>
         <section class="content">
             <div class="content-total">
@@ -136,6 +144,8 @@ import {mapState,mapActions} from 'vuex';
 import libs from '../javascripts/main.js';
 import img from '../images/top_banner.png';
 import picker from './testComponents/pickerTime.vue';
+import silder from './testComponents/silder.vue';
+import silderitem from './testComponents/silderItem.vue';
 
 var i = require('../images/top_banner.png')
 
@@ -147,9 +157,9 @@ export default {
             counts:this.$store.state.StateRoute.count,
             message:"Hello",
             swiper:[
-                {src:img,alt:"top_banner1"},
-                {src:"http://static0.tuicool.com/images/upload/pingxx_right.jpg",alt:"top_banner2"},
-                {src:img,alt:"top_banner3"},
+                {src:"https://static.vux.li/demo/1.jpg",alt:"top_banner1",url:"https://static.vux.li/demo/1.jpg"},
+                {src:"https://static.vux.li/demo/2.jpg",alt:"top_banner2",url:"https://static.vux.li/demo/1.jpg"},
+                {src:"https://static.vux.li/demo/3.jpg",alt:"top_banner3",url:"https://static.vux.li/demo/1.jpg"},
             ]
         }
     },
@@ -185,7 +195,9 @@ export default {
     },
     // 导入其他组件
     components:{
-        pickerTime:picker
+        pickerTime:picker,
+        silderBox:silder,
+        silderItem:silderitem,
     },
     // 局部自定义指令
     directives: {

@@ -5,7 +5,7 @@ const libs={
     *适用[string,number]类型
     *ES6 版 :Array.from(new Set(array));
     */
-    unique:function(arr){
+    unique:(arr)=>{
         let res = [];
         let json = {};
         for(let i = 0;i < arr.length;i++){
@@ -24,7 +24,7 @@ const libs={
     *@param:progrColor(string) 绘制进度圆的颜色值
     *进度条的值设置在canvas的data-progress上，值区间0~100
     */
-    drawCricle:function (canvasParentEle,canvasSelf,isTrueOrFalse,progrColor){
+    drawCricle:(canvasParentEle,canvasSelf,isTrueOrFalse,progrColor)=>{
 
         if(!canvasParentEle && !canvasSelf && !isTrueOrFalse){
             console.error('arguments not meeting expectations');
@@ -107,7 +107,7 @@ const libs={
     *@param:(string) 'json' 返回json格式
     *返回一个promise对象,可以使用.then来处理response参数
     */
-    Fetch:function (promise,type){
+    Fetch:(promise,type)=>{
         if(!promise && typeof promise !== 'object' && JSON.stringify(promise) != '{}') return;
         return new Promise((resolve,reject) => {
             fetch(promise).then((response) => {
@@ -121,7 +121,39 @@ const libs={
                 }
             }).catch((err) => {console.log(err);})
         })
-    }
+    },
+    /**
+    *移动端手势判断
+    *根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
+    *@param:(startX) 开始坐标X轴
+    *@param:(startY) 开始坐标Y轴
+    *@param:(endX) 结束坐标X轴
+    *@param:(endY) 结束坐标Y轴
+    */
+    GetSlideDirection:(startX,startY, endX, endY)=>{
+
+        let dy = startY - endY;
+        let dx = endX - startX;
+        let result = 0;
+
+        //如果滑动距离太短
+        if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
+            return result;
+        }
+
+        // 获取手势方向
+        let angle = Math.atan2(dy,dx) * 180 / Math.PI;//返回角度
+        if (angle >= -45 && angle < 45) {
+            result = 4;
+        }else if (angle >= 45 && angle < 135) {
+            result = 1;
+        }else if (angle >= -135 && angle < -45) {
+            result = 2;
+        }else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
+            result = 3;
+        }
+        return result;
+    },
 }
 
 export default libs;

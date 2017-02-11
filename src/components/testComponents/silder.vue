@@ -4,13 +4,14 @@
         v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
         v-on:touchend.stop.prevent="touchend($event)">
-            <a href="http://www.baidu.com" v-for="(item,index) in imgs" v-bind="{'data-item' : index}">
-                <img v-bind:src="item.url" alt="">
+            <a v-bind:href="item.url" v-for="(item,index) in imgs" v-bind="{'data-item' : index}">
+                <img v-bind:src="item.src" v-bind:alt="item.alt">
             </a>
+
         </div>
-        <div class="silderbox-item">
-            <span v-for="(i,index) in imgs.length" v-bind:class="{'curr': index==imgIndex}"></span>
-        </div>
+        <ul class="silderbox-item" ref="silderboxItem">
+            <li v-for="(i,index) in imgs.length" v-bind:class="{'curr': index==imgIndex}"></span>
+        </ul>
     </section>
 </template>
 
@@ -46,27 +47,50 @@ class ColorPoint extends Point{
 let cp = new ColorPoint(25,8,'green');
 console.log(cp.toColor());
 
-var i = require('../../images/top_banner.png')
+import libs from '../../javascripts/main.js';
+var i = require('../../images/top_banner.png');
 export default {
     name:'silderbox',
     data(){
         return {
             msg:'silder',
-            imgs:[
-                {'url':i},
-                {'url':i},
-                {'url':i},
-                {'url':i},
-            ],
+            imgs:this.imgArr/*[
+                {'url':i,'src':i,'alt':i},
+                {'url':i,'src':i,'alt':i},
+                {'url':i,'src':i,'alt':i},
+                {'url':i,'src':i,'alt':i},
+            ]*/,
             imgIndex:0,//图片下标
             boxWidth:0,//silderbox-img 的总宽度
-            boxOffset:0,//上一个图片的offsetX值
-            endOffset:0,
+            startOffset:0,//上一个图片的offsetX值
+            endOffset:0,//最后一个图片的offsetX值
+        }
+    },
+    props:{
+        auto:{
+            type:Number,
+        },
+        imgArr:{
+            type:Array,
+        },
+        show:{
+            type:String,
+            default:()=>{
+                return 'block';
+            }
         }
     },
     mounted(){
-        this.eEle = this.$refs.silderboxImg;
+        this.silderBox = this.$refs.silderboxImg;
+        let silderItem = this.$refs.silderboxItem;
         this.autoPlay();
+        if(this.show == 'none'){
+            silderItem.style='display:none;';
+        }else if(this.show == 'left'){
+            silderItem.style='text-align:left;';
+        }else if(this.show == 'right'){
+            silderItem.style='text-align:right;';
+        }
     },
     created(){
         this.windowWidth = window.screen.width;
@@ -76,26 +100,19 @@ export default {
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;            
-            this.eEle.style.transition="none";
-            clearInterval(this.auto)
+            this.silderBox.style.transition="none";
+            clearInterval(this.Swiper)
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
             this.endY = e.touches[0].clientY;
-
-            this.direction = this.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
+            //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
+            this.direction = libs.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.startOffset =  -(this.startX - this.endX);
-            // console.log(this.eEle.style.width.replace('px',''));
-            if(Math.abs(this.startOffset) >= (this.windowWidth/3)){
-                if(this.direction == 3 ){
-                    // this.index+=1;
-                }else if(this.direction == 4){
-                    // this.index-=1;
-                }
-            }
+           
             let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
-            console.log(s)
-            this.eEle.style.transform=`translate3d(${s}px,0,0)`;
+
+            this.silderBox.style.transform=`translate3d(${s}px,0,0)`;
         },
         touchend(e){
             this.endX = e.changedTouches[0].clientX;
@@ -106,17 +123,17 @@ export default {
             this.autoPlay();
             // 如果是只是点击则不切换图片
             if(this.endOffset <= 50){
-                this.eEle.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
             }
 
             if(this.direction == 3){//向右
                 if(this.imgIndex == this.imgs.length-1){
-                    this.eEle.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                    this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                     return;
                 }
                 
-                this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                 this.imgIndex+=1;
                 // console.log('向右'+this.imgIndex);
             }else if(this.direction == 4){//向左
@@ -130,23 +147,25 @@ export default {
                 }else{
                     res = (this.imgIndex+1)*this.windowWidth-this.windowWidth;
                 }
-                this.eEle.style.transform=`translate3d(${-res}px,0,0)`;
+                this.silderBox.style.transform=`translate3d(${-res}px,0,0)`;
             }
         },
         autoPlay(){
+            if(this.auto){
 
-            this.auto = setInterval(()=>{
-                this.eEle.style.transition=".5s";
-                if(this.imgIndex == this.imgs.length-1){
+                this.Swiper = setInterval(()=>{
+                    this.silderBox.style.transition=".5s";
+                    if(this.imgIndex == this.imgs.length-1){
 
-                    this.eEle.style.transform=`translate3d(${0}px,0,0)`;
-                    this.imgIndex=0;
-                    
-                }else{
-                    this.eEle.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
-                    this.imgIndex+=1;
-                }
-            }, 1000)
+                        this.silderBox.style.transform=`translate3d(${0}px,0,0)`;
+                        this.imgIndex=0;
+                        
+                    }else{
+                        this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                        this.imgIndex+=1;
+                    }
+                }, this.auto);
+            }
         },
         //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
         GetSlideDirection(startX,startY, endX, endY){
@@ -180,11 +199,11 @@ export default {
 
 <style lang="less">
 .silderbox{
-    height: 4rem;
+    
     overflow: hidden;
     position: relative;
     .silderbox-img{
-        height: 4rem;
+        // height: 4rem;
         display: box;
         display: -webkit-box;
         display: flex;
@@ -192,12 +211,13 @@ export default {
         justify-content: space-between;
         -webkit-justify-content: space-between;
         >a{
+            width: 100%;
             display: block;
-            height: 4rem;
+            overflow: hidden;
             img{
                 pointer-events:none;
                 width: 100%;
-                height: 4rem;
+                float: left;
             }
         }
     }
@@ -211,7 +231,7 @@ export default {
         line-height: .25rem;
         width: 100%;
         text-align: center;
-        >span{
+        >li{
             display: inline-block;
             height: .25rem;
             width: .25rem;
