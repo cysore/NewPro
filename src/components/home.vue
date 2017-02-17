@@ -6,13 +6,13 @@
             </mt-swipe>
         </section>
 
-        
+
         <silderBox v-bind:auto="3000" v-bind:imgArr="swiper" v-bind:show="'block'">
 
             <!-- <a v-bind:href="item.url" v-for="(item,index) in swiper">
                 <img v-bind:src="item.src" v-bind:alt="item.alt">
             </a> -->
-            
+
         </silderBox>
 
         <section class="content">
@@ -148,7 +148,7 @@ import img from '../images/top_banner.png';
 import picker from './testComponents/pickerTime.vue';
 
 import silder from './testComponents/silder.vue';
-import silderitem from './testComponents/silderItem.vue';
+// import silderitem from './testComponents/silderItem.vue';
 
 var i = require('../images/top_banner.png')
 
@@ -200,7 +200,7 @@ export default {
     components:{
         pickerTime:picker,
         silderBox:silder,
-        silderItem:silderitem,
+        // silderItem:silderitem,
     },
     // 局部自定义指令
     directives: {

@@ -81,6 +81,24 @@ export default [
         component: resolve => require(['../components/testComponents/silder.vue'],resolve)
     },
     {
+        path: '/switch',
+        meta: {
+            auth: false,
+            title: '开关',
+        },
+        name: 'switch',
+        component: resolve => require(['../components/testComponents/switch.vue'],resolve)
+    },
+    {
+        path: '/systemcompoents',
+        meta: {
+            auth: false,
+            title: '系统组件列表',
+        },
+        name: 'systemcompoents',
+        component: resolve => require(['../components/SystemComponents.vue'],resolve)
+    },
+    {
         path: '*',
         redirect: {name:'routeHome'}
     }
