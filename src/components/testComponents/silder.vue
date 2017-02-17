@@ -4,7 +4,7 @@
         v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
         v-on:touchend.stop.prevent="touchend($event)">
-            
+
             <slot>
                 <a v-bind:href="item.url" v-for="(item,idx) in imgs" v-bind="{'data-item' : idx}">
                     <img v-bind:src="item.src" v-bind:alt="item.alt">
@@ -97,7 +97,7 @@ export default {
     methods:{
         touchstart(e){
             this.startX = e.touches[0].clientX;
-            this.startY = e.touches[0].clientY;            
+            this.startY = e.touches[0].clientY;
             this.silderBox.style.transition="none";
             clearInterval(this.Swiper)
         },
@@ -107,7 +107,7 @@ export default {
             //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
             this.direction = libs.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.startOffset =  -(this.startX - this.endX);
-           
+
             let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
 
             this.silderBox.style.transform=`translate3d(${s}px,0,0)`;
@@ -120,6 +120,11 @@ export default {
             this.$refs.silderboxImg.style.transition=".5s";
             this.endOffset = Math.abs(this.startX-this.endX);
             this.autoPlay();
+            
+            if(this.direction == 1 || this.direction == 2){
+                this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                return;
+            }
             // 如果是只是点击则不切换图片
             if(this.endOffset <= 50){
                 this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
@@ -131,7 +136,7 @@ export default {
                     this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                     return;
                 }
-                
+
                 this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                 this.imgIndex+=1;
                 // console.log('向右'+this.imgIndex);
@@ -139,7 +144,7 @@ export default {
                 // console.log('向左'+(this.imgIndex-1));
                 let res;
                 this.imgIndex -= 1;
-                
+
                 if(this.imgIndex <= 0){
                     this.imgIndex = 0;
                     res = 0;
@@ -162,7 +167,7 @@ export default {
 
                         this.silderBox.style.transform=`translate3d(${0}px,0,0)`;
                         this.imgIndex=0;
-                        
+
                     }else{
                         this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                         this.imgIndex+=1;
@@ -202,7 +207,7 @@ export default {
 
 <style lang="less">
 .silderbox{
-    
+
     overflow: hidden;
     position: relative;
     .silderbox-img{

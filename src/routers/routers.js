@@ -99,6 +99,15 @@ export default [
         component: resolve => require(['../components/SystemComponents.vue'],resolve)
     },
     {
+        path: '/loadmore',
+        meta: {
+            auth: false,
+            title: '加载',
+        },
+        name: 'loadmore',
+        component: resolve => require(['../components/testComponents/loadmore.vue'],resolve)
+    },
+    {
         path: '*',
         redirect: {name:'routeHome'}
     }

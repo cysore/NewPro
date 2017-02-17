@@ -41,8 +41,11 @@ export default {
         // },
         '$route'(to,from){
             this.notMenuRouterName=to.name;
+            let res = ['routeLogin','routeInvestementId','loadmore'].indexOf(to.name) != -1;
+            // console.log(res);
+
             // 针对指定路由地址进行底部菜单屏蔽
-            if(to.name == 'routeLogin' || to.name == 'routeInvestementId'){
+            if(res){
                 this.isMenu=true;
             }else{
                 this.isMenu=false;
