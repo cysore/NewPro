@@ -151,13 +151,10 @@ export default {
     // padding: 1rem;
     // height: 100rem;
     background: #ccc;
-    position: relative;
 }
 .loadmore-up{
-    position: absolute;
     padding: .25rem 0;
-    top: -1.5rem;
-    left: 0;
+    margin-top: -1.5rem;
     width: 100%;
     height: 1rem;
     line-height: 1rem;
