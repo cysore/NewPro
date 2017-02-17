@@ -1,21 +1,24 @@
 <template lang="html">
+    <div class="test">
 
-    <section class="loadmore"
-    ref="loadmoreBox"
-    v-on:touchstart.stop.prevent="touchstart($event)"
-    v-on:touchmove.stop.prevent="touchmove($event)"
-    v-on:touchend.stop.prevent="touchend($event)"
-    >
-        <section class="loadmore-up" ref="loadmorePullUp">
-            <section class="loadmore-loding" v-bind:class="{'help': loding}">{{pullup}}</section>
-        </section>
-        {{msg}}
-        <section class="loadmore-down" ref="loadmorePullDown">
-            <section class="loadmore-loding" v-bind:class="{'help': loding}">{{pulldown}}</section>
-        </section>
-        <!-- <div class="help"></div> -->
-    </section>
 
+        <section class="loadmore"
+        ref="loadmoreBox"
+        v-on:touchstart.stop.prevent="touchstart($event)"
+        v-on:touchmove.stop.prevent="touchmove($event)"
+        v-on:touchend.stop.prevent="touchend($event)"
+        >
+            <section class="loadmore-up" ref="loadmorePullUp">
+                <section class="loadmore-loding" v-bind:class="{'help': loding}">{{pullup}}</section>
+            </section>
+
+            {{msg}}
+            <p v-for="item in 10" style="height:1rem;border:1px red solid;"></p>
+            <!-- <section class="loadmore-down" ref="loadmorePullDown">
+                <section class="loadmore-loding" v-bind:class="{'help': loding}">{{pulldown}}</section>
+            </section> -->
+        </section>
+    </div>
 </template>
 
 <script>
@@ -28,7 +31,7 @@ export default {
             msg:'loadmore',
             loding:false,
             pullup:'↓',
-            pulldown:'↑',
+            // pulldown:'↑',
         }
     },
     created(){
@@ -38,14 +41,14 @@ export default {
     mounted(){
         this.loadmoreBox = this.$refs.loadmoreBox;
         this.loadmorePullUp = this.$refs.loadmorePullUp;
-        this.loadmorePullDown = this.$refs.loadmorePullDown;
+        // this.loadmorePullDown = this.$refs.loadmorePullDown;
     },
     methods:{
         touchstart(e){
             this.startX = e.touches[0].clientX;
             this.startY = e.touches[0].clientY;
             this.loadmoreBox.style.transition="none";
-            // console.log(e.touches[0]);
+            // console.log(e.target);
         },
         touchmove(e){
             this.endX = e.touches[0].clientX;
@@ -55,12 +58,12 @@ export default {
             this.offsetY = this.startY - this.endY;
 
             if(this.direction == 1){
-                if(this.offsetY > -100){
+                /*if(this.offsetY > -100){
                     // console.log('上拉');
                     this.loadmorePullDown.children[0].style.transform=`rotate(${180}deg)`;
                 }else{
                     this.loadmorePullDown.children[0].style.transform=`rotate(${0}deg)`;
-                }
+                }*/
                 this.loadmoreBox.style.transform=`translate3d(0,${-this.offsetY}px,0)`;
             }else if(this.direction == 2){
 
@@ -82,10 +85,10 @@ export default {
 
 
             loadmoreBox.style.transition=".5s";
-            if(this.direction == 3 || this.direction == 4){
+            /*if(this.direction == 3 || this.direction == 4){
                 loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
                 return;
-            }
+            }*/
             if(this.direction == 2 &&　this.offsetY < -100){
                 console.log('下拉');
                 this.loding = true;
@@ -95,13 +98,15 @@ export default {
                 return;
             }else if(this.direction == 1 && this.offsetY > -100){
                 console.log('上拉');
-                this.loding = true;
+                /*this.loding = true;
                 this.pulldown = '';
                 loadmoreBox.style.transform=`translate3d(0,${-this.loadmorePullUp.offsetHeight}px,0)`;
                 this.lodingDownHandler();
-                return;
+                return;*/
+            }else{
+                console.log(1);
+                loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
             }
-
 
         },
         lodingUpHandler(){
@@ -134,30 +139,39 @@ export default {
 </script>
 
 <style lang="less">
-.test{height: 50vh;overflow-x: scroll;}
+.test{
+    height: 50vh;
+    // overflow-y: scroll;
+    overflow: hidden;
+    -webkit-overflow-scrolling : touch;
+    border: 1px blue solid;
+}
 .none{display: none;}
 .loadmore{
-    height: 100vh;
-    border: 1px red solid;
+    // padding: 1rem;
+    // height: 100rem;
+    background: #ccc;
     position: relative;
 }
 .loadmore-up{
     position: absolute;
-    top: -5vh;
+    padding: .25rem 0;
+    top: -1.5rem;
     left: 0;
     width: 100%;
-    height: 5vh;
-    line-height: 5vh;
+    height: 1rem;
+    line-height: 1rem;
     text-align: center;
     transition: .5s;
 }
 .loadmore-down{
     position: absolute;
-    bottom: -5vh;
+    bottom: -1rem;
     left: 0;
+    right: 0;
     width: 100%;
-    height: 5vh;
-    line-height: 5vh;
+    height: 1rem;
+    line-height: 1rem;
     text-align: center;
     transition: .5s;
 }
@@ -200,8 +214,8 @@ export default {
 }
 
 .help{
-    width: 30px;
-    height: 30px;
+    width: 1rem;
+    height: 1rem;
     border: 1px #ccc solid;
     border-radius: 50%;
     position: relative;
