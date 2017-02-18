@@ -70,6 +70,9 @@ export default {
         },
         imgArr:{
             type:Array,
+            default:()=>{
+                return []
+            }
         },
         show:{
             type:String,
@@ -120,7 +123,7 @@ export default {
             this.$refs.silderboxImg.style.transition=".5s";
             this.endOffset = Math.abs(this.startX-this.endX);
             this.autoPlay();
-            
+
             if(this.direction == 1 || this.direction == 2){
                 this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
@@ -153,10 +156,12 @@ export default {
                 }
                 this.silderBox.style.transform=`translate3d(${-res}px,0,0)`;
             }
+
             // 获取图片下标
             // let str = this.$refs.silderboxImg.style.transform;
             // let curidx = Math.abs(str.substring(str.indexOf('(')+1,str.length-1).split(',')[0].replace('px',''));
             // this.imgIndex = curidx / this.windowWidth;
+            // console.log(str);
         },
         autoPlay(){
             if(this.auto){

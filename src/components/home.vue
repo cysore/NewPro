@@ -9,7 +9,7 @@
 
         <silderBox v-bind:auto="3000" v-bind:imgArr="swiper" v-bind:show="'block'">
 
-            <!-- <a v-bind:href="item.url" v-for="(item,index) in swiper">
+            <!-- <a v-bind:href="item.url" v-for="(item,index) in swiper" v-bind="{'data-item' : index}">
                 <img v-bind:src="item.src" v-bind:alt="item.alt">
             </a> -->
 
