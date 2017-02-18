@@ -5,7 +5,7 @@
             v-on:touchstart.stop.prevent='touchStart($event,$index)'
             v-on:touchmove.stop.prevent='touchMove($event,$index)'
             v-on:touchend.stop.prevent='touchEnd($event,$index)'>
-                {{item.remark}}--{{$index}}
+                {{item.remark}}
             </div>
             <div class="list-r">
                 <div class="list-r-mark" v-on:touchstart='setMark($event,$index)'>

@@ -120,6 +120,11 @@ export default {
             this.endY = e.changedTouches[0].clientY;
             this.imgIndex = Number(e.target.dataset.item);//第几张图片的下标
 
+            // let str = this.$refs.silderboxImg.style.transform;
+            // let curidx = Math.abs(str.substring(str.indexOf('(')+1,str.length-1).split(',')[0].replace('px',''));
+            // this.imgIndex = Math.round(curidx / this.windowWidth);
+            // console.log(curidx,this.imgIndex);
+
             this.$refs.silderboxImg.style.transition=".5s";
             this.endOffset = Math.abs(this.startX-this.endX);
             this.autoPlay();
@@ -158,10 +163,6 @@ export default {
             }
 
             // 获取图片下标
-            // let str = this.$refs.silderboxImg.style.transform;
-            // let curidx = Math.abs(str.substring(str.indexOf('(')+1,str.length-1).split(',')[0].replace('px',''));
-            // this.imgIndex = curidx / this.windowWidth;
-            // console.log(str);
         },
         autoPlay(){
             if(this.auto){
