@@ -187,7 +187,6 @@ export default {
         }else{
             console.log(this.$store.state.StateUser);
         }
-        console.log(this.$myGlobalMethod)
     },
     // 导入其他组件
     components:{

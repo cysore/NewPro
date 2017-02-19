@@ -50,8 +50,7 @@ class ColorPoint extends Point{
 let cp = new ColorPoint(25,8,'green');
 console.log(cp.toColor());
 
-import libs from '../../javascripts/main.js';
-var i = require('../../images/top_banner.png');
+
 export default {
     name:'silderbox',
     data(){
@@ -108,7 +107,7 @@ export default {
             this.endX = e.touches[0].clientX;
             this.endY = e.touches[0].clientY;
             //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
-            this.direction = libs.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
+            this.direction = this.$tool.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.startOffset =  -(this.startX - this.endX);
 
             let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
