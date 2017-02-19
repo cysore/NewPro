@@ -21,6 +21,8 @@ import 'mint-ui/lib/style.css';// mintUI 样式
 import './styles/main.less';// 所有文件样式
 import 'nprogress/nprogress.css';// 进度条样式
 
+import tool from '../plugin/tool/tool.js';
+
 import directives from './directive/touch.js';
 directives(Vue);
 
@@ -39,7 +41,7 @@ Vue.config.debug = true;
 Vue.use(VueRouter);//vue使用路由配置
 Vue.use(VueResource);//vue使用响应请求
 Vue.use(Mint);//使用mintUI
-
+Vue.use(tool);//使用自定义插件方法
 
 // 引入创建的Store
 import store from './store/index.js';

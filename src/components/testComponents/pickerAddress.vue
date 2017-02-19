@@ -54,7 +54,7 @@ export default {
         setAddress:{
             type:Array,
             default:()=>{
-                return [];
+                return ['北京','北京市','东城区'];
             }
         }
     },
@@ -63,12 +63,12 @@ export default {
     },
     created(){
         // 如果没有设置省市区使用默认
-        if(this.setAddress.length == 0){
-            this.province   = AreaData;
-            this.city       = AreaData['0'].c;
-            this.area       = AreaData['0'].c['0'].c;
-        }else{
-            
+        // if(this.setAddress.length == 0){
+        //     this.province   = AreaData;
+        //     this.city       = AreaData['0'].c;
+        //     this.area       = AreaData['0'].c['0'].c;
+        // }else{
+
             this.province   = AreaData;
             for(let i = 0;i < AreaData.length;i++){
                 if(AreaData[i].n == this.setAddress[0]){
@@ -105,7 +105,7 @@ export default {
             // this.setProvinceCurrIndex = 2;//当前省下标
             // this.setCityCurrIndex = 2;//当前市下标
             // this.setAreaCurrIndex = 2;//当前区下标
-        }
+        // }
     },
     mounted(){
         this.$children.forEach((item,k)=>{

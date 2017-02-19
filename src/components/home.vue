@@ -161,7 +161,7 @@ export default {
     data(){
         return{
             date:null,
-            address:["江西省", "萍乡市", "西湖区"],
+            address:["湖南省", "长沙市", "岳麓区"],
             // count:this.$store.state.StateRoute.count,
             counts:this.$store.state.StateRoute.count,
             message:"Hello",
@@ -178,7 +178,7 @@ export default {
     },
     // 模板编译/挂载之后(不保证组件已经存在document中)
     mounted(){
-        // this.$Progress.finish();//进度条完成
+        
     },
     // 组件创建完成
     created(){
@@ -187,7 +187,7 @@ export default {
         }else{
             console.log(this.$store.state.StateUser);
         }
-
+        console.log(this.$myGlobalMethod)
     },
     // 导入其他组件
     components:{
