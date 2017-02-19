@@ -54,13 +54,29 @@ export default [
         name: 'routeLogin',
         component: resolve => require(['../components/login.vue'],resolve)
     },{
-        path: '/picker',
+        path: '/pickerTime',
         meta: {
             auth: false,
             title: '选择时间',
         },
-        name: 'routePicker',
+        name: 'pickerTime',
         component: resolve => require(['../components/testComponents/pickerTime.vue'],resolve)
+    },{
+        path: '/pickerAddress',
+        meta: {
+            auth: false,
+            title: '选择地址',
+        },
+        name: 'pickerAddress',
+        component: resolve => require(['../components/testComponents/pickerAddress.vue'],resolve)
+    },{
+        path: '/picker',
+        meta: {
+            auth: false,
+            title: 'picker',
+        },
+        name: 'picker',
+        component: resolve => require(['../components/testComponents/picker.vue'],resolve)
     },
     {
         path: '/sliderRightClose',

@@ -105,7 +105,7 @@
                     <div class="top-more"><a href="">更多</a></div>
                 </div>
                 <div class="safety-type">
-                    <a href="">
+                    <a v-on:click="showPickerAddress">
                         <img src="../images/safety_funds.png" alt="">
                         资金安全
                     </a>
@@ -128,34 +128,38 @@
 
         </section>
 
-        <pickerTime
+        <!-- <pickerTime
             v-bind:maxDate="'2012-12-12'"
             v-bind:minDate="'2010-10-10'"
             v-bind:setDate="'2011-11-11'"
             v-bind:resDate='data'
             v-on:on-result-change="onResultChange"
             ref="pickerTime"
-        ></pickerTime>
-
+        ></pickerTime> -->
+        <pickerAddress 
+            v-bind:setAddress="address"
+            v-on:accept-result="acceptResult"
+            ref="pickerAddress"
+        ></pickerAddress>
     </div>
 </template>
 
 <script>
-// import { Swipe, SwipeItem } from 'mint-ui';
 import {mapState,mapActions} from 'vuex';
 import libs from '../javascripts/main.js';
 import img from '../images/top_banner.png';
-import picker from './testComponents/pickerTime.vue';
+// import pickertime from './testComponents/pickerTime.vue';
 
-import silder from './testComponents/silder.vue';
+import silderbox from './testComponents/silder.vue';
+import pickeraddress from './testComponents/pickerAddress.vue';
 // import silderitem from './testComponents/silderItem.vue';
 
-var i = require('../images/top_banner.png')
 
 export default {
     data(){
         return{
             date:null,
+            address:["江西省", "南昌市", "东湖区"],
             // count:this.$store.state.StateRoute.count,
             counts:this.$store.state.StateRoute.count,
             message:"Hello",
@@ -182,24 +186,12 @@ export default {
             console.log(this.$store.state.StateUser);
         }
 
-        /*this.$Progress.start();//进度条开始
-        this.$router.beforeEach((to,from,next)=>{
-            if(to.meta.progress !== undefined){
-                let meta = to.meta.progress;
-                this.$Progress.parseMeta(meta);
-            }
-            this.$Progress.start();
-            next();
-        })
-        this.$router.afterEach((to,from) => {
-            this.$Progress.finish();
-        })*/
-
     },
     // 导入其他组件
     components:{
-        pickerTime:picker,
-        silderBox:silder,
+        // pickerTime      :pickertime,
+        silderBox       :silderbox,
+        pickerAddress   :pickeraddress,
         // silderItem:silderitem,
     },
     // 局部自定义指令
@@ -243,6 +235,12 @@ export default {
         onResultChange(val){
             this.data = val;
             console.log(this.data)
+        },
+        showPickerAddress(){
+            this.$refs.pickerAddress.open();
+        },
+        acceptResult(val){
+            console.log(val)
         }
     },
     // 组件的计算属性
