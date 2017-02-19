@@ -1,8 +1,6 @@
 <template lang="html">
     <transition name="fadeOutAddress">
-    <!-- <div> -->
         
-        <!-- <div v-on:click="show = !show">123<br>123</div> -->
         
         <section class="pickerAddress" v-on:click="show = true" v-show="!show">
             <transition name="fadeInAddress">
@@ -21,7 +19,8 @@
         </section>
 
     </transition>
-    <!-- </div> -->
+
+    
 </template>
 
 <script>

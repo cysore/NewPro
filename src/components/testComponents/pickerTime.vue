@@ -1,7 +1,7 @@
 <template lang="html">
     <transition name="fadeIO">
 
-        <div class="picker" v-on:click="show = true" v-show="!show">
+        <div class="pickerTime" v-on:click="show = true" v-show="!show">
             <!-- <div v-on:click="show = !show">123<br>123</div> -->
 
             <!-- <transition name="fadeIO"> -->
@@ -585,7 +585,7 @@ export default {
 </script>
 
 <style lang="less">
-.picker{
+.pickerTime{
     position: fixed;
     top: 0;
     left: 0;

@@ -128,14 +128,15 @@
 
         </section>
 
-        <!-- <pickerTime
+        <pickerTime
             v-bind:maxDate="'2012-12-12'"
             v-bind:minDate="'2010-10-10'"
             v-bind:setDate="'2011-11-11'"
             v-bind:resDate='data'
             v-on:on-result-change="onResultChange"
             ref="pickerTime"
-        ></pickerTime> -->
+        ></pickerTime>
+
         <pickerAddress 
             v-bind:setAddress="address"
             v-on:accept-result="acceptResult"
@@ -148,9 +149,10 @@
 import {mapState,mapActions} from 'vuex';
 import libs from '../javascripts/main.js';
 import img from '../images/top_banner.png';
-// import pickertime from './testComponents/pickerTime.vue';
 
 import silderbox from './testComponents/silder.vue';
+
+import pickertime from './testComponents/pickerTime.vue';
 import pickeraddress from './testComponents/pickerAddress.vue';
 // import silderitem from './testComponents/silderItem.vue';
 
@@ -189,7 +191,7 @@ export default {
     },
     // 导入其他组件
     components:{
-        // pickerTime      :pickertime,
+        pickerTime      :pickertime,
         silderBox       :silderbox,
         pickerAddress   :pickeraddress,
         // silderItem:silderitem,
