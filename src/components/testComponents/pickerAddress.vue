@@ -10,9 +10,18 @@
                         <span v-on:click="enter">确定</span>
                     </div>
                     <div class="picker-address-content">
-                        <Picker v-bind:AreaData="province" v-on:accept-result="acceptResultProvince"></Picker>
-                        <Picker v-bind:AreaData="city" v-on:accept-result="acceptResultCity"></Picker>
-                        <Picker v-bind:AreaData="area" v-on:accept-result="acceptResultArea"></Picker>
+                        <Picker 
+                        v-bind:AreaData="province" 
+                        v-bind:setIndex="setProvinceCurrIndex" 
+                        v-on:accept-result="acceptResultProvince"></Picker>
+                        <Picker 
+                        v-bind:AreaData="city" 
+                        v-bind:setIndex="setCityCurrIndex" 
+                        v-on:accept-result="acceptResultCity"></Picker>
+                        <Picker 
+                        v-bind:AreaData="area" 
+                        v-bind:setIndex="setAreaCurrIndex" 
+                        v-on:accept-result="acceptResultArea"></Picker>
                     </div>
                 </div>
             </transition>
@@ -20,7 +29,7 @@
 
     </transition>
 
-    
+
 </template>
 
 <script>
@@ -31,14 +40,14 @@ export default {
     name:'pickerAddress',
     data(){
         return{
-            msg         :'pickerAddress',
-            province    :null,//省
-            provinceIdx :0,
-            city        :null,//市
-            cityIdx     :0,
-            area        :null,//区
-            areaIdx     :0,
-            show        :true,
+            msg                     :'pickerAddress',
+            province                :null,//省
+            selectedProvinceIndex   :0,
+            city                    :null,//市
+            selectedCityIndex       :0,
+            area                    :null,//区
+            selectedAreaIndex       :0,
+            show                    :true,
         }
     },
     props:{
@@ -53,14 +62,55 @@ export default {
         Picker:pickers
     },
     created(){
-        console.log(this.setAddress)
-        this.province   = AreaData;
-        this.city       = AreaData['0'].c;
-        this.area       = AreaData['0'].c['0'].c;
+        // 如果没有设置省市区使用默认
+        if(this.setAddress.length == 0){
+            this.province   = AreaData;
+            this.city       = AreaData['0'].c;
+            this.area       = AreaData['0'].c['0'].c;
+        }else{
+            
+            this.province   = AreaData;
+            for(let i = 0;i < AreaData.length;i++){
+                if(AreaData[i].n == this.setAddress[0]){
+                    this.selectedProvinceIndex = i;//选中省的下标
+                    this.setProvinceCurrIndex = i;//设置当前省下标
+                    break;
+                }
+            }
+            let AreaDataCitys = AreaData[this.selectedProvinceIndex].c;
+            for(let i = 0;i < AreaDataCitys.length;i++){
+                if(AreaDataCitys[i].n == this.setAddress[1]){
+                    this.selectedCityIndex = i;//选中市的下标
+                    this.setCityCurrIndex = i;//设置当前市下标
+                    this.city       = AreaDataCitys;
+                    break;
+                }
+            }
+            let AreaDataAreas = AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].c;
+            for(let i = 0;i < AreaDataAreas.length;i++){
+                if(AreaDataAreas[i].n == this.setAddress[2]){
+                    this.selectedAreaIndex = i;//选中区的下标
+                    this.setAreaCurrIndex = i;//设置当前区下标
+                    this.area       = AreaDataAreas;
+                    break;
+                }
+            }
 
+
+            // this.province   = AreaData;
+            // this.city       = AreaData['2'].c;
+            // this.area       = AreaData['2'].c['2'].c;
+
+            // this.selectedProvinceIndex = 2;//选中省下标
+            // this.setProvinceCurrIndex = 2;//当前省下标
+            // this.setCityCurrIndex = 2;//当前市下标
+            // this.setAreaCurrIndex = 2;//当前区下标
+        }
     },
     mounted(){
-
+        this.$children.forEach((item,k)=>{
+            item.init();
+        })
     },
     methods:{
         open(){
@@ -68,36 +118,34 @@ export default {
         },
         enter(){
             this.show = true;
-            // console.log(AreaData[this.provinceIdx].n)
-            // console.log(AreaData[this.provinceIdx].c[this.cityIdx].n)
-            // console.log(AreaData[this.provinceIdx].c[this.cityIdx].c[this.areaIdx].n);
             let address = [
-                AreaData[this.provinceIdx].n,
-                AreaData[this.provinceIdx].c[this.cityIdx].n,
-                AreaData[this.provinceIdx].c[this.cityIdx].c[this.areaIdx].n
+                AreaData[this.selectedProvinceIndex].n,
+                AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].n,
+                AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].c[this.selectedAreaIndex].n
             ]
             this.$emit('accept-result',address);
         },
         acceptResultProvince(v){
-            this.provinceIdx = v;
-            this.city        = AreaData[v].c;
+            this.selectedProvinceIndex = v;
+            // this.city        = AreaData[v].c;
             this.area        = AreaData[v].c['0'].c;
         },
         acceptResultCity(v){
-            this.cityIdx = v;
-            this.area    = AreaData[this.provinceIdx].c[v].c;
+            this.selectedCityIndex = v;
+            // this.area    = AreaData[this.selectedProvinceIndex].c[v].c;
         },
         acceptResultArea(v){
-            this.areaIdx = v;
+            this.selectedAreaIndex = v;
             console.log(v)
         }
     },
     watch:{
-        provinceIdx(n,o){
+        selectedProvinceIndex(n,o){
             this.city = AreaData[n].c;
         },
-        cityIdx(n,o){
-            this.area = AreaData[this.provinceIdx].c[n].c;
+        selectedCityIndex(n,o){
+            console.log(this.selectedProvinceIndex)
+            this.area = AreaData[this.selectedProvinceIndex].c[n].c;
         },
         
     }

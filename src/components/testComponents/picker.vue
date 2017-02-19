@@ -24,6 +24,12 @@ export default{
 		}
 	},
 	props:{
+		setIndex:{
+			type:Number,
+			default:()=>{
+				return 0;
+			}
+		},
 		AreaData:{
 			type:Array,
 			default:()=>{
@@ -33,9 +39,11 @@ export default{
 	},
 	created(){
 		// this.arr = this.AreaData;
+		// console.log(this.AreaData)
 	},
 	mounted(){
-		this.liHeight = Number((window.getComputedStyle(this.$refs.picker.querySelector('li')).height).replace('px',''));
+		this.pickerEle = this.$refs.picker;
+		this.liHeight = Number((window.getComputedStyle(this.pickerEle.querySelector('li')).height).replace('px',''));
 	},
 	methods:{
 		touchstart(e){
@@ -76,17 +84,23 @@ export default{
             // console.log(offset)
             this.$emit('accept-result',this.currindex);
 		},
+		init(v){
+			this.currindex = this.setIndex;
+			let currY = this.currOffset = -(this.currindex)*this.liHeight;
+			this.pickerEle.style.transform='translateY('+ currY +'px)';
+
+		}
 	},
 	watch:{
 		AreaData(n,o){
-			let str = this.$refs.picker.style.transform;
+			let str = this.pickerEle.style.transform;
 			if(str){
 				let left 	= str.indexOf('(');
 				let right 	= str.indexOf(')');
 				let number 	= Number(str.substring(left+1,right).replace('px',''));
 				if(Math.abs(number) / this.liHeight >= n.length){
 					this.currOffset = 0;
-					this.$refs.picker.style.transform='translateY('+ 0 +'px)';
+					this.pickerEle.style.transform='translateY('+ 0 +'px)';
 				}
 			}
 		}

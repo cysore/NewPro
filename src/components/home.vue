@@ -161,7 +161,7 @@ export default {
     data(){
         return{
             date:null,
-            address:["江西省", "南昌市", "东湖区"],
+            address:["江西省", "萍乡市", "西湖区"],
             // count:this.$store.state.StateRoute.count,
             counts:this.$store.state.StateRoute.count,
             message:"Hello",
