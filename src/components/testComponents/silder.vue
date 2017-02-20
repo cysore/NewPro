@@ -112,7 +112,8 @@ export default {
 
             let s = -this.imgIndex*this.windowWidth+e.touches[0].pageX-this.startX;
 
-            this.silderBox.style.transform=`translate3d(${s}px,0,0)`;
+            // this.silderBox.style.transform=`translate3d(${s}px,0,0)`;
+            this.silderBox.style.webkitTransform =`translate3d(${s}px,0,0)`;
         },
         touchend(e){
             this.endX = e.changedTouches[0].clientX;
@@ -129,22 +130,26 @@ export default {
             this.autoPlay();
 
             if(this.direction == 1 || this.direction == 2){
-                this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                // this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                this.silderBox.style.webkitTransform =`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
             }
             // 如果是只是点击则不切换图片
             if(this.endOffset <= 50){
-                this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                // this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                this.silderBox.style.webkitTransform =`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                 return;
             }
 
             if(this.direction == 3){//向右
                 if(this.imgIndex == this.imgs.length-1){
-                    this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                    // this.silderBox.style.transform=`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
+                    this.silderBox.style.webkitTransform =`translate3d(${-((this.imgIndex)*this.windowWidth)}px,0,0)`;
                     return;
                 }
 
-                this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                // this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                this.silderBox.style.webkitTransform =`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                 this.imgIndex+=1;
                 // console.log('向右'+this.imgIndex);
             }else if(this.direction == 4){//向左
@@ -158,7 +163,8 @@ export default {
                 }else{
                     res = (this.imgIndex+1)*this.windowWidth-this.windowWidth;
                 }
-                this.silderBox.style.transform=`translate3d(${-res}px,0,0)`;
+                // this.silderBox.style.transform=`translate3d(${-res}px,0,0)`;
+                this.silderBox.style.webkitTransform =`translate3d(${-res}px,0,0)`;
             }
 
             // 获取图片下标
@@ -170,42 +176,18 @@ export default {
                     this.silderBox.style.transition=".5s";
                     if(this.imgIndex == this.imgs.length-1){
 
-                        this.silderBox.style.transform=`translate3d(${0}px,0,0)`;
+                        // this.silderBox.style.transform=`translate3d(${0}px,0,0)`;
+                        this.silderBox.style.webkitTransform =`translate3d(${0}px,0,0)`;
                         this.imgIndex=0;
 
                     }else{
-                        this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                        // this.silderBox.style.transform=`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
+                        this.silderBox.style.webkitTransform =`translate3d(${-((this.imgIndex+1)*this.windowWidth)}px,0,0)`;
                         this.imgIndex+=1;
                     }
                 }, this.auto);
             }
         },
-        //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
-        GetSlideDirection(startX,startY, endX, endY){
-
-            let dy = startY - endY;
-            let dx = endX - startX;
-            let result = 0;
-
-            //如果滑动距离太短
-            if (Math.abs(dx) < 2 && Math.abs(dy) < 2) {
-                return result;
-            }
-
-            // 获取手势方向
-            let angle = Math.atan2(dy,dx) * 180 / Math.PI;//返回角度
-            if (angle >= -45 && angle < 45) {
-                result = 4;
-            }else if (angle >= 45 && angle < 135) {
-                result = 1;
-            }else if (angle >= -135 && angle < -45) {
-                result = 2;
-            }else if ((angle >= 135 && angle <= 180) || (angle >= -180 && angle < -135)) {
-                result = 3;
-            }
-            return result;
-        },
-
     }
 }
 </script>

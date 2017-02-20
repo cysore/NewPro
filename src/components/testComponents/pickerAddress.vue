@@ -132,7 +132,6 @@ export default {
         },
         acceptResultArea(v){
             this.selectedAreaIndex = v;
-            console.log(v)
         }
     },
     watch:{

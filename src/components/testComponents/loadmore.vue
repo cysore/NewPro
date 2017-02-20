@@ -40,6 +40,28 @@ export default {
     },
     created(){
         this.windowHeight = window.screen.height;
+        let dateArr = ["2017-02-20 11:55:47", "2017-02-20 10:25:00", "2017-02-20 10:24:44", "2017-02-17 19:58:21", "2017-02-17 19:57:50", "2017-02-17 18:49:59"];
+                    // ["2017-02-20 11:55:47", "10:25:00", "10:24:44", "2017-02-17 19:58:21", "19:57:50", "18:49:59"]
+        let arr = [];
+        for(let i = 0;i<dateArr.length;i++){
+            if(dateArr[i+1]){
+                // debugger
+                let first = dateArr[i].split(' ')[0];
+                let next = dateArr[i+1].split(' ')[0];
+
+
+                if(first == next){
+                    console.log(1);
+                    arr.push(dateArr[i])
+                }else{
+                    arr.push(dateArr[i].split(' ')[1])
+                }
+            }else{
+                console.log(dateArr[i]);
+            }
+        }
+        console.log(arr);
+        // console.log(Array.from(new Set(arr)));
     },
     mounted(){
         this.loadmoreBox = this.$refs.loadmoreBox;
