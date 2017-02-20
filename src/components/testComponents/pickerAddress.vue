@@ -1,7 +1,7 @@
 <template lang="html">
     <transition name="fadeOutAddress">
-        
-        
+
+
         <section class="pickerAddress" v-on:click="show = true" v-show="!show">
             <transition name="fadeInAddress">
                 <div class="picker-address" v-show="!show">
@@ -10,17 +10,17 @@
                         <span v-on:click="enter">确定</span>
                     </div>
                     <div class="picker-address-content">
-                        <Picker 
-                        v-bind:AreaData="province" 
-                        v-bind:setIndex="setProvinceCurrIndex" 
+                        <Picker
+                        v-bind:AreaData="province"
+                        v-bind:setIndex="setProvinceCurrIndex"
                         v-on:accept-result="acceptResultProvince"></Picker>
-                        <Picker 
-                        v-bind:AreaData="city" 
-                        v-bind:setIndex="setCityCurrIndex" 
+                        <Picker
+                        v-bind:AreaData="city"
+                        v-bind:setIndex="setCityCurrIndex"
                         v-on:accept-result="acceptResultCity"></Picker>
-                        <Picker 
-                        v-bind:AreaData="area" 
-                        v-bind:setIndex="setAreaCurrIndex" 
+                        <Picker
+                        v-bind:AreaData="area"
+                        v-bind:setIndex="setAreaCurrIndex"
                         v-on:accept-result="acceptResultArea"></Picker>
                     </div>
                 </div>
@@ -63,13 +63,9 @@ export default {
     },
     created(){
         // 如果没有设置省市区使用默认
-        // if(this.setAddress.length == 0){
-        //     this.province   = AreaData;
-        //     this.city       = AreaData['0'].c;
-        //     this.area       = AreaData['0'].c['0'].c;
-        // }else{
 
-            this.province   = AreaData;
+
+            this.province   = AreaData.map((v,k)=>{return v.n});
             for(let i = 0;i < AreaData.length;i++){
                 if(AreaData[i].n == this.setAddress[0]){
                     this.selectedProvinceIndex = i;//选中省的下标
@@ -82,7 +78,7 @@ export default {
                 if(AreaDataCitys[i].n == this.setAddress[1]){
                     this.selectedCityIndex = i;//选中市的下标
                     this.setCityCurrIndex = i;//设置当前市下标
-                    this.city       = AreaDataCitys;
+                    this.city       = AreaDataCitys.map((v,k)=>{return v.n});
                     break;
                 }
             }
@@ -91,7 +87,7 @@ export default {
                 if(AreaDataAreas[i].n == this.setAddress[2]){
                     this.selectedAreaIndex = i;//选中区的下标
                     this.setAreaCurrIndex = i;//设置当前区下标
-                    this.area       = AreaDataAreas;
+                    this.area       = AreaDataAreas.map((v,k)=>{return v.n});
                     break;
                 }
             }
@@ -108,9 +104,7 @@ export default {
         // }
     },
     mounted(){
-        this.$children.forEach((item,k)=>{
-            item.init();
-        })
+
     },
     methods:{
         open(){
@@ -128,7 +122,9 @@ export default {
         acceptResultProvince(v){
             this.selectedProvinceIndex = v;
             // this.city        = AreaData[v].c;
-            this.area        = AreaData[v].c['0'].c;
+            this.area        = AreaData[v].c['0'].c.map((v,k)=>{
+                return v.n
+            });
         },
         acceptResultCity(v){
             this.selectedCityIndex = v;
@@ -141,13 +137,16 @@ export default {
     },
     watch:{
         selectedProvinceIndex(n,o){
-            this.city = AreaData[n].c;
+            this.city = AreaData[n].c.map((v,k)=>{
+                return v.n;
+            });
         },
         selectedCityIndex(n,o){
-            console.log(this.selectedProvinceIndex)
-            this.area = AreaData[this.selectedProvinceIndex].c[n].c;
+            this.area = AreaData[this.selectedProvinceIndex].c[n].c.map((v,k)=>{
+                return v.n;
+            });
         },
-        
+
     }
 }
 </script>
@@ -203,7 +202,7 @@ export default {
         display: -webkit-flex;
         justify-content: space-between;
         -webkit-justify-content: space-between;
-        
+
         .picker-address-list{
             width: 33.33%;
             float: left;

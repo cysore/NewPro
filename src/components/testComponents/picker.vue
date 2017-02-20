@@ -3,11 +3,11 @@
 		<ul class="picker-ul" ref="picker"
 		v-on:touchstart.stop.prevent="touchstart($event)"
         v-on:touchmove.stop.prevent="touchmove($event)"
-        v-on:touchend.stop.prevent="touchend($event)"	
+        v-on:touchend.stop.prevent="touchend($event)"
 		>
 			<li></li>
 			<li></li>
-			<li v-for="item in AreaData">{{item.n}}</li>
+			<li v-for="item in AreaData">{{item}}</li>
 			<li></li>
 			<li></li>
 		</ul>
@@ -44,6 +44,11 @@ export default{
 	mounted(){
 		this.pickerEle = this.$refs.picker;
 		this.liHeight = Number((window.getComputedStyle(this.pickerEle.querySelector('li')).height).replace('px',''));
+		
+		// 设置初始选中的偏移值
+		this.currindex = this.setIndex;
+		let currY = this.currOffset = -(this.currindex)*this.liHeight;
+		this.pickerEle.style.transform='translateY('+ currY +'px)';
 	},
 	methods:{
 		touchstart(e){
@@ -67,7 +72,7 @@ export default{
 
             // 取整计算需要移动的值
             let offset = Math.round((this.currOffset + d) / this.liHeight) * this.liHeight;
-            
+
             // 偏移量大于2个li高度时候
             if(offset >= this.liHeight ){
                 offset = 0 ;
@@ -105,7 +110,7 @@ export default{
 			}
 		}
 	}
-}	
+}
 </script>
 <style lang="less">
 .picker{
