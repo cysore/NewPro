@@ -40,27 +40,43 @@ export default {
     },
     created(){
         this.windowHeight = window.screen.height;
-        let dateArr = ["2017-02-20 11:55:47", "2017-02-20 10:25:00", "2017-02-20 10:24:44", "2017-02-17 19:58:21", "2017-02-17 19:57:50", "2017-02-17 18:49:59"];
-                    // ["2017-02-20 11:55:47", "10:25:00", "10:24:44", "2017-02-17 19:58:21", "19:57:50", "18:49:59"]
-        let arr = [];
-        for(let i = 0;i<dateArr.length;i++){
-            if(dateArr[i+1]){
-                // debugger
-                let first = dateArr[i].split(' ')[0];
-                let next = dateArr[i+1].split(' ')[0];
 
-                if(first != next){
-                    arr.push(dateArr[i])
+        /*new Promise((resolve,reject) => {
+            fetch('https://api.github.com/users/github').then(function(data){
+                if(data.status == 200){
+
+                    data.json().then((d)=>{
+                        console.log(d);
+                        // resolve(d)
+                    });
                 }else{
-                    arr.push(dateArr[i].split(' ')[1])
+                    reject(data);
                 }
-            }else{
-                arr.push(dateArr[i])
-            }
+            }).catch((e)=>{console.log(e)});
+        })
 
+        var req2 = new Request('https://api.github.com/users/github',{
+            method:'GET',
+            cache:'reload',
+        })
+
+        this.$tool.Fetch(req2,'json').then((response)=>{
+            console.log(response);
+        })*/
+
+        function* gen(){
+            let url = 'https://api.github.com/users/github';
+            let res = yield fetch(url);
         }
-        console.log(arr);
-        // console.log(Array.from(new Set(arr)));
+        let g = gen();
+        let res = g.next();
+        res.value.then(function(data){
+
+            console.log(data);
+        }).then(function(data){
+            g.next(data);
+        })
+
     },
     mounted(){
         this.loadmoreBox = this.$refs.loadmoreBox;
@@ -81,7 +97,7 @@ export default {
             this.endX = e.touches[0].clientX;
             this.endY = e.touches[0].clientY;
             //根据起点和终点返回方向 1：向上，2：向下，3：向左，4：向右,0：未滑动
-            this.direction = libs.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
+            this.direction = this.$tool.GetSlideDirection(this.startX,this.startY,this.endX,this.endY);
             this.offsetY = this.startY - this.endY;
 
             if(this.scrolls == 0){

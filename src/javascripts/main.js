@@ -31,17 +31,17 @@ const libs={
             return
         };
 
-        var canvasParent = document.getElementById(canvasParentEle);
-        var canvas = document.getElementById(canvasSelf);
-        var dataPorgress = Number(canvas.dataset.progress);
+        let canvasParent = document.getElementById(canvasParentEle);
+        let canvas = document.getElementById(canvasSelf);
+        let dataPorgress = Number(canvas.dataset.progress);
         // 字符串'%'替换处理
         if(isNaN(dataPorgress)){
             dataPorgress = Number(canvas.dataset.progress.replace('%',''));
         }
 
-        var porgress = isTrueOrFalse ? 1.4*(dataPorgress)/100 : 2*(dataPorgress)/100;
-        var CanvasWidth = (window.getComputedStyle(canvasParent).getPropertyValue('width')).replace(/px/g,'');
-        var CanvasHeight = (window.getComputedStyle(canvasParent).getPropertyValue('height')).replace(/px/g,'');
+        let porgress = isTrueOrFalse ? 1.4*(dataPorgress)/100 : 2*(dataPorgress)/100;
+        let CanvasWidth = (window.getComputedStyle(canvasParent).getPropertyValue('width')).replace(/px/g,'');
+        let CanvasHeight = (window.getComputedStyle(canvasParent).getPropertyValue('height')).replace(/px/g,'');
 
         canvas.width = CanvasWidth*2;
         canvas.height = CanvasHeight*2;
@@ -49,15 +49,15 @@ const libs={
         canvas.style.width = canvas.width/2+'px';
         canvas.style.height = canvas.height/2+'px';
 
-        var res;// 绘制百分比所需的半径
-        var lineWidth = CanvasWidth/12.5;// 绘制圆弧线宽
-        var setData={
+        let res;// 绘制百分比所需的半径
+        let lineWidth = CanvasWidth/12.5;// 绘制圆弧线宽
+        let setData={
             x:canvas.width/2,
             y:canvas.height/2,
             r:(canvas.width-lineWidth-2)/2// 减2控制绘制的圆弧与canvas的边界紧密贴合，防止出现canvas边界出现模糊
         }
 
-        var ctx = canvas.getContext('2d');
+        let ctx = canvas.getContext('2d');
             ctx.lineCap="round";
             // 绘制底圆
             ctx.beginPath();
@@ -108,7 +108,7 @@ const libs={
     *返回一个promise对象,可以使用.then来处理response参数
     */
     Fetch:(promise,type)=>{
-        if(!promise && typeof promise !== 'object' && JSON.stringify(promise) != '{}') return;
+        if(!promise && typeof promise !== 'object' && JSON.stringify(promise) != '{}') return 'arguments error!';
         return new Promise((resolve,reject) => {
             fetch(promise).then((response) => {
                 if(response.status == 200){

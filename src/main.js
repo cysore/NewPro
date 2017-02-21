@@ -34,8 +34,6 @@ NProgress.configure({
     showSpinner:false,//关闭旋转圈
 })
 
-
-
 //开启debug模式
 Vue.config.debug = true;
 Vue.use(VueRouter);//vue使用路由配置

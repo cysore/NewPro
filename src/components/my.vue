@@ -97,15 +97,25 @@ export default {
         // console.log(this.StateUser.user);
     },
     beforeCreate(){
-        /*let a = new Promise((resolve,reject) => {
+        /*let a1 = new Promise((resolve,reject) => {
             this.$http.jsonp('https://api.douban.com/v2/movie/top250?count=10').then(function(data){
                 data.status == 200 ? resolve(data) : reject(data);
             });
-        })
+        });
+        let a2 = new Promise((resolve,reject) => {
+            this.$http({
+                url:'api/selectUser',
+                method:'GET',
+                cache:'reload',
+                params:{user:123,pass:'123'}
+            }).then(function(data){
+                data.status == 200 ? resolve(data) : reject(data);
+            });
+        });
         let b = new Promise((resolve,reject) => {
             fetch('api/login',{
                 method:'POST',
-                body:{user:123,pass:'123'}
+                body:{user:123,pass:'121'}
             }).then(function(data){
                 if(data.status == 200){
                     data.json().then((d)=>{resolve(d)});
@@ -127,21 +137,29 @@ export default {
             params:{user:123,pass:'123'}
         })
         var req3 = new Request('https://api.douban.com/v2/movie/top250?count=10',{
-            method:'get',
+            method:'GET',
+            cache: 'reload',
             mode:'no-cors'
         })
         // 同步等待执行async
         let asyncPromise = async function(){
             try{
                 let get1 = await libs.Fetch(req1);
-                console.log(get1.json().then(d => {console.log(d)}));
+                let getres1 = get1.json().then(d => {
+                    console.log(d);
+                })
+
                 let get2 = await libs.Fetch(req2);
-                console.log(get2.json().then(d => {console.log(d)}));
+                let getres2 = get2.json().then(d => {
+                    console.log(d);
+                })
+
             }catch(err){
                 console.log(err);
             }
         }
         asyncPromise();
+
 
         // 设置头信息
         /*let headers = new Headers();
@@ -158,9 +176,9 @@ export default {
 
 
         // promise并发多个请求
-        /*Promise.all([a,b]).then((data) => {
+        /*Promise.all([a2,b]).then((data) => {
             console.log(data);
-        },(err) => {
+        }).catch((err) => {
             console.log(err);
         })*/
 
