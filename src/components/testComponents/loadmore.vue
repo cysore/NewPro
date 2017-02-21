@@ -49,16 +49,15 @@ export default {
                 let first = dateArr[i].split(' ')[0];
                 let next = dateArr[i+1].split(' ')[0];
 
-
-                if(first == next){
-                    console.log(1);
+                if(first != next){
                     arr.push(dateArr[i])
                 }else{
                     arr.push(dateArr[i].split(' ')[1])
                 }
             }else{
-                console.log(dateArr[i]);
+                arr.push(dateArr[i])
             }
+
         }
         console.log(arr);
         // console.log(Array.from(new Set(arr)));
