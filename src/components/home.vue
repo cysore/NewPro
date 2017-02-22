@@ -144,7 +144,9 @@
         ></pickerAddress>
 
         <pickerDate
-
+            v-bind:setMinDate="[2010,5,5]"
+            v-bind:setMaxDate="[2020,5,5]"
+            v-bind:setCurrDate="[2015,5,5]"
             v-on:accept-result="acceptResultDate"
             ref="pickerDate"
         ></pickerDate>
@@ -170,6 +172,7 @@ export default {
         return{
             date:null,
             address:["湖南省", "长沙市", "岳麓区"],
+            date:[2015,5,5],
             // count:this.$store.state.StateRoute.count,
             counts:this.$store.state.StateRoute.count,
             message:"Hello",

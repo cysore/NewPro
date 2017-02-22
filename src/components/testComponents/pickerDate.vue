@@ -102,6 +102,8 @@ export default {
     },
     created(){
         console.log(this.setCurrDate);
+        console.log(this.setMaxDate);
+        console.log(this.setMinDate);
 
 
 
