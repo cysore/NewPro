@@ -109,7 +109,7 @@
                         <img src="../images/safety_funds.png" alt="">
                         资金安全
                     </a>
-                    <a href="">
+                    <a v-on:click="showPickerDate">
                         <img src="../images/safety_risk.png" alt="">
                         严格风控
                     </a>
@@ -137,11 +137,18 @@
             ref="pickerTime"
         ></pickerTime>
 
-        <pickerAddress 
+        <pickerAddress
             v-bind:setAddress="address"
-            v-on:accept-result="acceptResult"
+            v-on:accept-result="acceptResultAddress"
             ref="pickerAddress"
         ></pickerAddress>
+
+        <pickerDate
+
+            v-on:accept-result="acceptResultDate"
+            ref="pickerDate"
+        ></pickerDate>
+
     </div>
 </template>
 
@@ -154,9 +161,10 @@ import silderbox from './testComponents/silder.vue';
 
 import pickertime from './testComponents/pickerTime.vue';
 import pickeraddress from './testComponents/pickerAddress.vue';
+import pickerdate from './testComponents/pickerDate.vue';
+
 // import silderitem from './testComponents/silderItem.vue';
-
-
+// import paint from 'paint-canvas';
 export default {
     data(){
         return{
@@ -178,7 +186,7 @@ export default {
     },
     // 模板编译/挂载之后(不保证组件已经存在document中)
     mounted(){
-        
+
     },
     // 组件创建完成
     created(){
@@ -193,6 +201,7 @@ export default {
         pickerTime      :pickertime,
         silderBox       :silderbox,
         pickerAddress   :pickeraddress,
+        pickerDate      :pickerdate,
         // silderItem:silderitem,
     },
     // 局部自定义指令
@@ -237,12 +246,20 @@ export default {
             this.data = val;
             console.log(this.data)
         },
+        // 地址选择
         showPickerAddress(){
             this.$refs.pickerAddress.open();
         },
-        acceptResult(val){
+        acceptResultAddress(val){
             console.log(val)
-        }
+        },
+        // 时间选择
+        showPickerDate(){
+            this.$refs.pickerDate.open();
+        },
+        acceptResultDate(val){
+            console.log(val)
+        },
     },
     // 组件的计算属性
     /*computed: {

@@ -62,6 +62,14 @@ export default [
         name: 'pickerTime',
         component: resolve => require(['../components/testComponents/pickerTime.vue'],resolve)
     },{
+        path: '/pickerDate',
+        meta: {
+            auth: false,
+            title: '选择时间',
+        },
+        name: 'pickerDate',
+        component: resolve => require(['../components/testComponents/pickerDate.vue'],resolve)
+    },{
         path: '/pickerAddress',
         meta: {
             auth: false,

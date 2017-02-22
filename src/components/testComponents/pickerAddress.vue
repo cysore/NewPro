@@ -11,15 +11,15 @@
                     </div>
                     <div class="picker-address-content">
                         <Picker
-                        v-bind:AreaData="province"
+                        v-bind:PropData="province"
                         v-bind:setIndex="setProvinceCurrIndex"
                         v-on:accept-result="acceptResultProvince"></Picker>
                         <Picker
-                        v-bind:AreaData="city"
+                        v-bind:PropData="city"
                         v-bind:setIndex="setCityCurrIndex"
                         v-on:accept-result="acceptResultCity"></Picker>
                         <Picker
-                        v-bind:AreaData="area"
+                        v-bind:PropData="area"
                         v-bind:setIndex="setAreaCurrIndex"
                         v-on:accept-result="acceptResultArea"></Picker>
                     </div>
@@ -33,9 +33,9 @@
 </template>
 
 <script>
-import AreaData from '../../../static/AreaData.json';
-import libs from '../../javascripts/main.js';
+import PropData from '../../../static/AreaData.json';
 import pickers from './picker.vue';
+
 export default {
     name:'pickerAddress',
     data(){
@@ -65,15 +65,15 @@ export default {
         // 如果没有设置省市区使用默认
 
 
-            this.province   = AreaData.map((v,k)=>{return v.n});
-            for(let i = 0;i < AreaData.length;i++){
-                if(AreaData[i].n == this.setAddress[0]){
+            this.province   = PropData.map((v,k)=>{return v.n});
+            for(let i = 0;i < PropData.length;i++){
+                if(PropData[i].n == this.setAddress[0]){
                     this.selectedProvinceIndex = i;//选中省的下标
                     this.setProvinceCurrIndex = i;//设置当前省下标
                     break;
                 }
             }
-            let AreaDataCitys = AreaData[this.selectedProvinceIndex].c;
+            let AreaDataCitys = PropData[this.selectedProvinceIndex].c;
             for(let i = 0;i < AreaDataCitys.length;i++){
                 if(AreaDataCitys[i].n == this.setAddress[1]){
                     this.selectedCityIndex = i;//选中市的下标
@@ -82,7 +82,7 @@ export default {
                     break;
                 }
             }
-            let AreaDataAreas = AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].c;
+            let AreaDataAreas = PropData[this.selectedProvinceIndex].c[this.selectedCityIndex].c;
             for(let i = 0;i < AreaDataAreas.length;i++){
                 if(AreaDataAreas[i].n == this.setAddress[2]){
                     this.selectedAreaIndex = i;//选中区的下标
@@ -113,16 +113,16 @@ export default {
         enter(){
             this.show = true;
             let address = [
-                AreaData[this.selectedProvinceIndex].n,
-                AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].n,
-                AreaData[this.selectedProvinceIndex].c[this.selectedCityIndex].c[this.selectedAreaIndex].n
+                PropData[this.selectedProvinceIndex].n,
+                PropData[this.selectedProvinceIndex].c[this.selectedCityIndex].n,
+                PropData[this.selectedProvinceIndex].c[this.selectedCityIndex].c[this.selectedAreaIndex].n
             ]
             this.$emit('accept-result',address);
         },
         acceptResultProvince(v){
             this.selectedProvinceIndex = v;
             // this.city        = AreaData[v].c;
-            this.area        = AreaData[v].c['0'].c.map((v,k)=>{
+            this.area        = PropData[v].c['0'].c.map((v,k)=>{
                 return v.n
             });
         },
@@ -136,12 +136,12 @@ export default {
     },
     watch:{
         selectedProvinceIndex(n,o){
-            this.city = AreaData[n].c.map((v,k)=>{
+            this.city = PropData[n].c.map((v,k)=>{
                 return v.n;
             });
         },
         selectedCityIndex(n,o){
-            this.area = AreaData[this.selectedProvinceIndex].c[n].c.map((v,k)=>{
+            this.area = PropData[this.selectedProvinceIndex].c[n].c.map((v,k)=>{
                 return v.n;
             });
         },

@@ -7,7 +7,7 @@
 		>
 			<li></li>
 			<li></li>
-			<li v-for="item in AreaData">{{item}}</li>
+			<li v-for="item in PropData">{{item}}</li>
 			<li></li>
 			<li></li>
 		</ul>
@@ -30,7 +30,7 @@ export default{
 				return 0;
 			}
 		},
-		AreaData:{
+		PropData:{
 			type:Array,
 			default:()=>{
 				return ['picker','picker','picker','picker','picker'];
@@ -44,7 +44,7 @@ export default{
 	mounted(){
 		this.pickerEle = this.$refs.picker;
 		this.liHeight = Number((window.getComputedStyle(this.pickerEle.querySelector('li')).height).replace('px',''));
-		
+
 		// 设置初始选中的偏移值
 		this.currindex = this.setIndex;
 		let currY = this.currOffset = -(this.currindex)*this.liHeight;
@@ -88,16 +88,10 @@ export default{
             // console.log(idx)
             // console.log(offset)
             this.$emit('accept-result',this.currindex);
-		},
-		init(v){
-			this.currindex = this.setIndex;
-			let currY = this.currOffset = -(this.currindex)*this.liHeight;
-			this.pickerEle.style.transform='translateY('+ currY +'px)';
-
 		}
 	},
 	watch:{
-		AreaData(n,o){
+		PropData(n,o){
 			let str = this.pickerEle.style.transform;
 			if(str){
 				let left 	= str.indexOf('(');

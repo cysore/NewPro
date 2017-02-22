@@ -154,6 +154,47 @@ const libs={
         }
         return result;
     },
+    /**
+    *根据传入的值获取当前时间YY-MM-DD or YY-MM-DD h:m:s
+    *@param:strDate(String) 'max:最大时间 min:最小时间 cur:当前时间' 默认当前时间
+    *@param:sizeDate(Number) '最大、小年数值' 默认为0
+    */
+    getFormDate:(str = 'cur',size = 0)=>{
+        let date = new Date();
+        let [splice1,splice2] = ["-",":"];
+
+        let year    = date.getFullYear();
+        let month   = date.getMonth() + 1;
+        let day     = date.getDate();
+        let hours   = date.getHours();
+        let minutes = date.getMinutes();
+        let seconds = date.getSeconds();
+
+        let cur = [year , month , day];
+        let max = [(year + size) , month , day];
+        let min = [(year - size) , month , day];
+
+        if(str == 'cur'){
+            return cur;
+        }else if(str == 'max'){
+            return max;
+        }else if(str == 'min'){
+            return min;
+        }else{
+            return year + splice1 + month + splice1 + day + " " + hours + splice2 + minutes + splice2 + seconds;
+        }
+    },
+    /**
+    *根据传入的年和月份返回当月天数
+    *@param:year(number)
+    *@param:month(number)
+    */
+    getDaysInMonth(year,month){
+        //parseInt(number,type)这个函数后面如果不跟第2个参数来表示进制的话，默认是10进制。
+        month = parseInt(month,10);
+        var temp = new Date(year,month,0);
+        return temp.getDate();
+    },
 }
 
 export default libs;
