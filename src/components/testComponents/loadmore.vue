@@ -16,9 +16,7 @@
 
             {{msg}}
             <p v-for="item in 20" style="height:1rem;border:1px red solid;">{{item}}</p>
-            <!-- <section class="loadmore-down" ref="loadmorePullDown">
-                <section class="loadmore-loding" v-bind:class="{'help': loding}">{{pulldown}}</section>
-            </section> -->
+
         </section>
 
     </div>
@@ -35,7 +33,6 @@ export default {
             msg:'loadmore',
             loding:false,
             pullup:'↓',
-            // pulldown:'↑',
         }
     },
     created(){
@@ -83,7 +80,6 @@ export default {
         this.loadmorePullUp = this.$refs.loadmorePullUp;
         this.wrap = this.$refs.wrap;
         this.$refs.wrap.addEventListener('scroll',this.scrollHandler);
-        // this.loadmorePullDown = this.$refs.loadmorePullDown;
     },
     methods:{
         touchstart(e){
@@ -102,12 +98,6 @@ export default {
 
             if(this.scrolls == 0){
                 if(this.direction == 1){
-                    /*if(this.offsetY > -100){
-                        // console.log('上拉');
-                        this.loadmorePullDown.children[0].style.transform=`rotate(${180}deg)`;
-                    }else{
-                        this.loadmorePullDown.children[0].style.transform=`rotate(${0}deg)`;
-                    }*/
                     this.loadmoreBox.style.transform=`translate3d(0,${-this.offsetY}px,0)`;
                 }else if(this.direction == 2){
 
@@ -131,10 +121,6 @@ export default {
             let loadmoreBox = this.loadmoreBox;
 
             loadmoreBox.style.transition=".5s";
-            /*if(this.direction == 3 || this.direction == 4){
-                loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
-                return;
-            }*/
             if(this.direction == 2 &&　this.offsetY < -100){
                 console.log('下拉');
                 this.loding = true;
@@ -144,11 +130,6 @@ export default {
                 return;
             }else if(this.direction == 1 && this.offsetY > -100){
                 console.log('上拉');
-                /*this.loding = true;
-                this.pulldown = '';
-                loadmoreBox.style.transform=`translate3d(0,${-this.loadmorePullUp.offsetHeight}px,0)`;
-                this.lodingDownHandler();
-                return;*/
             }else{
                 console.log(1);
                 loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
@@ -162,16 +143,6 @@ export default {
                     this.loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
                     this.loding = false;
                     this.pullup = '↓';
-                },3000)
-            }
-        },
-        lodingDownHandler(){
-            if(this.loding){
-                setTimeout(()=>{
-                    this.loadmorePullDown.children[0].style.transform=`rotate(${0}deg)`;
-                    this.loadmoreBox.style.transform=`translate3d(0,${0}px,0)`;
-                    this.loding = false;
-                    this.pulldown = '↑';
                 },3000)
             }
         },
