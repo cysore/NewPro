@@ -99,6 +99,8 @@ export default{
 				let number 	= Number(str.substring(left+1,right).replace('px',''));
 				if(Math.abs(number) / this.liHeight >= n.length){
 					this.currOffset = 0;
+					this.currindex = 0;
+					this.$emit('accept-result',this.currindex);
 					this.pickerEle.style.transform='translateY('+ 0 +'px)';
 				}
 			}

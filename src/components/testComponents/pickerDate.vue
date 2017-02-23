@@ -101,14 +101,9 @@ export default {
 
     },
     created(){
-        console.log(this.setCurrDate);
-        console.log(this.setMaxDate);
-        console.log(this.setMinDate);
-
-
 
         // setting years
-        let comoutedYear = this.setMaxDate[0] - this.setMinDate[0];
+        let comoutedYear = this.setMaxDate[0] - this.setMinDate[0] + 1;
         for(let i = 0;i< comoutedYear;i++){
             this.year.push(this.setMinDate[0]+i);
             if(this.setMinDate[0]+i == this.setCurrDate[0]){
@@ -170,8 +165,12 @@ export default {
         },
         acceptResultDay(v){
             this.selectedDayIndex = v;
-            console.log(v);
         },
+        // 获取当前天数
+        getTargetDay(){
+            return  this.$tool.getDaysInMonth(this.year[this.selectedYearIndex],this.month[this.selectedMonthIndex]);
+        },
+        // 设置当前天数
         setTargetDay(){
             let days = this.$tool.getDaysInMonth(this.year[this.selectedYearIndex],this.month[this.selectedMonthIndex]);
             this.day.length = 0;
@@ -181,7 +180,24 @@ export default {
         }
     },
     watch:{
-
+        selectedYearIndex(n,o){
+            if(n == 0){
+                this.month.length = 0;
+                for(let i = this.setMinDate[1]; i<=12;i++){
+                    this.month.push(i)
+                }
+            }else if(n == this.year.length-1){
+                this.month.length = 0;
+                for(let i = 1; i<=this.setMaxDate[1];i++){
+                    this.month.push(i)
+                }
+            }else{
+                this.month.length = 0;
+                for(let i = 1; i<=12;i++){
+                    this.month.push(i)
+                }
+            }
+        }
     }
 }
 </script>

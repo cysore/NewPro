@@ -144,9 +144,9 @@
         ></pickerAddress>
 
         <pickerDate
-            v-bind:setMinDate="[2010,5,5]"
-            v-bind:setMaxDate="[2020,5,5]"
-            v-bind:setCurrDate="[2015,5,5]"
+            v-bind:setMinDate="[2015,5,5]"
+            v-bind:setMaxDate="[2018,5,5]"
+            v-bind:setCurrDate="[2016,2,29]"
             v-on:accept-result="acceptResultDate"
             ref="pickerDate"
         ></pickerDate>
@@ -167,6 +167,7 @@ import pickerdate from './testComponents/pickerDate.vue';
 
 // import silderitem from './testComponents/silderItem.vue';
 // import paint from 'paint-canvas';
+
 export default {
     data(){
         return{
