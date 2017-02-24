@@ -51,7 +51,6 @@ export default {
 </script>
 
 <style lang="less">
-    @h:1rem;
     .switch{
         background: #fff;
         padding:  .25rem;

@@ -157,10 +157,22 @@ export default {
         },
         acceptResultYear(v){
             this.selectedYearIndex = v;
+            /*if(v == 0 && this.selectedMonthIndex == 0){
+                this.day.length = 0;
+
+            }else if(v == this.year.length-1 && this.selectedMonthIndex == this.month.length-1){
+                this.day.length = 0;
+                console.log(this.day);
+            }else{
+                this.setTargetDay();
+            }*/
             this.setTargetDay();
         },
         acceptResultMonth(v){
             this.selectedMonthIndex = v;
+            /*if(v == 0 && this.selectedYearIndex == 0){
+                this.day.length = 0;
+            }*/
             this.setTargetDay();
         },
         acceptResultDay(v){
@@ -197,6 +209,7 @@ export default {
                     this.month.push(i)
                 }
             }
+            this.setTargetDay();
         }
     }
 }

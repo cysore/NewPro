@@ -113,11 +113,9 @@ router.afterEach(to=>{
     }
 })
 
-import libs from './javascripts/main.js';
 
 //路由器会创建一个 App 实例，并且挂载到选择符 #app 匹配的元素上。
 new Vue({
-    data:libs,
     router,// 注册路由
     store,// 注册 store 对象。将会把 store 实例注入到所有子组件。子组件使用this.$store.state来访问
     components:{App},
