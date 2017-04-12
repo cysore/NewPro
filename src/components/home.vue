@@ -30,7 +30,7 @@
                 <div class="notice-icon">
                     <i class="notice-icon-new"></i>
                 </div>
-                <div class="notice-info"><a href="">淘金家进行系统维护和升级，期间可能会影...</a></div>
+                <div class="notice-info"><a href="">进行系统维护和升级，期间可能会影...</a></div>
                 <div class="notice-more"><a href="./notice.html">更多</a></div>
             </div>
             <div class="content-investment">
@@ -50,7 +50,7 @@
                         </p>
                         <a href="#" class="info-btn" v-on:click="immediately">立即投资</a>
                         <p class="info-tips">
-                            资金安全由富友金账户监控
+                            资金安全由账户监控
                         </p>
                     </div>
                 </div>
@@ -74,7 +74,7 @@
                         </p>
                         <a class="info-btn" v-on:click="showPicker">立即投资</a>
                         <p class="info-tips">
-                            资金安全由富友金账户监控
+                            资金安全由账户监控
                         </p>
                     </div>
                 </div>
@@ -85,12 +85,12 @@
             <div class="content-news">
                 <div class="news-top">
                     <div class="top-icon"></div>
-                    <div class="top-tit">淘金家. 媒体报道</div>
+                    <div class="top-tit"> 媒体报道</div>
                     <div class="top-more"><a href="./media.html">更多</a></div>
                 </div>
                 <div class="news-topline">
                     <a href="">
-                        芭莎男士专访淘金家CEO杨蜀
+                        芭莎男士专访
                         <span>2016-09-06</span>
                     </a>
                 </div>
